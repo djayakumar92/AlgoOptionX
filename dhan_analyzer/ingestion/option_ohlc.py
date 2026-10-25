@@ -25,7 +25,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 
-from dhanhq import dhanhq
+from dhan_analyzer.ingestion.providers import MarketDataProvider
 
 from dhan_analyzer.ingestion.historical import rows_from_response
 
@@ -78,7 +78,7 @@ def next_trading_day(d: date) -> date:
 
 
 def fetch_session_ohlc(
-    client: dhanhq,
+    client: MarketDataProvider,
     security_id: str,
     session_date: date,
     interval_min: int = 5,
@@ -108,7 +108,7 @@ def fetch_session_ohlc(
     if resp.get("status") == "failure":
         raise OptionOhlcError(f"intraday_minute_data failed for {security_id}: {resp}")
 
-    rows = rows_from_response(resp)
+    rows = rows_from_response(resp, interval_min=interval_min)
     if not rows:
         return None
 

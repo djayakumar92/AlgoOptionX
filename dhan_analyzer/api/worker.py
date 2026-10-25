@@ -20,6 +20,7 @@ from dhan_analyzer.api import prediction
 from dhan_analyzer.api.state import LiveState
 from dhan_analyzer.config import Settings
 from dhan_analyzer.ingestion import historical
+from dhan_analyzer.ingestion.quality import DataQualityError
 from dhan_analyzer.ingestion.option_chain import OptionChainError
 from dhan_analyzer.ingestion.scheduler import OptionChainPoller
 
@@ -68,6 +69,11 @@ def run_worker(
             )
         except OptionChainError as exc:
             logger.warning("Poll failed, retrying: %s", exc)
+            state.set_error(str(exc), int(time.time()))
+            stop_event.wait(settings.polling.option_chain_interval_sec)
+            continue
+        except DataQualityError as exc:
+            logger.warning("Market-data quality gate blocked a cycle: %s", exc)
             state.set_error(str(exc), int(time.time()))
             stop_event.wait(settings.polling.option_chain_interval_sec)
             continue

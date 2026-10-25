@@ -32,6 +32,55 @@ def _locked(fn):
 # ---- candles -----------------------------------------------------------
 
 @_locked
+def upsert_candle_batch(
+    conn: sqlite3.Connection,
+    symbol: str,
+    interval: str,
+    rows: list[dict],
+    manifest: dict,
+) -> None:
+    """Atomically persist validated candles and their source/hash manifest."""
+    with conn:
+        conn.executemany(
+            """
+            INSERT INTO candles (symbol, interval, ts, open, high, low, close, volume, oi)
+            VALUES (:symbol, :interval, :ts, :open, :high, :low, :close, :volume, :oi)
+            ON CONFLICT(symbol, interval, ts) DO UPDATE SET
+                open=excluded.open, high=excluded.high, low=excluded.low,
+                close=excluded.close, volume=excluded.volume, oi=excluded.oi
+            """,
+            [{"symbol": symbol, "interval": interval, "oi": None, **row} for row in rows],
+        )
+        conn.execute(
+            """
+            INSERT INTO candle_ingestion_batches (
+                source_id, symbol, interval, requested_from, requested_to, received_ts,
+                source_row_count, accepted_row_count, excluded_incomplete_count,
+                source_first_ts, source_last_ts, content_sha256, validation_version, quality_status
+            ) VALUES (
+                :source_id, :symbol, :interval, :requested_from, :requested_to, :received_ts,
+                :source_row_count, :accepted_row_count, :excluded_incomplete_count,
+                :source_first_ts, :source_last_ts, :content_sha256, :validation_version, :quality_status
+            )
+            """,
+            manifest,
+        )
+
+
+@_locked
+def get_candle_ingestion_batches(
+    conn: sqlite3.Connection, symbol: str, limit: int = 100
+) -> list[sqlite3.Row]:
+    return conn.execute(
+        """
+        SELECT * FROM candle_ingestion_batches
+        WHERE symbol = ?
+        ORDER BY received_ts DESC, id DESC LIMIT ?
+        """,
+        (symbol, limit),
+    ).fetchall()
+
+@_locked
 def upsert_candles(conn: sqlite3.Connection, symbol: str, interval: str, rows: list[dict]) -> None:
     """rows: dicts with keys ts, open, high, low, close, volume, oi (oi optional).
 

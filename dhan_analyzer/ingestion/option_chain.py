@@ -4,7 +4,8 @@ import logging
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from dhanhq import dhanhq
+from dhan_analyzer.ingestion.providers import MarketDataProvider
+from dhan_analyzer.ingestion.quality import validate_option_chain
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ class OptionChainResult:
     rows: list[dict]  # matches storage.repository.insert_option_chain_snapshot row shape
 
 
-def fetch_expiry_list(client: dhanhq, under_security_id: str, under_segment: str) -> list[date]:
+def fetch_expiry_list(client: MarketDataProvider, under_security_id: str, under_segment: str) -> list[date]:
     resp = client.expiry_list(under_security_id=int(under_security_id), under_exchange_segment=under_segment)
     if resp.get("status") != "success":
         raise OptionChainError(f"expiry_list failed: {resp}")
@@ -32,7 +33,7 @@ def fetch_expiry_list(client: dhanhq, under_security_id: str, under_segment: str
 
 
 def fetch_option_chain(
-    client: dhanhq, under_security_id: str, under_segment: str, expiry: date
+    client: MarketDataProvider, under_security_id: str, under_segment: str, expiry: date
 ) -> OptionChainResult:
     """Single option-chain poll. Caller (scheduler) is responsible for the 3s/request throttle."""
     resp = client.option_chain(
@@ -76,4 +77,5 @@ def fetch_option_chain(
                 }
             )
 
-    return OptionChainResult(ts=ts, spot_price=float(data["last_price"]), rows=rows)
+    spot_price = validate_option_chain(data.get("last_price"), rows)
+    return OptionChainResult(ts=ts, spot_price=spot_price, rows=rows)

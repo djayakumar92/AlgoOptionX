@@ -10,10 +10,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+import time
 
 import pandas as pd
-from dhanhq import dhanhq
+from dhan_analyzer.ingestion.providers import MarketDataProvider
 
+from dhan_analyzer.ingestion.quality import is_regular_session, require_fresh_latest_bar
 from dhan_analyzer.ingestion.scheduler import OptionChainPoller
 from dhan_analyzer.signals import combine, momentum, oi_behavior, sentiment, trend
 from dhan_analyzer.signals.combine import Suggestion
@@ -38,7 +40,7 @@ class CycleResult:
 
 def run_cycle(
     conn,
-    client: dhanhq,
+    client: MarketDataProvider,
     poller: OptionChainPoller,
     under_symbol: str,
     under_security_id: str,
@@ -65,6 +67,12 @@ def run_cycle(
     oi_summary = oi_behavior.classify(latest, previous)
 
     candles = repository.get_candles(conn, under_symbol, str(intraday_interval))
+    if is_regular_session(int(time.time())):
+        require_fresh_latest_bar(
+            candles.to_dict("records"),
+            intraday_interval,
+            now_ts=int(time.time()),
+        )
     trend_summary = trend.summarize(candles)
 
     atm_iv_avg = None

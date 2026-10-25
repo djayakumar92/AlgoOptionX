@@ -4,8 +4,8 @@ import logging
 import time
 from datetime import date, datetime, timedelta
 
-from dhanhq import dhanhq
-
+from dhan_analyzer.ingestion.quality import parse_candle_response
+from dhan_analyzer.ingestion.providers import MarketDataProvider
 from dhan_analyzer.storage import repository
 
 logger = logging.getLogger(__name__)
@@ -18,33 +18,14 @@ class HistoricalDataError(RuntimeError):
     pass
 
 
-def rows_from_response(resp: dict) -> list[dict]:
-    data = resp.get("data", resp)
-    timestamps = data.get("timestamp", [])
-    opens = data.get("open", [])
-    highs = data.get("high", [])
-    lows = data.get("low", [])
-    closes = data.get("close", [])
-    volumes = data.get("volume", [])
-    ois = data.get("open_interest", [None] * len(timestamps))
-
-    return [
-        {
-            "ts": int(ts),
-            "open": float(o),
-            "high": float(h),
-            "low": float(l),
-            "close": float(c),
-            "volume": int(v) if v is not None else 0,
-            "oi": int(oi) if oi is not None else None,
-        }
-        for ts, o, h, l, c, v, oi in zip(timestamps, opens, highs, lows, closes, volumes, ois)
-    ]
+def rows_from_response(resp: dict, interval_min: int | None = None) -> list[dict]:
+    """Return only validated, completed rows from a Dhan candle response."""
+    return parse_candle_response(resp, interval_min=interval_min).rows
 
 
 def fetch_daily(
     conn,
-    client: dhanhq,
+    client: MarketDataProvider,
     symbol: str,
     security_id: str,
     exchange_segment: str,
@@ -60,18 +41,19 @@ def fetch_daily(
         from_date=from_date.isoformat(),
         to_date=to_date.isoformat(),
     )
-    if resp.get("status") == "failure":
-        raise HistoricalDataError(f"historical_daily_data failed: {resp}")
-
-    rows = rows_from_response(resp)
-    repository.upsert_candles(conn, symbol, "day", rows)
-    logger.info("Upserted %d daily candles for %s", len(rows), symbol)
-    return len(rows)
+    try:
+        batch = parse_candle_response(resp, interval_min=None)
+    except ValueError as exc:
+        raise HistoricalDataError(f"Rejected invalid daily candle data for {symbol}: {exc}") from exc
+    manifest = batch.manifest(symbol, "day", from_date.isoformat(), to_date.isoformat())
+    repository.upsert_candle_batch(conn, symbol, "day", batch.rows, manifest)
+    logger.info("Persisted %d validated daily candles for %s", len(batch.rows), symbol)
+    return len(batch.rows)
 
 
 def backfill_intraday(
     conn,
-    client: dhanhq,
+    client: MarketDataProvider,
     symbol: str,
     security_id: str,
     exchange_segment: str,
@@ -97,14 +79,17 @@ def backfill_intraday(
             to_date=chunk_end.strftime("%Y-%m-%d %H:%M:%S"),
             interval=interval_min,
         )
-        if resp.get("status") == "failure":
+        try:
+            batch = parse_candle_response(resp, interval_min=interval_min)
+        except ValueError as exc:
             raise HistoricalDataError(
-                f"intraday_minute_data failed for {chunk_start}..{chunk_end}: {resp}"
-            )
-
-        rows = rows_from_response(resp)
-        repository.upsert_candles(conn, symbol, str(interval_min), rows)
-        total += len(rows)
+                f"Rejected invalid intraday candle data for {chunk_start}..{chunk_end}: {exc}"
+            ) from exc
+        requested_from = chunk_start.strftime("%Y-%m-%d %H:%M:%S")
+        requested_to = chunk_end.strftime("%Y-%m-%d %H:%M:%S")
+        manifest = batch.manifest(symbol, str(interval_min), requested_from, requested_to)
+        repository.upsert_candle_batch(conn, symbol, str(interval_min), batch.rows, manifest)
+        total += len(batch.rows)
 
         chunk_start = chunk_end
         time.sleep(INTER_CHUNK_DELAY_SEC)
@@ -115,7 +100,7 @@ def backfill_intraday(
 
 def catch_up_intraday(
     conn,
-    client: dhanhq,
+    client: MarketDataProvider,
     symbol: str,
     security_id: str,
     exchange_segment: str,

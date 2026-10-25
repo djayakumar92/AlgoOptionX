@@ -41,6 +41,27 @@ CREATE TABLE IF NOT EXISTS option_chain_snapshot (
     ask_qty        INTEGER
 );
 
+CREATE TABLE IF NOT EXISTS candle_ingestion_batches (
+    id                          INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_id                   TEXT    NOT NULL,
+    symbol                      TEXT    NOT NULL,
+    interval                    TEXT    NOT NULL,
+    requested_from              TEXT    NOT NULL,
+    requested_to                TEXT    NOT NULL,
+    received_ts                 INTEGER NOT NULL,
+    source_row_count            INTEGER NOT NULL,
+    accepted_row_count          INTEGER NOT NULL,
+    excluded_incomplete_count   INTEGER NOT NULL,
+    source_first_ts             INTEGER,
+    source_last_ts              INTEGER,
+    content_sha256              TEXT    NOT NULL,
+    validation_version          INTEGER NOT NULL,
+    quality_status              TEXT    NOT NULL CHECK (quality_status = 'VALID')
+);
+
+CREATE INDEX IF NOT EXISTS idx_candle_ingestion_symbol_time
+    ON candle_ingestion_batches (symbol, interval, received_ts);
+
 CREATE INDEX IF NOT EXISTS idx_option_chain_lookup
     ON option_chain_snapshot (underlying, expiry, strike, option_type, ts);
 

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from dhanhq import dhanhq
+from dhan_analyzer.ingestion.providers import MarketDataProvider
 
 from dhan_analyzer.ingestion.historical import rows_from_response
 
@@ -30,7 +30,7 @@ class ChartCandlesError(RuntimeError):
 
 
 def fetch_candles(
-    client: dhanhq, security_id: str, exchange_segment: str, instrument_type: str, interval: str
+    client: MarketDataProvider, security_id: str, exchange_segment: str, instrument_type: str, interval: str
 ) -> list[dict]:
     """interval: '1' | '5' | '15' (intraday minutes) or 'day'."""
     if interval not in INTERVAL_LOOKBACK_DAYS:
@@ -61,4 +61,4 @@ def fetch_candles(
     if resp.get("status") == "failure":
         raise ChartCandlesError(f"candle fetch failed for {security_id} ({interval}): {resp}")
 
-    return rows_from_response(resp)
+    return rows_from_response(resp, interval_min=None if interval == DAILY_INTERVAL else int(interval))
