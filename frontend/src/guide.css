@@ -1,0 +1,190 @@
+/* --- The in-app trading guide -------------------------------------------
+
+   A reading page inside a trading app. It keeps the shared bar so the market
+   never disappears while you look something up, but everything below the bar
+   is sized for reading rather than for glancing: a measured column, generous
+   line height, and a contents rail so a rule can be found mid-session without
+   scrolling through the whole document.                                    */
+
+.guide-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .guide-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guide-toc {
+    display: none;
+  }
+}
+
+/* The one place in the app that deliberately keeps a narrow measure: this is
+   prose, and prose past about 80 characters a line gets harder to read, not
+   easier. Everywhere else the extra width buys another column. */
+.guide-body {
+  max-width: 78ch;
+  padding: 28px 34px 36px;
+  line-height: 1.65;
+  font-size: 14.5px;
+}
+
+.guide-body > *:first-child {
+  margin-top: 0;
+}
+
+.guide-body h1 {
+  font-size: 24px;
+  margin: 0 0 6px;
+}
+
+.guide-body h2 {
+  font-size: 18px;
+  margin: 34px 0 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.guide-body h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.guide-body h3 {
+  font-size: 15px;
+  margin: 22px 0 6px;
+}
+
+.guide-body p,
+.guide-body li {
+  color: var(--text);
+}
+
+.guide-body ul,
+.guide-body ol {
+  padding-left: 22px;
+}
+
+.guide-body li + li {
+  margin-top: 5px;
+}
+
+/* Blockquotes carry the rules that matter most in this document -- "wait for
+   a candle to close", "never hold overnight" -- so they are styled to be the
+   loudest thing on the page rather than a decorative indent. */
+.guide-body blockquote {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-dim);
+  border-radius: 0 8px 8px 0;
+  font-weight: 600;
+}
+
+.guide-body blockquote p {
+  margin: 0;
+}
+
+.guide-body table {
+  margin: 14px 0;
+  font-size: 13.5px;
+}
+
+.guide-body th,
+.guide-body td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide-body th {
+  color: var(--text-dim);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Code blocks here are screenshots of the app rendered in text -- the bar,
+   the trade card, the level ladder. Monospace keeps their columns lined up. */
+.guide-body pre {
+  margin: 14px 0;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.guide-body code {
+  font-size: 0.92em;
+}
+
+.guide-body :not(pre) > code {
+  padding: 1px 5px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.guide-body hr {
+  margin: 28px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* --- contents rail --- */
+
+.guide-toc {
+  position: sticky;
+  top: 88px; /* clears the sticky market bar */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.guide-toc-link {
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.guide-toc-link:hover {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.guide-toc-link.is-sub {
+  padding-left: 22px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* --- search, in the bar --- */
+
+.guide-search {
+  padding: 5px 10px;
+  min-width: 190px;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.guide-search:focus {
+  outline: none;
+  border-color: var(--accent);
+}

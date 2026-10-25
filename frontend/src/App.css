@@ -1,0 +1,1386 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  flex: 0 0 240px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 22px;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-name {
+  color: var(--sidebar-text);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.brand-tagline {
+  color: var(--sidebar-text-dim);
+  font-size: 11.5px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge */
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome/Edge/Safari -- scrolling still works, the bar just doesn't render */
+}
+
+/* Group labels are section dividers, not clickable -- kept small, faint, and
+   spaced apart from the links below them (a top border doubles as a rule
+   between groups) so they read as headers, never as another item in the list. */
+.nav-group-label {
+  margin: 22px 12px 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sidebar-border);
+  color: #575b6e;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.sidebar-nav > .nav-group-label:first-child {
+  margin-top: 4px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.nav-link-row {
+  border-radius: 8px;
+}
+
+.nav-link-row:hover {
+  background: var(--sidebar-active-bg);
+}
+
+/* Links are the brightest, boldest text in the sidebar so they read as the
+   thing you click, clearly heavier than the dim group labels above them. */
+.nav-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-left: 2px solid transparent;
+}
+
+.nav-link::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: var(--sidebar-text-dim);
+}
+
+.nav-link.active {
+  color: #fff;
+  font-weight: 700;
+  background: var(--sidebar-active-bg);
+  border-left-color: var(--accent);
+}
+
+.nav-link.active::before {
+  background: var(--accent);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 8px;
+  color: var(--sidebar-text-dim);
+  font-size: 11.5px;
+  font-style: italic;
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.main-area-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+}
+
+.disclaimer {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.fetch-latest-button {
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fetch-latest-button:hover:not(:disabled) {
+  border-color: var(--info);
+  color: var(--info);
+}
+
+.fetch-latest-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.start-trading-button {
+  /* Fixed (not theme-token) colors: this is a solid-fill CTA, and --bullish/--info
+     are tuned to be light/readable as *text* in dark mode, not as a button fill
+     with white text on top -- using them here would go low-contrast in dark mode. */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #16803c;
+  border: 1px solid #16803c;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.start-trading-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.start-trading-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  filter: none;
+}
+
+.timeframe-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.timeframe-button {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.timeframe-button.active {
+  /* Fixed for the same reason as .start-trading-button above. */
+  color: #fff;
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.trading-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+}
+
+/* The card moved up to .chart-pane, so this is just the chart surface plus
+   the space its overlay is positioned against. */
+.candle-chart-canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.candle-chart-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+}
+
+/* Loading, error and empty states sit on top of the canvas instead of above
+   it. As siblings they pushed the chart down and let it snap back when they
+   cleared, so every pane jumped on load and on each timeframe change. */
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px;
+  text-align: center;
+  background: color-mix(in srgb, var(--panel-bg) 88%, transparent);
+  border-radius: 8px;
+}
+
+.chart-overlay-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chart-overlay-detail {
+  font-size: 12px;
+  color: var(--text-dim);
+  max-width: 42ch;
+  line-height: 1.45;
+}
+
+.banner {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.banner-info {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+.banner-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.banner-error {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.panel h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.suggestion-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bias-label {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.confidence {
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+.bias-bullish .bias-label {
+  color: var(--bullish);
+}
+
+.bias-bearish .bias-label {
+  color: var(--bearish);
+}
+
+.bias-neutral .bias-label {
+  color: var(--neutral);
+}
+
+.bias-bullish {
+  color: var(--bullish);
+}
+
+.bias-bearish {
+  color: var(--bearish);
+}
+
+.bias-neutral {
+  color: var(--neutral);
+}
+
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.suggestion-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.field-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rationale {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.not-an-order {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin: 0;
+}
+
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.metric-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.metric-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.sentiment-panel .metrics-row {
+  margin-bottom: 12px;
+}
+
+.oi-strikes {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.chain-table {
+  font-variant-numeric: tabular-nums;
+}
+
+.chain-table th {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chain-table th:nth-child(3) {
+  text-align: center;
+}
+
+.chain-table td {
+  text-align: right;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.strike-cell {
+  text-align: center;
+  font-weight: 600;
+}
+
+.atm-row {
+  background: var(--info-bg);
+}
+
+.hlc-legs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.hlc-leg-column h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.hlc-leg-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  font-size: 14px;
+}
+
+.hlc-domination {
+  font-weight: 700;
+}
+
+.oi-chart-scroll {
+  overflow-x: auto;
+}
+
+.oi-chart-atm-band {
+  fill: var(--info-bg);
+}
+
+.oi-chart-bar-ce {
+  fill: var(--bearish);
+}
+
+.oi-chart-bar-pe {
+  fill: var(--bullish);
+}
+
+.oi-chart-strike-label {
+  font-size: 11px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+}
+
+.oi-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.oi-chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.oi-chart-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  font-style: normal;
+}
+
+.oi-chart-swatch-ce {
+  background: var(--bearish);
+}
+
+.oi-chart-swatch-pe {
+  background: var(--bullish);
+}
+
+.oi-history-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.oi-history-head h2 {
+  margin-bottom: 0;
+}
+
+.oi-history-latest {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.oi-history-line-ce {
+  stroke: var(--bearish);
+  stroke-width: 2;
+}
+
+.oi-history-line-pe {
+  stroke: var(--bullish);
+  stroke-width: 2;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-card-link {
+  margin-top: auto;
+  padding-top: 6px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.dashboard-card-link:hover {
+  text-decoration: underline;
+}
+
+/* The grid fills the window instead of standing at a fixed pixel height.
+   Every layout used to carry its own hardcoded height (620px for one pane,
+   760px for four, and so on), which meant a four-pane grid on a 1080p screen
+   gave each chart about 270px of actual candles after its own chrome -- while
+   on a large monitor the same grid left most of the screen empty. Charts are
+   the one page where vertical space is the whole product.
+
+   The subtracted 188px is the chrome above and below: the sticky bar and its
+   margin, the one-line description, and the page's bottom padding. The
+   min-height keeps it usable on a short window, where the page scrolls
+   instead. */
+.chart-grid {
+  display: grid;
+  gap: 16px;
+  height: calc(100vh - 188px);
+  min-height: 440px;
+}
+
+.chart-grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.chart-grid-2col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chart-grid-2row {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.chart-grid-3left {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas: "a b" "a c";
+}
+
+.chart-grid-4 {
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* Two stacked rows of charts need more room than a single row, so below this
+   the page gives up on fitting the window and scrolls -- a squashed chart is
+   worse than a scroll. Set at 700px rather than 900px: a 900px-tall window
+   yields 712px of grid, which is roughly 300px of canvas per pane in a
+   two-row layout and perfectly usable. Triggering the fallback there made a
+   perfectly good window scroll for no reason. */
+@media (max-height: 700px) {
+  .chart-grid-2row,
+  .chart-grid-3left,
+  .chart-grid-4 {
+    height: auto;
+    min-height: 620px;
+  }
+
+  .chart-grid-2row .chart-pane,
+  .chart-grid-3left .chart-pane,
+  .chart-grid-4 .chart-pane {
+    min-height: 300px;
+  }
+}
+
+.chart-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px 12px;
+  /* Panes are the same component at wildly different widths -- full width in
+     the single layout, roughly a third of it in the four-pane grid. Sizing
+     the header against the pane rather than the window is the only way one
+     rule can serve both; a media query would have to guess which layout is
+     active. */
+  container-type: inline-size;
+}
+
+/* One row of chrome, inside the card: symbol, the price readout, timeframes.
+   Was two rows outside the card plus a repeated title inside it. */
+.chart-pane-head {
+  display: flex;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+  /* Deliberately no wrapping: a second row of controls comes straight out of
+     the chart's height, which on this page is the thing being bought. The
+     container queries below shed content instead of wrapping it. */
+  flex-wrap: nowrap;
+}
+
+/* Narrow pane: the price readout drops to close-only. A close is the number
+   people actually read off a small chart. */
+@container (max-width: 560px) {
+  .chart-ohlc .chart-ohlc-hide-narrow {
+    display: none;
+  }
+}
+
+/* Narrower still: no room for a readout at all without squeezing the
+   timeframe buttons, which are the thing being clicked. */
+@container (max-width: 400px) {
+  .chart-ohlc {
+    display: none;
+  }
+}
+
+/* In-pane timeframe buttons are smaller than the page-level ones -- they sit
+   in a card's header, not a page header. */
+.chart-pane-head .timeframe-button {
+  padding: 4px 9px;
+  font-size: 12px;
+}
+
+.chart-pane-head .chart-pane-select {
+  padding: 4px 8px;
+  font-size: 12.5px;
+  max-width: 150px;
+}
+
+/* The readout takes the middle and pushes the timeframes right, so the two
+   control clusters stay at the card's edges where they are easy to hit. */
+.chart-ohlc {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-right: auto;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.chart-ohlc b {
+  font-weight: 700;
+}
+
+.chart-ohlc.is-up b {
+  color: var(--bullish);
+}
+
+.chart-ohlc.is-down b {
+  color: var(--bearish);
+}
+
+.chart-ohlc-note {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.chart-pane-select {
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.layout-picker {
+  position: relative;
+}
+
+.layout-picker .fetch-latest-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layout-popover-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+}
+
+.layout-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 230px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+.layout-popover-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.layout-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.layout-option:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.layout-option.active {
+  color: var(--text);
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.layout-icon {
+  display: grid;
+  gap: 2px;
+  width: 26px;
+  height: 18px;
+  color: inherit;
+}
+
+.layout-icon-cell {
+  background: currentColor;
+  opacity: 0.45;
+  border-radius: 1px;
+}
+
+.chart-grid-1-icon {
+  grid-template-columns: 1fr;
+}
+
+.chart-grid-2col-icon {
+  grid-template-columns: 1fr 1fr;
+}
+
+.chart-grid-2row-icon {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.chart-grid-3left-icon {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "a b" "a c";
+}
+
+.chart-grid-4-icon {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.sync-heading {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.sync-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  flex: 0 0 32px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.switch-track {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+
+.switch-track::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--accent);
+}
+
+.switch input:checked + .switch-track::before {
+  transform: translateX(14px);
+}
+
+/* --- Demo/placeholder content (features with no real backend yet) --- */
+
+.demo-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px dashed var(--warning);
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.demo-banner-tag {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--warning);
+  color: #1a1400;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.demo-banner-text {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+.nav-link-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-demo-tag {
+  flex: 0 0 auto;
+  margin-left: 4px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-text-dim);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.nav-link-row {
+  display: flex;
+  align-items: center;
+}
+
+/* --- Command Center --- */
+
+.command-center-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.command-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.command-stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.command-stat-value {
+  font-size: 19px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.command-stat-sub {
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+
+.recommendation-box {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.recommendation-reason {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+/* --- Score / strength bars (reused by Market Structure, AI Analyst, Scenario
+   Engine, Backtest -- mirrors the ASCII bar-chart style the requirement doc
+   uses for zone strength / seller pressure / trade-setup scores). --- */
+
+.score-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding: 3px 0;
+}
+
+.score-bar-label {
+  flex: 0 0 84px;
+  text-align: right;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-bar-track {
+  flex: 1;
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 5px;
+}
+
+.score-bar-fill.bullish {
+  background: var(--bullish);
+}
+
+.score-bar-fill.bearish {
+  background: var(--bearish);
+}
+
+.score-bar-value {
+  flex: 0 0 30px;
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Evidence bars on the AI Analyst setup cards carry sentence-length labels
+   ("Dealer hedging amplifies moves"), which wrap to three lines inside the
+   84px label column the other score bars share. Widened and left-aligned
+   here rather than changing that shared width, which suits the short numeric
+   labels it was built for. */
+.evidence-bars .score-bar-label {
+  flex: 0 0 210px;
+  text-align: left;
+}
+
+@media (max-width: 1100px) {
+  .evidence-bars .score-bar-label {
+    flex: 0 0 140px;
+  }
+}
+
+/* --- Zone cards (Market Structure / scored S/R) --- */
+
+.zone-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.zone-card:last-child {
+  border-bottom: none;
+}
+
+.zone-range {
+  flex: 0 0 140px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.zone-class {
+  flex: 0 0 130px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.zone-class-institutional { color: var(--bullish); }
+.zone-class-strong { color: var(--info); }
+.zone-class-moderate { color: var(--neutral); }
+.zone-class-weak { color: var(--text-dim); }
+
+.zone-factors {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* --- Structure event list (HH/HL/LH/LL, BOS, etc.) --- */
+
+.structure-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.structure-event {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 13.5px;
+}
+
+.structure-event-tag {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* --- Scenario cards --- */
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.scenario-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.scenario-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.scenario-card-title {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.scenario-card-prob {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.scenario-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+  padding: 3px 0;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Setup cards (AI Analyst) ---
+   Deliberately NOT reusing .scenario-card/.scenario-field above. Those are
+   built for short label/value pairs ("Target", "24,150") and lay out with
+   `justify-content: space-between`, which pushes the value hard right. That
+   is fine for a number and wrong for a sentence: a paragraph placed there
+   ends up right-aligned against a ragged left edge, which is what the first
+   version of this page shipped. Setups are explanatory by design -- the whole
+   point is the assumption and the invalidation, in full sentences -- so they
+   need a layout built for prose. */
+
+.setup-grid {
+  display: grid;
+  /* 420px, not the 240px the scenario grid uses: these cards hold sentences,
+     and a 240px column turns every one of them into a narrow ribbon of text. */
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 14px;
+}
+
+.setup-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--panel-bg);
+}
+
+.setup-card.is-armed {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-dim);
+}
+
+.setup-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.setup-card-title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.setup-card-grade {
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.setup-field {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+/* Label sits above its value rather than beside it. A fixed side-column wide
+   enough for "The assumption you are making" would leave the numeric fields
+   looking stranded, and stacking keeps every value on one consistent left
+   margin -- which is what makes a card of mixed prose and numbers scannable. */
+.setup-field-label {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.setup-field ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.setup-field li + li {
+  margin-top: 4px;
+}
+
+.setup-levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.setup-level-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Replay controls --- */
+
+.replay-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.replay-controls input[type="date"],
+.replay-controls input[type="time"],
+.replay-controls select {
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.replay-scrubber {
+  width: 100%;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.checklist-mark {
+  flex: 0 0 18px;
+  font-weight: 800;
+}
+
+.checklist-mark.pass { color: var(--bullish); }
+.checklist-mark.fail { color: var(--bearish); }
+
+@media (max-width: 900px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex: none;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    padding: 4px 8px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .nav-group-label {
+    width: 100%;
+    margin: 4px 8px 0;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .chart-grid-1,
+  .chart-grid-2col,
+  .chart-grid-2row,
+  .chart-grid-3left,
+  .chart-grid-4 {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+    height: auto;
+  }
+
+  .chart-grid .chart-pane {
+    height: 340px;
+  }
+
+  .layout-popover {
+    right: auto;
+    left: 0;
+  }
+}
