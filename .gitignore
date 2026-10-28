@@ -9,4 +9,11 @@ __pycache__/
 build/
 dist/
 .pytest_cache/
-frontend/node_modules/
+apps/web/node_modules/
+
+.hypothesis/
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/research-dist/
+
+.harness/

@@ -1,0 +1,12 @@
+# Initial routing to the repository owner; verify collaborator eligibility and
+# use the user as human approver; independent QA is a separate AI context.
+# This file does not enforce reviews without external branch protection.
+/src/algooptionx_harness/ @djayakumar92
+/.agents/ @djayakumar92
+/.github/ @djayakumar92
+/AGENTS.md @djayakumar92
+/docs/ @djayakumar92
+/apps/web/tests/visual-baselines/ @djayakumar92
+/src/algooptionx/ @djayakumar92
+/apps/web/src/ @djayakumar92
+/config/ @djayakumar92
