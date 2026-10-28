@@ -1,6 +1,6 @@
 # AlgoOptionX development
 
-The application name is AlgoOptionX. Use the existing checkout; cloud tasks are already isolated. Default development uses the credential-free `dhan_analyzer.api.paper_app` application. The original broker research server is `dhan_analyzer.api.app` and requires Dhan credentials.
+The application name is AlgoOptionX. Use the existing checkout; cloud tasks are already isolated. Default development uses the credential-free `algooptionx.api.app` application. The original broker research server is `algooptionx.research.api.app` and requires Dhan credentials.
 
 - Read README.md and the applicable specs before changes. Treat synthetic fixtures and research outputs honestly; do not label rule scores as trained AI probabilities or real investment performance.
 - Run `uv run pytest -q -rs`, frontend build and lint. Run Playwright for affected journeys. Preserve failures and skips in reports.
@@ -12,9 +12,9 @@ The application name is AlgoOptionX. Use the existing checkout; cloud tasks are 
 
 ## Development harness
 
-Read `harness/README.md` for harness work. The fourteen role contracts are in `harness/agents/`; native reusable skills are in `.agents/skills/`. Dispatch only roles relevant to the task. Use a distinct read-only validator context after implementation; do not describe your own tests as independent approval.
+Read `docs/development/ai-development-harness.md` for harness work. The fourteen role contracts are in `src/algooptionx_harness/agents/`; native reusable skills are in `.agents/skills/`. Dispatch only roles relevant to the task. Use a distinct read-only validator context after implementation; do not describe your own tests as independent approval.
 
-Use captured tasks and baseline backups in ignored `.harness/tasks/`. Keep specification inputs immutable within an approved task; create a new revision when they change. Run `algooptionx-harness validate-config` and relevant `tests/harness/` checks. Keep test/build reports inside ignored unique run directories and verify evidence hashes before using them. Never regenerate visual candidates during CI or call candidate comparisons human-approved design.
+Use captured tasks and baseline backups in ignored `.harness/tasks/`. Keep specification inputs immutable within an approved task; create a new revision when they change. Run `algooptionx-harness validate-config` and relevant `tests/control_plane/` checks. Keep test/build reports inside ignored unique run directories and verify evidence hashes before using them. Never regenerate visual candidates during CI or call candidate comparisons human-approved design.
 
 Optional unattended writing workers require a signed implementation gate; normal chat-approved edits occur in the current authorized Codex session. QA/release require current passing evidence and an independent-validator handoff. Human private keys and trusted release policy belong outside the agent environment; an unsigned request, skill, role, local file or passing CI run conveys no approval authority. Do not bypass external gates when access, identity enrollment or human approval is missing. Preserve reports and report the precise external blocker.
 

@@ -16,18 +16,18 @@ jobs:
         with:
           node-version: '24'
       - run: uv sync --frozen --extra dev --python 3.12
-      - run: npm --prefix frontend ci
-      - run: npm --prefix frontend run build
+      - run: npm --prefix apps/web ci
+      - run: npm --prefix apps/web run build
       - run: npx playwright install --with-deps chromium
-        working-directory: frontend
+        working-directory: apps/web
       # Missing/different renderer profiles fail. This job never updates snapshots
       # and never acts as a human design/release approval.
-      - run: npm --prefix frontend run test:visual
+      - run: npm --prefix apps/web run test:visual
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: visual-comparison-for-human-review
           path: |
-            frontend/test-results/
-            frontend/playwright-report/
-            frontend/tests/visual-baselines/manifest.json
+            apps/web/test-results/
+            apps/web/playwright-report/
+            apps/web/tests/visual-baselines/manifest.json

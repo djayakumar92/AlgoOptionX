@@ -1,6 +1,6 @@
 # Market structure and trend: what actually has evidence
 
-Extends `dhan_analyzer/signals/trend.py`, which already computes VWAP,
+Extends `src/algooptionx/research/signals/trend.py`, which already computes VWAP,
 9/21 moving-average crossover, and ADX(14) trend strength. Nothing about
 **market structure** (swing highs/lows, higher-high/higher-low sequences,
 break of structure, trending-vs-ranging regime) is implemented at all --
