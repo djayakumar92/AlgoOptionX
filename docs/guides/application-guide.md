@@ -1,4 +1,6 @@
-# StrikeLine — Make Plan Easy
+# AlgoOptionX — research application guide
+
+This guide covers the original Dhan-backed research interface (`npm --prefix apps/web run build:research`). For the default offline paper workspace, see the [main README](../../README.md).
 
 A private, single-user NIFTY options analysis tool built on your DhanHQ account.
 It watches the market, automates your own trading rules, and keeps a record of
@@ -11,7 +13,7 @@ only — you still decide and trade manually.
 
 ## How to open it
 
-Double-click **`Start Analyzer.bat`**. It starts the app and opens your browser
+Double-click **`scripts/windows/start-research.bat`**. It starts the app and opens your browser
 to it automatically. Best used during NSE market hours (9:15–15:30 IST), since
 that's when live option-chain and candle data are actually moving. Closing the
 console window stops the app.
@@ -26,7 +28,7 @@ routine — what to look at, when, and exactly how to enter and exit** — open
 contents rail, and keeps the live market bar at the top so you never lose sight
 of the price while looking a rule up.
 
-That page is served from `docs/guides/trading-research.md` in this folder, so the file
+That page is served from `docs/guides/trading-research.md` in the repository, so the file
 and the in-app page are the same document — edit the file and the page follows.
 
 ---

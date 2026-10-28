@@ -837,3 +837,141 @@ def test_report_fifo_and_log_symlink_cannot_overwrite_source(project):
     assert evidence.status == "failed"
     assert (root / "feature.py").read_text() == original
     assert "interfered" in evidence.results[0].detail
+
+
+@pytest.mark.parametrize("termination", ["timeout", "failure"])
+def test_worker_always_reports_out_of_scope_changes_on_unsuccessful_exit(
+    project, trust, termination
+):
+    root, task, baseline = project
+    keys, policy = trust
+    authorization = verify_gate(
+        task,
+        "implementation",
+        implementation_chain(task, keys),
+        policy,
+        task.baseline_digest,
+    )
+    executable = root / ".harness/mutating-worker"
+    executable.parent.mkdir(exist_ok=True)
+    executable.write_text(
+        "#!"
+        + sys.executable
+        + "\n"
+        + "import sys,time\nfrom pathlib import Path\nsys.stdin.read()\n"
+        + "Path('outside.py').write_text('unexpected worker edit')\n"
+        + ("time.sleep(20)\n" if termination == "timeout" else "sys.exit(7)\n")
+    )
+    executable.chmod(0o700)
+    output = root / f".harness/agents/{termination}"
+    with pytest.raises(HarnessError, match="Out-of-scope change: outside.py") as error:
+        codex_worker(
+            root,
+            task,
+            baseline,
+            "backend-engineer",
+            output,
+            authorization=authorization,
+            executable=str(executable),
+            timeout=1,
+        )
+    assert (root / "outside.py").read_text() == "unexpected worker edit"
+    result = json.loads((output / "outcome.json").read_text())
+    assert result["status"] == "blocked"
+    assert result["runtime_state"] == (
+        "timed_out" if termination == "timeout" else "failed"
+    )
+    assert result["exit_code"] == (-9 if termination == "timeout" else 7)
+    assert result["changed_paths"] == ["outside.py"]
+    assert result["integrity_status"] == "failed"
+    assert result["source_before"] != result["source_after"]
+    assert result["deployment_performed"] is False
+    assert ("timed out" if termination == "timeout" else "exited with 7") in str(
+        error.value
+    )
+
+
+def test_canceled_worker_preserves_cancellation_and_records_integrity(
+    project, trust, monkeypatch
+):
+    root, task, baseline = project
+    keys, policy = trust
+    authorization = verify_gate(
+        task,
+        "implementation",
+        implementation_chain(task, keys),
+        policy,
+        task.baseline_digest,
+    )
+    executable = root / ".harness/canceled-worker"
+    executable.parent.mkdir(exist_ok=True)
+    executable.write_text(
+        "#!"
+        + sys.executable
+        + "\nimport sys,time\nfrom pathlib import Path\nsys.stdin.read()\nPath('outside.py').write_text('interrupted worker edit')\ntime.sleep(20)\n"
+    )
+    executable.chmod(0o700)
+    original = subprocess.Popen.communicate
+
+    def interrupt(process, input=None, timeout=None):
+        if process.args[0] == str(executable):
+            try:
+                return original(process, input=input, timeout=0.3)
+            except subprocess.TimeoutExpired:
+                raise KeyboardInterrupt("simulated user cancellation")
+        return original(process, input=input, timeout=timeout)
+
+    monkeypatch.setattr(subprocess.Popen, "communicate", interrupt)
+    output = root / ".harness/agents/canceled"
+    with pytest.raises(KeyboardInterrupt, match="simulated user cancellation"):
+        codex_worker(
+            root,
+            task,
+            baseline,
+            "backend-engineer",
+            output,
+            authorization=authorization,
+            executable=str(executable),
+            timeout=5,
+        )
+    result = json.loads((output / "outcome.json").read_text())
+    assert result["runtime_state"] == "canceled"
+    assert result["integrity_status"] == "failed"
+    assert result["changed_paths"] == ["outside.py"]
+    assert (root / "outside.py").read_text() == "interrupted worker edit"
+
+
+@pytest.mark.parametrize("handoff_status", ["blocked", "failed"])
+def test_worker_outcome_cannot_promote_incomplete_handoff(project, handoff_status):
+    root, task, baseline = project
+    executable = root / ".harness/incomplete-worker"
+    executable.parent.mkdir(exist_ok=True)
+    script = """import sys,json
+from pathlib import Path
+args=sys.argv[1:]
+bundle=json.loads(sys.stdin.read())
+result={'schema_version':1,'task_id':bundle['task']['id'],'task_digest':bundle['task_digest'],'source_digest':bundle['source_digest'],'role':bundle['role']['id'],'actor':bundle['assigned_actor'],'requirement_ids':bundle['task']['requirement_ids'],'status':__STATUS__,'summary':'Independent review could not complete; further investigation is required.','artifacts':[],'findings':[],'next_role':None}
+Path(args[args.index('--output-last-message')+1]).write_text(json.dumps(result))
+"""
+    executable.write_text(
+        "#!"
+        + sys.executable
+        + "\n"
+        + script.replace("__STATUS__", repr(handoff_status))
+    )
+    executable.chmod(0o700)
+    output = root / f".harness/agents/{handoff_status}"
+    path = codex_worker(
+        root,
+        task,
+        baseline,
+        "independent-validator",
+        output,
+        executable=str(executable),
+        timeout=5,
+    )
+    result = json.loads((output / "outcome.json").read_text())
+    assert result["status"] == handoff_status
+    assert json.loads(path.read_text())["status"] == handoff_status
+    assert result["integrity_status"] == "passed"
+    assert result["deployment_performed"] is False

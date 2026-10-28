@@ -18,6 +18,7 @@ from algooptionx_harness.workspace import (
     snapshot,
     validate_scope,
     write_json,
+    changed_paths,
 )
 
 
@@ -199,8 +200,12 @@ def codex_worker(
         )
         if key in os.environ
     }
-    with (output_dir / "runtime.jsonl").open("wb") as log:
-        try:
+    process = None
+    runtime_error = None
+    runtime_state = "unavailable"
+    runtime_problem = ""
+    try:
+        with (output_dir / "runtime.jsonl").open("wb") as log:
             process = subprocess.Popen(
                 argv,
                 stdin=subprocess.PIPE,
@@ -210,35 +215,86 @@ def codex_worker(
                 env=env,
                 start_new_session=True,
             )
-        except OSError as exc:
-            raise HarnessError(
-                f"Agent runtime unavailable: {type(exc).__name__}"
-            ) from exc
-        try:
-            process.communicate(json.dumps(bundle).encode(), timeout=timeout)
-        except subprocess.TimeoutExpired as exc:
-            raise HarnessError(
-                "Agent runtime timed out; process group stopped and logs retained."
-            ) from exc
-        finally:
             try:
-                os.killpg(process.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            process.wait()
-    after = snapshot(root)
-    if not writes and digest(before) != digest(after):
-        raise HarnessError(
-            "Read-only review changed source; reject the handoff and inspect the sandbox."
+                process.communicate(json.dumps(bundle).encode(), timeout=timeout)
+                runtime_state = "exited"
+            finally:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                process.wait()
+    except subprocess.TimeoutExpired as exc:
+        runtime_error = exc
+        runtime_state = "timed_out"
+        runtime_problem = (
+            "Agent runtime timed out; process group stopped and logs retained."
         )
-    validate_scope(task, baseline, after)
-    if process.returncode:
-        raise HarnessError(
+    except (KeyboardInterrupt, SystemExit) as exc:
+        runtime_error = exc
+        runtime_state = "canceled"
+        runtime_problem = (
+            "Agent runtime canceled; process group stopped and logs retained."
+        )
+    except Exception as exc:
+        runtime_error = exc
+        runtime_state = "failed" if process else "unavailable"
+        runtime_problem = f"Agent runtime unavailable or failed: {type(exc).__name__}"
+
+    # Every terminal path, including interruption, must inspect the surviving
+    # source. Preserve changes for review rather than resetting user work.
+    integrity_errors = []
+    after = None
+    changed = []
+    try:
+        after = snapshot(root)
+        changed = changed_paths(before, after)
+        if not writes and digest(before) != digest(after):
+            integrity_errors.append(
+                "Read-only review changed source; reject the handoff and inspect the sandbox."
+            )
+        validate_scope(task, baseline, after)
+    except Exception as exc:
+        integrity_errors.append(f"Post-worker integrity check failed: {exc}")
+    if not runtime_problem and process is not None and process.returncode:
+        runtime_problem = (
             f"Agent exited with {process.returncode}; retained its failure log."
         )
-    accepted = accept_handoff(root, task, baseline, output, role_name)
-    if accepted.actor != bundle["assigned_actor"]:
-        raise HarnessError("Agent returned a handoff for another runtime actor.")
+        runtime_state = "failed"
+    outcome = {
+        "schema_version": 1,
+        "task_id": task.id,
+        "actor": bundle["assigned_actor"],
+        "role": role_name,
+        "status": "blocked",
+        "runtime_state": runtime_state,
+        "runtime_error": runtime_problem,
+        "exit_code": process.returncode if process is not None else None,
+        "source_before": digest(before),
+        "source_after": digest(after) if after is not None else None,
+        "changed_paths": changed,
+        "integrity_status": "failed" if integrity_errors else "passed",
+        "integrity_errors": integrity_errors,
+        "human_approval": False,
+        "deployment_performed": False,
+    }
+    write_json(output_dir / "outcome.json", outcome)
+    if isinstance(runtime_error, (KeyboardInterrupt, SystemExit)):
+        raise runtime_error
+    if runtime_problem or integrity_errors:
+        raise HarnessError(
+            " ".join([runtime_problem, *integrity_errors]).strip()
+        ) from runtime_error
+    try:
+        accepted = accept_handoff(root, task, baseline, output, role_name)
+        if accepted.actor != bundle["assigned_actor"]:
+            raise HarnessError("Agent returned a handoff for another runtime actor.")
+    except Exception as exc:
+        outcome["handoff_error"] = str(exc)
+        write_json(output_dir / "outcome.json", outcome)
+        raise
+    outcome["status"] = accepted.status
+    write_json(output_dir / "outcome.json", outcome)
     return output
 
 
