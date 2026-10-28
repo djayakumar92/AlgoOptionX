@@ -6,6 +6,15 @@
     <meta name="theme-color" content="#0d1017" />
     <meta name="description" content="AlgoOptionX — NIFTY options research, deterministic simulation and disciplined paper trading." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Apply the saved workspace palette before the first paint.
+      (() => {
+        let preference = "dark";
+        try { preference = localStorage.getItem("algooptionx.theme") || "dark"; } catch {}
+        const theme = preference === "light" || (preference === "system" && !matchMedia("(prefers-color-scheme: dark)").matches) ? "light" : "dark";
+        document.documentElement.dataset.workspaceTheme = theme;
+      })();
+    </script>
     <title>AlgoOptionX · Research & Paper Trading</title>
   </head>
   <body>

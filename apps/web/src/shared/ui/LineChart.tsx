@@ -4,7 +4,7 @@ import { EmptyState } from "./EmptyState";
 export function LineChart({
   values,
   label,
-  color = "#4ddbb0",
+  color = "var(--ax-green)",
 }: {
   values: number[];
   label: string;
@@ -52,7 +52,7 @@ export function LineChart({
             x2="740"
             y1={y}
             y2={y}
-            stroke="#ffffff09"
+            stroke="var(--ax-border)"
             strokeDasharray="4 5"
           />
         ))}
@@ -67,16 +67,16 @@ export function LineChart({
           strokeWidth="2.5"
           strokeLinejoin="round"
         />
-        <text x="750" y="49" fill="#7e879a" fontSize="10">
+        <text x="750" y="49" fill="var(--ax-muted)" fontSize="10">
           {number(high)}
         </text>
-        <text x="750" y="199" fill="#7e879a" fontSize="10">
+        <text x="750" y="199" fill="var(--ax-muted)" fontSize="10">
           {number(low)}
         </text>
-        <text x="30" y="231" fill="#7e879a" fontSize="10">
+        <text x="30" y="231" fill="var(--ax-muted)" fontSize="10">
           SESSION START
         </text>
-        <text x="698" y="231" fill="#7e879a" fontSize="10">
+        <text x="698" y="231" fill="var(--ax-muted)" fontSize="10">
           LATEST
         </text>
       </svg>

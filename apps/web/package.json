@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test:e2e": "playwright test workspace.spec.ts",
+    "test:e2e": "playwright test workspace.spec.ts theme.spec.ts",
     "test:visual": "playwright test visual.spec.ts",
     "build:research": "tsc -b && vite build --mode research --outDir research-dist",
     "visual:candidates": "node tests/capture-visual.mjs",
