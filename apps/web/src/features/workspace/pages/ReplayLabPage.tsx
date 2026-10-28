@@ -95,7 +95,7 @@ export function ReplayLabPage() {
             <LineChart
               values={result.curve.map((r) => r.equity / 100)}
               label="Replay equity"
-              color="#a89aff"
+              color="var(--ax-purple)"
             />
             <p className="ax-footnote">
               {result.disclaimer} All remaining positions are closed at the end

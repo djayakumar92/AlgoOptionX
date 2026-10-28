@@ -1,3 +1,5 @@
+import { useWorkspaceTheme } from "../shared/theme/useWorkspaceTheme";
+import type { ThemePreference } from "../shared/theme/useWorkspaceTheme";
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { api, command } from "../features/workspace/api/client";
@@ -54,6 +56,7 @@ const aliases: Record<string, string> = {
 };
 export default function WorkspaceApp() {
   const location = useLocation();
+  const { theme, changeTheme } = useWorkspaceTheme();
   const path = aliases[location.pathname] || location.pathname;
   const [state, setState] = useState<Workspace | null>(null),
     [error, setError] = useState(""),
@@ -251,6 +254,14 @@ export default function WorkspaceApp() {
             <strong>{current?.label || "Page"}</strong>
           </div>
           <div className="ax-topbar-right">
+            <label className="ax-theme-control">
+              <span>Theme</span>
+              <select aria-label="Theme" value={theme} onChange={(event) => changeTheme(event.target.value as ThemePreference)}>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="system">System</option>
+              </select>
+            </label>
             <span className="ax-connection">
               <i className={`ax-dot ${!connection ? "red" : ""}`} />
               {connection ? "Local engine connected" : "Connection lost"}
