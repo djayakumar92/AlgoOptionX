@@ -1,0 +1,6680 @@
+{
+  "source_commit": "ff8027ab8a9a54e6eed2deaef895eab91151145f",
+  "method": "All HEAD-tracked files hashed; UTF-8 files indexed, Python AST and static quoted TypeScript imports extracted; targeted semantic review is recorded separately. Ignored private files and databases not read.",
+  "file_count": 289,
+  "by_top_level": {
+    ".agents": 9,
+    ".claude": 5,
+    ".env.example": 1,
+    ".github": 3,
+    ".gitignore": 1,
+    ".python-version": 1,
+    "AGENTS.md": 1,
+    "README.md": 1,
+    "apps": 122,
+    "config": 1,
+    "docs": 12,
+    "pyproject.toml": 1,
+    "scripts": 2,
+    "src": 94,
+    "tests": 34,
+    "uv.lock": 1
+  },
+  "files": [
+    {
+      "path": ".agents/skills/architecture/SKILL.md",
+      "sha256": "b0398ae1578293857ff1eb95cf5e552a27c5dc55f84e4f9c2d4e9e8106b0c5d5",
+      "bytes": 625,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/evidence-review/SKILL.md",
+      "sha256": "773e3ce045c8b1c7cd32ac80dd6cf8521a2cdfdb6528544aef520674ae052328",
+      "bytes": 661,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/implementation/SKILL.md",
+      "sha256": "13afc6d07b853af2a78bafab345e7ff97e4c1135222f9cecc3b0b7b4cd685725",
+      "bytes": 642,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/quant-research/SKILL.md",
+      "sha256": "5e36106bd08311709c4dd939d84f48e9872387a68823475d41a8ceb689c63433",
+      "bytes": 705,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/release-governance/SKILL.md",
+      "sha256": "769e16966deeb8160a56e934b864ed7fda12bb3436aea0dd8e83eb97b0f5f6ab",
+      "bytes": 877,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/risk-validation/SKILL.md",
+      "sha256": "fa7025b28852280d5cda229661e7de7514583ab9864feaebdf5b8a2d4258c28d",
+      "bytes": 644,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/security-review/SKILL.md",
+      "sha256": "99e107947179bfa44fc162e0f7e012f75ed2e7edfef440353eaa0c51e80e3d3a",
+      "bytes": 661,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/specification/SKILL.md",
+      "sha256": "0e171a9a0f00147cff27173c5cc254189816e92b824a26690671cb33a4170d78",
+      "bytes": 634,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".agents/skills/visual-review/SKILL.md",
+      "sha256": "e0167ecc695b54e0662709460e3d14772f3ae6e085bf151e5284c9d49f0aa6c9",
+      "bytes": 794,
+      "group": ".agents",
+      "symbols": [],
+      "lines": 10
+    },
+    {
+      "path": ".claude/skills/nifty-options-domain-knowledge/SKILL.md",
+      "sha256": "dfc0b592029b7102f2c92d73e7158266b17a7c71859667eb52044fcef594f961",
+      "bytes": 6714,
+      "group": ".claude",
+      "symbols": [],
+      "lines": 62
+    },
+    {
+      "path": ".claude/skills/nifty-options-domain-knowledge/references/candlestick-patterns.md",
+      "sha256": "1753c75b53651ce3d5442b8e50c0d613db33a67fb10ff2e0e644e3decfbe7865",
+      "bytes": 11791,
+      "group": ".claude",
+      "symbols": [],
+      "lines": 217
+    },
+    {
+      "path": ".claude/skills/nifty-options-domain-knowledge/references/greeks-iv-timing.md",
+      "sha256": "fa6e98c016c762e4a81aa1db41cb560655758111c81e7aeafca7e68d40b429e9",
+      "bytes": 5810,
+      "group": ".claude",
+      "symbols": [],
+      "lines": 109
+    },
+    {
+      "path": ".claude/skills/nifty-options-domain-knowledge/references/market-structure-trend.md",
+      "sha256": "1949894e43d187579aaa3cde0d44302c3e6aa73ae53f18a22ae2b5fc5050ccde",
+      "bytes": 11221,
+      "group": ".claude",
+      "symbols": [],
+      "lines": 197
+    },
+    {
+      "path": ".claude/skills/nifty-options-domain-knowledge/references/oi-pcr-institutional-practice.md",
+      "sha256": "245331605f5219c685086d9930565400ccb962a56ccfbdb1f5b313061821a362",
+      "bytes": 7087,
+      "group": ".claude",
+      "symbols": [],
+      "lines": 131
+    },
+    {
+      "path": ".env.example",
+      "sha256": "fdc027ca3c5af57c22c95a951d7c4a3c9c7dbb1584c22305e57685d9456c2dd0",
+      "bytes": 561,
+      "group": ".env.example",
+      "symbols": [],
+      "lines": 13
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "sha256": "0132bd6ad7624fc7aa80b87c0047d866dce782cf4dba624c3b80e7829da88cc0",
+      "bytes": 493,
+      "group": ".github",
+      "symbols": [],
+      "lines": 12
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "2a3869411e56edc903ca605ddaeeb96932a314f1f4fa58aea5d3e2effac8f532",
+      "bytes": 3910,
+      "group": ".github",
+      "symbols": [],
+      "lines": 98
+    },
+    {
+      "path": ".github/workflows/visual-evidence.yml",
+      "sha256": "cf16cd1bf9a0539876d33d1726aeefe03053197b8fba4ee554a707f5a740bb14",
+      "bytes": 1079,
+      "group": ".github",
+      "symbols": [],
+      "lines": 33
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "677f0e3f15ad4548609108d21ee3685129beee105695e7f13290b92c576d4268",
+      "bytes": 211,
+      "group": ".gitignore",
+      "symbols": [],
+      "lines": 19
+    },
+    {
+      "path": ".python-version",
+      "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "bytes": 5,
+      "group": ".python-version",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "08a381012ce17e774d0fa12772348f865827dadcf34503b341fd0f4774c9ebfb",
+      "bytes": 3824,
+      "group": "AGENTS.md",
+      "symbols": [],
+      "lines": 23
+    },
+    {
+      "path": "README.md",
+      "sha256": "b65c43e4bff1a6ddae9cfe0a0cfb91cea2249c0d717a0b8b5631722aa5ade011",
+      "bytes": 7375,
+      "group": "README.md",
+      "symbols": [],
+      "lines": 93
+    },
+    {
+      "path": "apps/web/.env.research",
+      "sha256": "8c78634cbadd4050a287496dd29c83c374de524a4d4ca8fae4876329f5edf935",
+      "bytes": 24,
+      "group": "apps",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "apps/web/README.md",
+      "sha256": "fa8aac78b8be1993010b57f41000a243ecba006f6731513fe4ec91e788bf2517",
+      "bytes": 1278,
+      "group": "apps",
+      "symbols": [],
+      "lines": 32
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "9db7d3401e783f828a26d608eac5f654ca8feaee0eeac7d8cdb6857d3c2f53da",
+      "bytes": 1038,
+      "group": "apps",
+      "symbols": [],
+      "lines": 24
+    },
+    {
+      "path": "apps/web/package-lock.json",
+      "sha256": "62f5b8fd062123963c38c218873f77d9d8257b9d21e34aa2a3c47af7a919c5ef",
+      "bytes": 103703,
+      "group": "apps",
+      "symbols": [],
+      "lines": 2911
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "4e36557a45e0781dcf7dcad4c8c4f1e5ce6c62555cf11b182cde9ac0523ae6c1",
+      "bytes": 1001,
+      "group": "apps",
+      "symbols": [],
+      "lines": 35
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "sha256": "cf29bf1d637764f0483d774e952b150e4b0c7e7221d384b928e851ea3a63bc47",
+      "bytes": 1487,
+      "group": "apps",
+      "symbols": [],
+      "lines": 51,
+      "imports": [
+        "@playwright/test",
+        "node:path"
+      ]
+    },
+    {
+      "path": "apps/web/public/favicon.svg",
+      "sha256": "29f517ab2ea58be6189c94605fc43996c9e156eb52131727cc414af1a6ce5c1a",
+      "bytes": 263,
+      "group": "apps",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "apps/web/public/icons.svg",
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a",
+      "bytes": 5031,
+      "group": "apps",
+      "symbols": [],
+      "lines": 24
+    },
+    {
+      "path": "apps/web/src/app/WorkspaceApp.tsx",
+      "sha256": "79d2020534ff3c50ab782407a03984cd620739a851c6bcb9ddcb9f1b0f1063e3",
+      "bytes": 14917,
+      "group": "apps",
+      "symbols": [],
+      "lines": 431,
+      "imports": [
+        "../shared/theme/useWorkspaceTheme",
+        "../shared/theme/useWorkspaceTheme",
+        "react",
+        "react-router-dom",
+        "../features/workspace/api/client",
+        "../features/workspace/lib/format",
+        "../features/workspace/types",
+        "../shared/ui",
+        "../shared/ui",
+        "../features/workspace/components",
+        "../features/workspace/pages",
+        "../features/workspace/styles/workspace.css"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/App.css",
+      "sha256": "0485f5347eee273fcb4728055c18edfc0400d8a2f00511ef295ce7c28039d859",
+      "bytes": 26421,
+      "group": "apps",
+      "symbols": [],
+      "lines": 1386
+    },
+    {
+      "path": "apps/web/src/features/research/ResearchApp.tsx",
+      "sha256": "63bee7f3e93e7b641e7230f1a1b238f84f75dc4680f7f3baf76276db499abc30",
+      "bytes": 2600,
+      "group": "apps",
+      "symbols": [],
+      "lines": 58,
+      "imports": [
+        "react",
+        "react-router-dom",
+        "./App.css",
+        "./components/Sidebar",
+        "./pages/AiAnalystPage",
+        "./pages/AnalyticsPage",
+        "./pages/BacktestPage",
+        "./pages/ChartPage",
+        "./pages/CommandCenterPage",
+        "./pages/HlcPage",
+        "./pages/JournalPage",
+        "./pages/LearningLabPage",
+        "./pages/LivePage",
+        "./pages/MarketStructurePage",
+        "./pages/OptionIntelligencePage",
+        "./pages/ScenarioEnginePage",
+        "./pages/SettingsPage"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/api.ts",
+      "sha256": "38f936bfcd137040144c0c21333cc40275a5b38536c8629b9589fbe6bd800b04",
+      "bytes": 5583,
+      "group": "apps",
+      "symbols": [],
+      "lines": 161,
+      "imports": [
+        "./types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/chartLayouts.ts",
+      "sha256": "5ba0958e7c510f5427d92b832e764e55c75df78c9f03a5025b9e31be090ddeb7",
+      "bytes": 788,
+      "group": "apps",
+      "symbols": [],
+      "lines": 18,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/features/research/chartLevels.ts",
+      "sha256": "47eb524be2e2406e75b3050e61e46bc1c5494e419524a3cd771d88300e2923bb",
+      "bytes": 2175,
+      "group": "apps",
+      "symbols": [],
+      "lines": 44,
+      "imports": [
+        "./components/CandleChart",
+        "./types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/cockpit.css",
+      "sha256": "933b91936d67166671bc1ca1458e85885aba41a5e3700377c819f45056596f4f",
+      "bytes": 9553,
+      "group": "apps",
+      "symbols": [],
+      "lines": 419
+    },
+    {
+      "path": "apps/web/src/features/research/components/CandleChart.tsx",
+      "sha256": "12a9116e6845fb129fba040314e620687cd3c92af23b855e020d87ec159406cc",
+      "bytes": 6892,
+      "group": "apps",
+      "symbols": [],
+      "lines": 211,
+      "imports": [
+        "lightweight-charts",
+        "react",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/ChartPane.tsx",
+      "sha256": "6dcb723310a14469e14f005f91b18656e2c3d38f11c6f6dfd5163df3b442f995",
+      "bytes": 4238,
+      "group": "apps",
+      "symbols": [],
+      "lines": 118,
+      "imports": [
+        "lightweight-charts",
+        "react",
+        "../chartLevels",
+        "../format",
+        "../hooks/useCandles",
+        "../types",
+        "./CandleChart"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/Cockpit.tsx",
+      "sha256": "25aaddd84ee1ffcf5545b6c64995f142bf3fbb3b265859fa428aa60e2fe40b56",
+      "bytes": 5273,
+      "group": "apps",
+      "symbols": [],
+      "lines": 147,
+      "imports": [
+        "react",
+        "../cockpit.css",
+        "../format",
+        "../hooks/usePrediction",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/DemoBanner.tsx",
+      "sha256": "c360bd60a30c9ccef20b406a56c2390ddc948373ff1f6193f66ffef65713c209",
+      "bytes": 682,
+      "group": "apps",
+      "symbols": [],
+      "lines": 18,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/features/research/components/LayoutIcon.tsx",
+      "sha256": "f8e863c1c6400f239b421b461445a107a80414b6abc43f428518a21e3e71688e",
+      "bytes": 535,
+      "group": "apps",
+      "symbols": [],
+      "lines": 18,
+      "imports": [
+        "../chartLayouts"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/MetricsRow.tsx",
+      "sha256": "75b8bbd093f70595073131ab06a2240fcaae265f1e399a7d5e596030e97e254c",
+      "bytes": 1073,
+      "group": "apps",
+      "symbols": [],
+      "lines": 30,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/OiChart.tsx",
+      "sha256": "4ee05b8c7bb6896f1334484101256dac3e68a6f0580c931a7915e04245d0238c",
+      "bytes": 2941,
+      "group": "apps",
+      "symbols": [],
+      "lines": 80,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/OiHistoryChart.tsx",
+      "sha256": "f14b95de941f818ff9923e1188197a11d2019e5b3bb5c1f1ec1c554df9fab94f",
+      "bytes": 2292,
+      "group": "apps",
+      "symbols": [],
+      "lines": 65,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/OptionChainTable.tsx",
+      "sha256": "a089188d3b4b37c5657e8c5fd3141e65d58cfd473cd1a7fd6eb4feed5f82b70b",
+      "bytes": 1015,
+      "group": "apps",
+      "symbols": [],
+      "lines": 35,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/OptionDepthTable.tsx",
+      "sha256": "00fb835a8464d2c830b2320c4e1987730813482a8df59cda15c18d4e44b15afe",
+      "bytes": 1864,
+      "group": "apps",
+      "symbols": [],
+      "lines": 54,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/RiskPanel.tsx",
+      "sha256": "05107a32df88311c50d83f2bf3ebef52aaad1dc5eea286e87c4e8910384ac5be",
+      "bytes": 5745,
+      "group": "apps",
+      "symbols": [],
+      "lines": 147,
+      "imports": [
+        "../format",
+        "../hooks/useRisk"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/SentimentPanel.tsx",
+      "sha256": "688bc1830b2a568e3202e105f43d495873589cec07f1cd76973e2f5edafab937",
+      "bytes": 1466,
+      "group": "apps",
+      "symbols": [],
+      "lines": 38,
+      "imports": [
+        "../format",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/Sidebar.tsx",
+      "sha256": "a24e4ec259005b9dc377a6737a09ea51d288559ebb0e20af825829de44f3845d",
+      "bytes": 2288,
+      "group": "apps",
+      "symbols": [],
+      "lines": 62,
+      "imports": [
+        "react-router-dom"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/components/SuggestionPanel.tsx",
+      "sha256": "8c8b3b0520644d1ab4dc6da2bfcb3b26129d3eb53aa5de804ccdb4ffb39242b4",
+      "bytes": 1332,
+      "group": "apps",
+      "symbols": [],
+      "lines": 38,
+      "imports": [
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/format.ts",
+      "sha256": "021f5a2ba55003364e408cc9bd95f1a1f3be144eb0681cc0e7c05f92ae283717",
+      "bytes": 775,
+      "group": "apps",
+      "symbols": [],
+      "lines": 19,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/features/research/guide.css",
+      "sha256": "6ee6d7dbefa8e4339d75bc9a45d45538db88e289a570c84255ef3db48fd4b0ba",
+      "bytes": 3843,
+      "group": "apps",
+      "symbols": [],
+      "lines": 190
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useAnalyticsByRegime.ts",
+      "sha256": "29086c2dc16964a0e4025d200ce64a89b4d898dbb34ee5ec3436b7c730de04e6",
+      "bytes": 419,
+      "group": "apps",
+      "symbols": [],
+      "lines": 10,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useBacktest.ts",
+      "sha256": "a8878662a22bbd4fef6f17da2ba2451e3a1cddab1ece98f95950d487ba2b2464",
+      "bytes": 2386,
+      "group": "apps",
+      "symbols": [],
+      "lines": 78,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useCandles.ts",
+      "sha256": "b2d12237b23ff7a91a951002232f08a51f76301b4a60cdc1e5966c281086e99e",
+      "bytes": 1340,
+      "group": "apps",
+      "symbols": [],
+      "lines": 43,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useGuide.ts",
+      "sha256": "8e0ce910986027e4db36f217b2ddce9813a2f82314d917378e67b0bbea0821e1",
+      "bytes": 502,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useHealth.ts",
+      "sha256": "9a5e4cc419794754a890ebcb340506a450767ba590a92656c778e4587566ba0c",
+      "bytes": 649,
+      "group": "apps",
+      "symbols": [],
+      "lines": 24,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useHlcState.ts",
+      "sha256": "eab8d656744c1d588d5dd8d2b4610b06ca273a339576fa59c0c18066f711a612",
+      "bytes": 2661,
+      "group": "apps",
+      "symbols": [],
+      "lines": 81,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useJournalEntries.ts",
+      "sha256": "fdf0f9429144598d8d0188ff3c9eba747d66f97a18f44a388e8b508c41741ec1",
+      "bytes": 1122,
+      "group": "apps",
+      "symbols": [],
+      "lines": 39,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useLearning.ts",
+      "sha256": "79121075685ab02ce40e18c8168f3a73d69a2ff390c247da886b7fba7a096e7c",
+      "bytes": 425,
+      "group": "apps",
+      "symbols": [],
+      "lines": 11,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useLiveState.ts",
+      "sha256": "1c0438689f2e914ae01a0ea2eea4d5986d1eed6b639cddda70c8e793b11509d0",
+      "bytes": 508,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useMarketStructure.ts",
+      "sha256": "abf76229a3c73941fab69004f54461e90bb59bf388e40ffc161789c2c81b9837",
+      "bytes": 528,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useOiHistory.ts",
+      "sha256": "d292a194bf196c82ae335bf7b7f9e5b8750ad0bd651312362e37fd1105a024d4",
+      "bytes": 532,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/usePolling.ts",
+      "sha256": "09c1fcacc83c30c1b5ca991bc132a16ad44bb517a600d609b0da8d333aab9aee",
+      "bytes": 1288,
+      "group": "apps",
+      "symbols": [],
+      "lines": 46,
+      "imports": [
+        "react",
+        "../api"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/usePrediction.ts",
+      "sha256": "ab9274f71c78c51644bd0b9963023259e1d54d902de1fa4e5093a7282bb974d5",
+      "bytes": 524,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useRisk.ts",
+      "sha256": "edddb8938a552c857c4e285810d7ec1bda0d3975d0c10cea18937c19505a6e72",
+      "bytes": 504,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useSettings.ts",
+      "sha256": "0403e7787c0e735462b4256e692dab81249ca589ec38cde0d062808f768b0f2a",
+      "bytes": 853,
+      "group": "apps",
+      "symbols": [],
+      "lines": 26,
+      "imports": [
+        "react",
+        "../api",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/hooks/useSupportResistance.ts",
+      "sha256": "7ccfbb88664697b24681f1dcd685b9f771ce8b52bb72571a81f5e16c0cb7aac9",
+      "bytes": 507,
+      "group": "apps",
+      "symbols": [],
+      "lines": 11,
+      "imports": [
+        "../api",
+        "../types",
+        "./usePolling"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/AiAnalystPage.tsx",
+      "sha256": "847510ee9784cc377530f3cceef5dde07de84523ea5145935c699098c365ff02",
+      "bytes": 14372,
+      "group": "apps",
+      "symbols": [],
+      "lines": 412,
+      "imports": [
+        "../components/Cockpit",
+        "../format",
+        "../hooks/usePrediction",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/AnalyticsPage.tsx",
+      "sha256": "c3cb8881d802c7822a2d2428da95de27c450e64f69b5f1a78f9b367aa7a1be88",
+      "bytes": 6534,
+      "group": "apps",
+      "symbols": [],
+      "lines": 161,
+      "imports": [
+        "../components/Cockpit",
+        "../hooks/useAnalyticsByRegime",
+        "../format",
+        "../hooks/useJournalEntries",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/BacktestPage.tsx",
+      "sha256": "35b272bf970a2a40a36a7841a3c184f4b1c0e22dced764a980265a437f1feb72",
+      "bytes": 7350,
+      "group": "apps",
+      "symbols": [],
+      "lines": 169,
+      "imports": [
+        "react",
+        "../components/Cockpit",
+        "../format",
+        "../hooks/useBacktest",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/ChartPage.tsx",
+      "sha256": "a09f5a54aa6fd31bc78648ff778088090bcf75461812977e147358a432b26bcc",
+      "bytes": 6362,
+      "group": "apps",
+      "symbols": [],
+      "lines": 158,
+      "imports": [
+        "../components/Cockpit",
+        "lightweight-charts",
+        "react",
+        "../chartLayouts",
+        "../components/CandleChart",
+        "../components/ChartPane",
+        "../components/LayoutIcon",
+        "../hooks/useHlcState",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/CommandCenterPage.tsx",
+      "sha256": "a3642339ed3695798b95eb9f65827deccfe2358a2718c31257191322218d56d7",
+      "bytes": 10641,
+      "group": "apps",
+      "symbols": [],
+      "lines": 244,
+      "imports": [
+        "react-router-dom",
+        "../components/Cockpit",
+        "../format",
+        "../hooks/useHealth",
+        "../hooks/useHlcState",
+        "../hooks/useJournalEntries",
+        "../hooks/useLiveState",
+        "../hooks/usePrediction"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/GuidePage.tsx",
+      "sha256": "050f2827686c1ce2b1f5aa68c6d16023ecc388366f6be1ecbb7f93f671465371",
+      "bytes": 4122,
+      "group": "apps",
+      "symbols": [],
+      "lines": 126,
+      "imports": [
+        "react",
+        "react-markdown",
+        "remark-gfm",
+        "../guide.css",
+        "../components/Cockpit",
+        "../hooks/useGuide"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/HlcPage.tsx",
+      "sha256": "23683228015f9bf6bd189db99c4c02f584dc1bde02c1214ccf83087e80ba2605",
+      "bytes": 10311,
+      "group": "apps",
+      "symbols": [],
+      "lines": 275,
+      "imports": [
+        "../components/Cockpit",
+        "react-router-dom",
+        "../components/RiskPanel",
+        "../format",
+        "../hooks/useHlcState",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/JournalPage.tsx",
+      "sha256": "eaf26797667b35f445734fa0e6ffaa4ac6b38da1faa9ca2795b9db2bb97d7ffa",
+      "bytes": 3198,
+      "group": "apps",
+      "symbols": [],
+      "lines": 78,
+      "imports": [
+        "../components/Cockpit",
+        "../format",
+        "../hooks/useJournalEntries",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/LearningLabPage.tsx",
+      "sha256": "68a8f878bd6af23ec38b5c6bfce8cb16865b460008eb4aff405c0b4bce7f2922",
+      "bytes": 7296,
+      "group": "apps",
+      "symbols": [],
+      "lines": 184,
+      "imports": [
+        "../components/Cockpit",
+        "../format",
+        "../hooks/useLearning",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/LivePage.tsx",
+      "sha256": "c1dbdaa15417816a151bd182ac5fcc1695bee5f81c85533e603cf6907d1bc3ca",
+      "bytes": 2432,
+      "group": "apps",
+      "symbols": [],
+      "lines": 56,
+      "imports": [
+        "../components/Cockpit",
+        "../components/MetricsRow",
+        "../components/OiChart",
+        "../components/OiHistoryChart",
+        "../components/OptionChainTable",
+        "../components/SentimentPanel",
+        "../components/SuggestionPanel",
+        "../format",
+        "../hooks/useHealth",
+        "../hooks/useLiveState",
+        "../hooks/useOiHistory"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/MarketStructurePage.tsx",
+      "sha256": "a0a7338aa35b8a21a428f5d7cdca4a5b414c87ee5d1ec6e1c62587812a83c8b9",
+      "bytes": 11018,
+      "group": "apps",
+      "symbols": [],
+      "lines": 258,
+      "imports": [
+        "../components/Cockpit",
+        "../format",
+        "../hooks/useMarketStructure",
+        "../hooks/useSupportResistance",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/OptionIntelligencePage.tsx",
+      "sha256": "649fee85a8798bfdb943a5d63ac0110c172d7eab53131ab87ef6efa5b3971994",
+      "bytes": 4278,
+      "group": "apps",
+      "symbols": [],
+      "lines": 105,
+      "imports": [
+        "../components/Cockpit",
+        "../components/DemoBanner",
+        "../components/OptionDepthTable",
+        "../format",
+        "../hooks/useLiveState",
+        "../hooks/useSupportResistance",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/ScenarioEnginePage.tsx",
+      "sha256": "2e14b9ce439576a3ac86715ab52e5ade5c56409b0b505264ccb8b5c0edfb39db",
+      "bytes": 7209,
+      "group": "apps",
+      "symbols": [],
+      "lines": 195,
+      "imports": [
+        "../components/Cockpit",
+        "../format",
+        "../hooks/usePrediction",
+        "../types"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/pages/SettingsPage.tsx",
+      "sha256": "5bbf67f63bf013b9ece3edb2994e0e515c7fa0d2295eda43015b8219158f4abe",
+      "bytes": 5025,
+      "group": "apps",
+      "symbols": [],
+      "lines": 111,
+      "imports": [
+        "../components/Cockpit",
+        "../hooks/useHealth",
+        "../hooks/useSettings"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/research/types.ts",
+      "sha256": "caae1d5f7ba7c2bb9bc3b2e29bf3544011711b2fc0d9960fac3a63a1182fb4a0",
+      "bytes": 15407,
+      "group": "apps",
+      "symbols": [],
+      "lines": 660,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/features/workspace/api/client.ts",
+      "sha256": "0f352aa127d0d35adad263a4372fbc7856fb28d51f4aaa495a2c7daeb52c5be5",
+      "bytes": 698,
+      "group": "apps",
+      "symbols": [],
+      "lines": 23,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/features/workspace/components/AccountSummary.tsx",
+      "sha256": "6d905b597b920acd7ea7553a136b61ba7eb84f8cbca6a9d39166729531d2b1a5",
+      "bytes": 1599,
+      "group": "apps",
+      "symbols": [],
+      "lines": 48,
+      "imports": [
+        "../types",
+        "../lib/format",
+        "../../../shared/ui/Icon",
+        "../../../shared/ui/Icon"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/components/ActivityPanel.tsx",
+      "sha256": "6e83ec4a7fb1c85db4a51fafde16b75f6b248206d16f4a5a8d800dd6f6e3634b",
+      "bytes": 2818,
+      "group": "apps",
+      "symbols": [],
+      "lines": 94,
+      "imports": [
+        "react",
+        "react-router-dom",
+        "../types",
+        "../../../shared/ui/Icon",
+        "../../../shared/ui/Panel",
+        "../../../shared/ui/EmptyState"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/components/PositionsPanel.tsx",
+      "sha256": "08f3cc3f5be6a4d3837f2d834982fc40b1e45d0d56769c2b45352c36c044d356",
+      "bytes": 2172,
+      "group": "apps",
+      "symbols": [],
+      "lines": 71,
+      "imports": [
+        "../types",
+        "../lib/format",
+        "../../../shared/ui/Badge",
+        "../../../shared/ui/Panel",
+        "../../../shared/ui/EmptyState"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/components/RiskPanel.tsx",
+      "sha256": "ab0189870cb6485fd59d13ecb8440bd9cc23025346893dab29a9c60c9584ead5",
+      "bytes": 1951,
+      "group": "apps",
+      "symbols": [],
+      "lines": 52,
+      "imports": [
+        "../types",
+        "../lib/format",
+        "../../../shared/ui/Icon",
+        "../../../shared/ui/Badge",
+        "../../../shared/ui/Panel"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/components/index.ts",
+      "sha256": "916007be0f4cf6a53f2763295edc37ba0744d2bb015b82ad20fa1c939b175f31",
+      "bytes": 192,
+      "group": "apps",
+      "symbols": [],
+      "lines": 4,
+      "imports": [
+        "./AccountSummary",
+        "./PositionsPanel",
+        "./RiskPanel",
+        "./ActivityPanel"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/lib/format.ts",
+      "sha256": "ad8530797a740bf041f0997a4336acde02cdf88dbbf9da007109dd1a7fb55642",
+      "bytes": 183,
+      "group": "apps",
+      "symbols": [],
+      "lines": 6,
+      "imports": [
+        "../../../shared/lib/format"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/DecisionEnginePage.tsx",
+      "sha256": "a650c0f861e73820828ea9623df5acdd134d48cb3aecf463490aa5e18b7ff9ef",
+      "bytes": 3174,
+      "group": "apps",
+      "symbols": [],
+      "lines": 105,
+      "imports": [
+        "../types",
+        "../../../shared/ui",
+        "../components"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/MarketTerminalPage.tsx",
+      "sha256": "c7e8d6cd756b15e419c75f8d3aeac827586573ed496dbb85892922ca8d76f95f",
+      "bytes": 7368,
+      "group": "apps",
+      "symbols": [],
+      "lines": 219,
+      "imports": [
+        "react",
+        "react",
+        "../types",
+        "../lib/format",
+        "../../../shared/ui",
+        "../components"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/OverviewPage.tsx",
+      "sha256": "6082615a574d43ba38a496d11b95481c1ca3ddc663af0b8d4c8a15bb05e5fcb0",
+      "bytes": 3000,
+      "group": "apps",
+      "symbols": [],
+      "lines": 93,
+      "imports": [
+        "react-router-dom",
+        "../types",
+        "../../../shared/lib/format",
+        "../../../shared/ui",
+        "../components"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/PerformancePage.tsx",
+      "sha256": "c86430d428c6b186ead246ebbcfba5d50e6d3e75e41a18d726b6611fed20937d",
+      "bytes": 1839,
+      "group": "apps",
+      "symbols": [],
+      "lines": 51,
+      "imports": [
+        "../types",
+        "../lib/format",
+        "../../../shared/ui",
+        "../components"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/ReplayLabPage.tsx",
+      "sha256": "d98273b3c1a5b4e856d484b68c6528356cfea74b2e83fd76b4541d6e6b2a57fb",
+      "bytes": 3799,
+      "group": "apps",
+      "symbols": [],
+      "lines": 116,
+      "imports": [
+        "react",
+        "../types",
+        "../lib/format",
+        "../api/client",
+        "../../../shared/ui"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/SettingsPage.tsx",
+      "sha256": "96c3096f99d7adc4496dd746353c9b12267988c728ffd63528b10e3837997c1d",
+      "bytes": 3516,
+      "group": "apps",
+      "symbols": [],
+      "lines": 104,
+      "imports": [
+        "react",
+        "../types",
+        "../../../shared/ui",
+        "../components"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/pages/index.ts",
+      "sha256": "ba2a073a7415ba9cf76cb151e4dc05a8c2d01ec472edb724e8a7f39c05dfac23",
+      "bytes": 314,
+      "group": "apps",
+      "symbols": [],
+      "lines": 6,
+      "imports": [
+        "./MarketTerminalPage",
+        "./DecisionEnginePage",
+        "./ReplayLabPage",
+        "./PerformancePage",
+        "./SettingsPage",
+        "./OverviewPage"
+      ]
+    },
+    {
+      "path": "apps/web/src/features/workspace/styles/workspace.css",
+      "sha256": "22ad483cbb2e4e012faf80f30867fefbd38379fff18d33a53244070a46559382",
+      "bytes": 36045,
+      "group": "apps",
+      "symbols": [],
+      "lines": 1653
+    },
+    {
+      "path": "apps/web/src/features/workspace/types.ts",
+      "sha256": "bc028582361161a5f8259deead0a51f7b9378f07484ce3344afedf1b6c49b9fc",
+      "bytes": 1724,
+      "group": "apps",
+      "symbols": [],
+      "lines": 92,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "b2a867629fd7e4eedb0b400ac7b8c001835dbb80c6edaac076b29952774c6617",
+      "bytes": 588,
+      "group": "apps",
+      "symbols": [],
+      "lines": 19,
+      "imports": [
+        "react",
+        "react-dom/client",
+        "react-router-dom",
+        "./styles/base.css",
+        "./app/WorkspaceApp.tsx"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/lib/format.ts",
+      "sha256": "8c7a11f5b4e69b27250c32a498a2702bed11e8cdbc81a21bbdf378f2b7e1b010",
+      "bytes": 352,
+      "group": "apps",
+      "symbols": [],
+      "lines": 9,
+      "imports": []
+    },
+    {
+      "path": "apps/web/src/shared/theme/useWorkspaceTheme.ts",
+      "sha256": "75defd3fa430654458f5fc102ee860e8717a9c4b4ca0529b8f9f96ba61f3c109",
+      "bytes": 1564,
+      "group": "apps",
+      "symbols": [],
+      "lines": 41,
+      "imports": [
+        "react"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/Badge.tsx",
+      "sha256": "fd8d16c99e75e944274399dea542dee82da451825136eac2de0e655319be5eea",
+      "bytes": 207,
+      "group": "apps",
+      "symbols": [],
+      "lines": 11,
+      "imports": [
+        "react"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/EmptyState.tsx",
+      "sha256": "f46438d041f54ee2acfe2a893a8b4aa680f8ca7fd5e44dc40768f2af80c0e184",
+      "bytes": 253,
+      "group": "apps",
+      "symbols": [],
+      "lines": 11,
+      "imports": [
+        "./Icon"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/Icon.tsx",
+      "sha256": "d0be60744ad38d75745df240d1816e9f99d64937dec1279b6962e3f59c65059e",
+      "bytes": 2074,
+      "group": "apps",
+      "symbols": [],
+      "lines": 92,
+      "imports": [
+        "react"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/LineChart.tsx",
+      "sha256": "5ced15dfe3b0979883f2333fa4fee769da13f81161c647cd92392ad84725529a",
+      "bytes": 2253,
+      "group": "apps",
+      "symbols": [],
+      "lines": 85,
+      "imports": [
+        "../lib/format",
+        "./EmptyState"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/Panel.tsx",
+      "sha256": "76bee60406b1c31de164d93ff00d1fa14f8b4024526c8b361adfc831cdc64de0",
+      "bytes": 532,
+      "group": "apps",
+      "symbols": [],
+      "lines": 28,
+      "imports": [
+        "react"
+      ]
+    },
+    {
+      "path": "apps/web/src/shared/ui/index.ts",
+      "sha256": "ce09d084c7820fe82f66143f66ba0b6fcd3a044e2f8a79db18e93c872e02c951",
+      "bytes": 221,
+      "group": "apps",
+      "symbols": [],
+      "lines": 6,
+      "imports": [
+        "./Icon",
+        "./Badge",
+        "./Panel",
+        "./EmptyState",
+        "./LineChart",
+        "./Icon"
+      ]
+    },
+    {
+      "path": "apps/web/src/styles/base.css",
+      "sha256": "e2a9b7749f2b8d2ce35f9394584786df88cde63536f7b5197338c67021833724",
+      "bytes": 1478,
+      "group": "apps",
+      "symbols": [],
+      "lines": 80
+    },
+    {
+      "path": "apps/web/tests/capture-visual.mjs",
+      "sha256": "77371cd61cbc8c7010f58931836fe72719499810040f78ec7b43d4aa4dc6b0f0",
+      "bytes": 1572,
+      "group": "apps",
+      "symbols": [],
+      "lines": 52
+    },
+    {
+      "path": "apps/web/tests/theme.spec.ts",
+      "sha256": "67d963b82a79619f29d6228b09c471accc1581c7ce34a2c7b5f9be4dee659f1c",
+      "bytes": 2624,
+      "group": "apps",
+      "symbols": [],
+      "lines": 47,
+      "imports": [
+        "@playwright/test"
+      ]
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/audit-1024.png",
+      "sha256": "a4067fcfe4dc6833c38a02658017c5ec7ace93546a31a02b71bd9a59ee1a4182",
+      "bytes": 101363,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/audit-1440.png",
+      "sha256": "d85908703a01df3366e7d2f92eb4540c1b2a84104bf7341be9ae40c66a130ce3",
+      "bytes": 111029,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/audit-390.png",
+      "sha256": "1d2a9b4c548423b9d1bb62bc770f59be9ec99237a7876a2e48b1446f6e1a6915",
+      "bytes": 50538,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/decisions-1024.png",
+      "sha256": "f5fc6ea07fe1371d5f504b8f68076b04506f664e0f32158aac24b07299cb2be8",
+      "bytes": 147468,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/decisions-1440.png",
+      "sha256": "e4107de84402d25f895c460fe3961c5f0a96fbb08ff85510e8916fc7198046bc",
+      "bytes": 155863,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/decisions-390.png",
+      "sha256": "27243653e23306bb0ef0c1e84fbd638295223b2e445119b49184dfebfa77f6e3",
+      "bytes": 98409,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/market-1024.png",
+      "sha256": "0810f82db644268f14be2d7d3c959f56ed00d2398929449e1f4b080d9f982e6c",
+      "bytes": 192703,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/market-1440.png",
+      "sha256": "8a86b6aa664e9ece59090d365b912178ad916d3965e6794197187f316a22c9f4",
+      "bytes": 212564,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/market-390.png",
+      "sha256": "92e9593d7919b95d44e5e31a88d603293d0b7d529bb3517cc4f2fb434c7bde4d",
+      "bytes": 114227,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/order-dialog.png",
+      "sha256": "edd09599f08eb0755afa8aa985346e707beec24cdc361ad6b43d20104fd544c2",
+      "bytes": 24301,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/overview-1024.png",
+      "sha256": "5c615660f8ff98cab9a9a59c7b9655cc3f984a47ff211589ba821cef0b3f5bdc",
+      "bytes": 260452,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/overview-1440.png",
+      "sha256": "3046bd8c12727e35acb65543d6e82166b5d50dda803d3892c6b3c038f63e9b98",
+      "bytes": 325278,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/overview-390.png",
+      "sha256": "f52e5df3fad90ecb7ef1ec575d5492e8cd7a906e8735b3524a9e33b25fde2729",
+      "bytes": 227528,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/performance-1024.png",
+      "sha256": "bc83e31a9ebbcc2074291b8ebb45ec19b9666107b7f26fed585eaec927af4081",
+      "bytes": 157485,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/performance-1440.png",
+      "sha256": "0dddc0c08c2113ea562c6018bd2ccd47bc8bca3883bb59d5f14c953386582acb",
+      "bytes": 180762,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/performance-390.png",
+      "sha256": "c47892a712ee0c1c8494ffdb23c775a5cbde53074c6a7b9d00ed43b0806b6e44",
+      "bytes": 114490,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/portfolio-1024.png",
+      "sha256": "df14b0927e080db9733e40a558ab6f87997239c21356635b4f5376265851ba6f",
+      "bytes": 146914,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/portfolio-1440.png",
+      "sha256": "2a3399ccfeba06bd12d2bfb39c4f31bbfeafa7a7a0c4f7e389273bc217e317ab",
+      "bytes": 170919,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/portfolio-390.png",
+      "sha256": "f0f25f7ee74867fdc88fc8951c1dff7473e1f72b9daf55e613abf3d7c629ea99",
+      "bytes": 102805,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/replay-1024.png",
+      "sha256": "96936b5606f51b48c9fb4b8cde502eb635090b19a3f639aa6004b8c3b1c76f2a",
+      "bytes": 140004,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/replay-1440.png",
+      "sha256": "8e5de0753ae0092c40448c51719065a8e8afb7b89864848fc08af4dcaf583b9a",
+      "bytes": 152078,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/replay-390.png",
+      "sha256": "ff98ff1c56b50f6463374c71dcfebc2cb310f25df00cf9b82b5cbed61c4c9601",
+      "bytes": 76163,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/settings-1024.png",
+      "sha256": "7b1f0fe00fa3dc804a18654a5e8470ad5e8d6c38570c15fe41044c5bdb755adb",
+      "bytes": 147268,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/settings-1440.png",
+      "sha256": "0b21c7a414cc23fa86085ac0a3981fe3251d2720368a6a2ef0747118333107ef",
+      "bytes": 157700,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/chromium-154-linux/settings-390.png",
+      "sha256": "9880fbe4311a678ea3f26fda9edde775001a5772c25c87ea6284d96a4ce5b1e0",
+      "bytes": 98150,
+      "group": "apps",
+      "symbols": [],
+      "binary": true
+    },
+    {
+      "path": "apps/web/tests/visual-baselines/manifest.json",
+      "sha256": "a223c583f8177b2ae7abddad9016aa4466fd017b473b5bad772c2194479aa58f",
+      "bytes": 4142,
+      "group": "apps",
+      "symbols": [],
+      "lines": 116
+    },
+    {
+      "path": "apps/web/tests/visual.spec.ts",
+      "sha256": "61da12ecb78ce45622e73b478291d1a5a3647781182b347bda3f71a4867407e8",
+      "bytes": 2977,
+      "group": "apps",
+      "symbols": [],
+      "lines": 89,
+      "imports": [
+        "@playwright/test",
+        "node:os"
+      ]
+    },
+    {
+      "path": "apps/web/tests/workspace.spec.ts",
+      "sha256": "ed61ec4a6d3979219406b34fa7ff503066a8b16a9bc77bb859f6d9adab71b70d",
+      "bytes": 5699,
+      "group": "apps",
+      "symbols": [],
+      "lines": 157,
+      "imports": [
+        "@playwright/test",
+        "@playwright/test"
+      ]
+    },
+    {
+      "path": "apps/web/tsconfig.app.json",
+      "sha256": "8e5d12ba330e7d86409edec74b95451e0db22ee09b9426c94b5bf817571eddb0",
+      "bytes": 655,
+      "group": "apps",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808",
+      "bytes": 119,
+      "group": "apps",
+      "symbols": [],
+      "lines": 7
+    },
+    {
+      "path": "apps/web/tsconfig.node.json",
+      "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8",
+      "bytes": 558,
+      "group": "apps",
+      "symbols": [],
+      "lines": 23
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "88b87afa01f14c04c202ecea32e47be98fde2354e4f16250e6da97b261bc96b8",
+      "bytes": 237,
+      "group": "apps",
+      "symbols": [],
+      "lines": 12,
+      "imports": [
+        "vite",
+        "@vitejs/plugin-react"
+      ]
+    },
+    {
+      "path": "config/research.toml",
+      "sha256": "61e72a42e86f69b6079f907b3db2ddb5e26a82da453130b660f6773b3c2379cc",
+      "bytes": 2359,
+      "group": "config",
+      "symbols": [],
+      "lines": 62
+    },
+    {
+      "path": "docs/architecture/decisions/0001-simulator-first.md",
+      "sha256": "af4d504dd56077f5e2bbe60b9020cc0b4ea26af1f9506248a03d7e8cc9d73c86",
+      "bytes": 2380,
+      "group": "docs",
+      "symbols": [],
+      "lines": 17
+    },
+    {
+      "path": "docs/architecture/repository-layout.md",
+      "sha256": "dc5cc1f076a17d7f47fdcda3c18688e39d0646da91cacbf56a2efad6006d222b",
+      "bytes": 6366,
+      "group": "docs",
+      "symbols": [],
+      "lines": 78
+    },
+    {
+      "path": "docs/development/ai-development-harness.md",
+      "sha256": "f29f6050e64af61e25561927263d480344223b39b800e9798892bf61689633f0",
+      "bytes": 19343,
+      "group": "docs",
+      "symbols": [],
+      "lines": 157
+    },
+    {
+      "path": "docs/guides/application-guide.md",
+      "sha256": "38ee36f916bfee88ae7c3f82f3788fbf8d0ce1f202df1951d99aa0bf855e4ced",
+      "bytes": 19951,
+      "group": "docs",
+      "symbols": [],
+      "lines": 422
+    },
+    {
+      "path": "docs/guides/research-workflow.md",
+      "sha256": "ec8eb2addb1d4e2b7d8b01a27fe88d9cbc8e5165ab0221526b7aec20a58f8f5a",
+      "bytes": 5934,
+      "group": "docs",
+      "symbols": [],
+      "lines": 120
+    },
+    {
+      "path": "docs/guides/trading-research.md",
+      "sha256": "0fd9f0457356ff428f720f421e610f0a63261f994ca0007b16aa198d1ccfefee",
+      "bytes": 9767,
+      "group": "docs",
+      "symbols": [],
+      "lines": 252
+    },
+    {
+      "path": "docs/product/ai-migration-requirements.md",
+      "sha256": "043499c7d616e43c70df2bf4ed5b231636f4add55258c1efe15fa1d07ef31588",
+      "bytes": 62249,
+      "group": "docs",
+      "symbols": [],
+      "lines": 2263
+    },
+    {
+      "path": "docs/product/enterprise-master-plan.md",
+      "sha256": "ed85457c4d88013103b7f4f18099934ee8778f5c760871bfd4b551f11f461385",
+      "bytes": 60865,
+      "group": "docs",
+      "symbols": [],
+      "lines": 815
+    },
+    {
+      "path": "docs/product/trading-knowledge-ai-skills-enhancement.md",
+      "sha256": "c977edcd8cf82e16e96cc44406046fcbf8727ff2f819ea3115e5e3e1f64c14eb",
+      "bytes": 10566,
+      "group": "docs",
+      "symbols": [],
+      "lines": 334
+    },
+    {
+      "path": "docs/product/work-queue.md",
+      "sha256": "ddd31fd280b0336a50e7c7da6192cd5d50c17e1e7baa9e14626066968d610025",
+      "bytes": 9166,
+      "group": "docs",
+      "symbols": [],
+      "lines": 43
+    },
+    {
+      "path": "docs/requirements/development-harness.md",
+      "sha256": "c420d269de01fb1b94c47d9f4b5d7965e42f2b577ea4e9bc5adf66798e2c4752",
+      "bytes": 2450,
+      "group": "docs",
+      "symbols": [],
+      "lines": 17
+    },
+    {
+      "path": "docs/requirements/paper-workspace.md",
+      "sha256": "e34e1ec244c598592bbe42577360a121d697a42cbbb2f014cf4f7bfc7120dd56",
+      "bytes": 2699,
+      "group": "docs",
+      "symbols": [],
+      "lines": 24
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "75a19f26e2e278ed33f6b7e92463380c330540b17c51899793498afed84afa6d",
+      "bytes": 1081,
+      "group": "pyproject.toml",
+      "symbols": [],
+      "lines": 37
+    },
+    {
+      "path": "scripts/windows/start-research.bat",
+      "sha256": "f4aad8c44e88be98d83f33c4cef8fc4d93355a95a529a29d851d39c518114fa2",
+      "bytes": 299,
+      "group": "scripts",
+      "symbols": [],
+      "lines": 7
+    },
+    {
+      "path": "scripts/windows/start-workspace.bat",
+      "sha256": "c38bc57011e5db955c847973d617dda9e5166df58c3a5336ced27dfc35500873",
+      "bytes": 196,
+      "group": "scripts",
+      "symbols": [],
+      "lines": 8
+    },
+    {
+      "path": "src/algooptionx/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/api/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/api/app.py",
+      "sha256": "085d5eedade8c7641b38e5c8bb75907e62ca43bbc53a44b1f67a8ef3772f1af9",
+      "bytes": 7514,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "create_app",
+          "kind": "FunctionDef",
+          "line": 20
+        },
+        {
+          "name": "run",
+          "kind": "FunctionDef",
+          "line": 199
+        }
+      ],
+      "lines": 202,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/api/contracts.py",
+      "sha256": "4385b7287cf073655465292efbc669b2599928962dcde853b76a47a5015950f8",
+      "bytes": 622,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "Command",
+          "kind": "ClassDef",
+          "line": 6
+        },
+        {
+          "name": "Replay",
+          "kind": "ClassDef",
+          "line": 18
+        }
+      ],
+      "lines": 20,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/market/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/market/simulator.py",
+      "sha256": "68c2709adb9b9d088c1d76d3e982188e5300e939ba360325392269b3e1684664",
+      "bytes": 1940,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "market",
+          "kind": "FunctionDef",
+          "line": 11
+        }
+      ],
+      "lines": 63,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/paper/__init__.py",
+      "sha256": "0800a036e135c8297974b13d429a6f4d4bc592929362fe7bbbd4f6b72e30a3e5",
+      "bytes": 81,
+      "group": "src",
+      "symbols": [],
+      "lines": 1,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/paper/engine.py",
+      "sha256": "70acee8e8ea69624f3a09f66cd1c58f8ebc752419af15d01a35d43779e7f6cf2",
+      "bytes": 16198,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "PaperError",
+          "kind": "ClassDef",
+          "line": 22
+        },
+        {
+          "name": "Engine",
+          "kind": "ClassDef",
+          "line": 26
+        }
+      ],
+      "lines": 405,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/paths.py",
+      "sha256": "00126e84ed6bdb36b6234691793d044bf6341e072d86044daad244e18d45d5b3",
+      "bytes": 743,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "repository_root",
+          "kind": "FunctionDef",
+          "line": 7
+        }
+      ],
+      "lines": 23,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/app.py",
+      "sha256": "cb5e3496700b3fe29b8b2d643f77f9b02faf94824253e1029982194547721e99",
+      "bytes": 26043,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_open_browser_soon",
+          "kind": "FunctionDef",
+          "line": 65
+        },
+        {
+          "name": "_retry_on_option_chain_error",
+          "kind": "FunctionDef",
+          "line": 73
+        },
+        {
+          "name": "lifespan",
+          "kind": "AsyncFunctionDef",
+          "line": 93
+        },
+        {
+          "name": "health",
+          "kind": "FunctionDef",
+          "line": 188
+        },
+        {
+          "name": "get_settings",
+          "kind": "FunctionDef",
+          "line": 197
+        },
+        {
+          "name": "live_state",
+          "kind": "FunctionDef",
+          "line": 234
+        },
+        {
+          "name": "hlc_state",
+          "kind": "FunctionDef",
+          "line": 246
+        },
+        {
+          "name": "hlc_refresh",
+          "kind": "FunctionDef",
+          "line": 260
+        },
+        {
+          "name": "oi_history",
+          "kind": "FunctionDef",
+          "line": 268
+        },
+        {
+          "name": "market_structure_state",
+          "kind": "FunctionDef",
+          "line": 278
+        },
+        {
+          "name": "support_resistance_state",
+          "kind": "FunctionDef",
+          "line": 290
+        },
+        {
+          "name": "risk_state",
+          "kind": "FunctionDef",
+          "line": 358
+        },
+        {
+          "name": "journal_entries",
+          "kind": "FunctionDef",
+          "line": 398
+        },
+        {
+          "name": "journal_backfill",
+          "kind": "FunctionDef",
+          "line": 404
+        },
+        {
+          "name": "backtest_run",
+          "kind": "FunctionDef",
+          "line": 426
+        },
+        {
+          "name": "backtest_status",
+          "kind": "FunctionDef",
+          "line": 464
+        },
+        {
+          "name": "backtest_runs",
+          "kind": "FunctionDef",
+          "line": 470
+        },
+        {
+          "name": "prediction_state",
+          "kind": "FunctionDef",
+          "line": 476
+        },
+        {
+          "name": "learning_state",
+          "kind": "FunctionDef",
+          "line": 501
+        },
+        {
+          "name": "guide",
+          "kind": "FunctionDef",
+          "line": 519
+        },
+        {
+          "name": "analytics_by_regime",
+          "kind": "FunctionDef",
+          "line": 529
+        },
+        {
+          "name": "learning_sessions",
+          "kind": "FunctionDef",
+          "line": 537
+        },
+        {
+          "name": "chart_candles_endpoint",
+          "kind": "FunctionDef",
+          "line": 546
+        }
+      ],
+      "lines": 605,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/backtest_worker.py",
+      "sha256": "aca2657351abdf17f17b32adce1390457b66e05fd64d1bde7240e4712a5fef94",
+      "bytes": 5451,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "trading_days",
+          "kind": "FunctionDef",
+          "line": 37
+        },
+        {
+          "name": "_empty_stats_row",
+          "kind": "FunctionDef",
+          "line": 51
+        },
+        {
+          "name": "run_backtest",
+          "kind": "FunctionDef",
+          "line": 63
+        }
+      ],
+      "lines": 121,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/hlc_worker.py",
+      "sha256": "8f9b85e4eb067367388922b420e1d31e24e032ec65da033fcaa620866acc3095",
+      "bytes": 19573,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_candidate_strikes",
+          "kind": "FunctionDef",
+          "line": 55
+        },
+        {
+          "name": "_fetch_nifty_close",
+          "kind": "FunctionDef",
+          "line": 60
+        },
+        {
+          "name": "_build_candidates",
+          "kind": "FunctionDef",
+          "line": 84
+        },
+        {
+          "name": "_resolve_for_date",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "_resolve_session",
+          "kind": "FunctionDef",
+          "line": 130
+        },
+        {
+          "name": "_weekly_anchor_date",
+          "kind": "FunctionDef",
+          "line": 158
+        },
+        {
+          "name": "_last_tuesday_of_month",
+          "kind": "FunctionDef",
+          "line": 164
+        },
+        {
+          "name": "_monthly_expiry",
+          "kind": "FunctionDef",
+          "line": 172
+        },
+        {
+          "name": "_monthly_anchor_date",
+          "kind": "FunctionDef",
+          "line": 178
+        },
+        {
+          "name": "_fetch_combined_premium",
+          "kind": "FunctionDef",
+          "line": 186
+        },
+        {
+          "name": "_compute_range_band",
+          "kind": "FunctionDef",
+          "line": 207
+        },
+        {
+          "name": "_log_trade_plan",
+          "kind": "FunctionDef",
+          "line": 250
+        },
+        {
+          "name": "_grade_pending_journal_entries",
+          "kind": "FunctionDef",
+          "line": 269
+        },
+        {
+          "name": "backfill_journal",
+          "kind": "FunctionDef",
+          "line": 320
+        },
+        {
+          "name": "run_hlc_cycle",
+          "kind": "FunctionDef",
+          "line": 359
+        },
+        {
+          "name": "RefreshCoordinator",
+          "kind": "ClassDef",
+          "line": 422
+        }
+      ],
+      "lines": 451,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/prediction.py",
+      "sha256": "911f68868312ac76ab86e1acb62cf1aaa3445a7bcf4d86161131fb2a5e54bb59",
+      "bytes": 16918,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "KeyLevel",
+          "kind": "ClassDef",
+          "line": 60
+        },
+        {
+          "name": "PredictionRead",
+          "kind": "ClassDef",
+          "line": 78
+        },
+        {
+          "name": "_latest_chain",
+          "kind": "FunctionDef",
+          "line": 92
+        },
+        {
+          "name": "_iv_history",
+          "kind": "FunctionDef",
+          "line": 99
+        },
+        {
+          "name": "_atm_iv",
+          "kind": "FunctionDef",
+          "line": 114
+        },
+        {
+          "name": "_key_levels",
+          "kind": "FunctionDef",
+          "line": 125
+        },
+        {
+          "name": "build",
+          "kind": "FunctionDef",
+          "line": 221
+        },
+        {
+          "name": "evaluate_and_record",
+          "kind": "FunctionDef",
+          "line": 330
+        },
+        {
+          "name": "grade_finished_sessions",
+          "kind": "FunctionDef",
+          "line": 385
+        },
+        {
+          "name": "_previous_session",
+          "kind": "FunctionDef",
+          "line": 431
+        }
+      ],
+      "lines": 440,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/serialize.py",
+      "sha256": "f2f1c3f6a5443fc3ac836916636695f183b5922eccd88687e3b3bba9a5db93a2",
+      "bytes": 6816,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_chain_window",
+          "kind": "FunctionDef",
+          "line": 19
+        },
+        {
+          "name": "serialize_cycle",
+          "kind": "FunctionDef",
+          "line": 65
+        },
+        {
+          "name": "serialize_hlc",
+          "kind": "FunctionDef",
+          "line": 86
+        },
+        {
+          "name": "serialize_support_resistance",
+          "kind": "FunctionDef",
+          "line": 94
+        },
+        {
+          "name": "serialize_risk",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "serialize_market_structure",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "serialize_journal_entry",
+          "kind": "FunctionDef",
+          "line": 123
+        },
+        {
+          "name": "serialize_prediction",
+          "kind": "FunctionDef",
+          "line": 129
+        },
+        {
+          "name": "serialize_learning",
+          "kind": "FunctionDef",
+          "line": 159
+        }
+      ],
+      "lines": 164,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/state.py",
+      "sha256": "541ee59a9941db7a254fbda44a2d7857210e9ab9e02211bef0e4a76c5261fc9d",
+      "bytes": 3289,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ResultState",
+          "kind": "ClassDef",
+          "line": 21
+        },
+        {
+          "name": "BacktestProgress",
+          "kind": "ClassDef",
+          "line": 49
+        },
+        {
+          "name": "BacktestState",
+          "kind": "ClassDef",
+          "line": 56
+        }
+      ],
+      "lines": 96,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/api/worker.py",
+      "sha256": "ede20d15e82f3f0c314eb2ffb120a54351eabb33db95b63960edb964d9856fbd",
+      "bytes": 5590,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "run_worker",
+          "kind": "FunctionDef",
+          "line": 45
+        }
+      ],
+      "lines": 131,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/auth.py",
+      "sha256": "f2277881dc24b0e0975b4cb856c19bd9508efcc77ffe1af631e13bb9272afa4e",
+      "bytes": 1398,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "AuthError",
+          "kind": "ClassDef",
+          "line": 12
+        },
+        {
+          "name": "build_client",
+          "kind": "FunctionDef",
+          "line": 16
+        },
+        {
+          "name": "build_context",
+          "kind": "FunctionDef",
+          "line": 38
+        }
+      ],
+      "lines": 40,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/config.py",
+      "sha256": "c9abd4a9a11bb58b43d8c5291eefb6d2153b467f3e79865c980c0e7fb466a84b",
+      "bytes": 5655,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ConfigError",
+          "kind": "ClassDef",
+          "line": 18
+        },
+        {
+          "name": "UnderlyingConfig",
+          "kind": "ClassDef",
+          "line": 23
+        },
+        {
+          "name": "PollingConfig",
+          "kind": "ClassDef",
+          "line": 31
+        },
+        {
+          "name": "HistoricalConfig",
+          "kind": "ClassDef",
+          "line": 37
+        },
+        {
+          "name": "HlcConfig",
+          "kind": "ClassDef",
+          "line": 43
+        },
+        {
+          "name": "TradePlanConfig",
+          "kind": "ClassDef",
+          "line": 48
+        },
+        {
+          "name": "RiskConfig",
+          "kind": "ClassDef",
+          "line": 54
+        },
+        {
+          "name": "Settings",
+          "kind": "ClassDef",
+          "line": 61
+        },
+        {
+          "name": "_load_toml",
+          "kind": "FunctionDef",
+          "line": 86
+        },
+        {
+          "name": "load_settings",
+          "kind": "FunctionDef",
+          "line": 96
+        },
+        {
+          "name": "load_settings_or_exit",
+          "kind": "FunctionDef",
+          "line": 182
+        }
+      ],
+      "lines": 187,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/execution/__init__.py",
+      "sha256": "f135d23e85c6967ce8da111f5373dc92081cb91797314918d82a842e5baee817",
+      "bytes": 65,
+      "group": "src",
+      "symbols": [],
+      "lines": 1,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/execution/policy.py",
+      "sha256": "b5f4ae29b0c35f33437e9ba6c56f8944210671b6b279342d15485f1ecd9a0d67",
+      "bytes": 1410,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ExecutionPolicyError",
+          "kind": "ClassDef",
+          "line": 12
+        },
+        {
+          "name": "ExecutionPolicy",
+          "kind": "ClassDef",
+          "line": 17
+        }
+      ],
+      "lines": 39,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/chart_candles.py",
+      "sha256": "83144a2efe623df956e3aa792f7f8e11943a200bd1c20af3f95e93c8cd69ba52",
+      "bytes": 2612,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ChartCandlesError",
+          "kind": "ClassDef",
+          "line": 28
+        },
+        {
+          "name": "fetch_candles",
+          "kind": "FunctionDef",
+          "line": 32
+        }
+      ],
+      "lines": 64,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/historical.py",
+      "sha256": "836368763ffac909fff7e167453c3b0a7b89d811491d8a491c94e365e5a0963d",
+      "bytes": 4269,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "HistoricalDataError",
+          "kind": "ClassDef",
+          "line": 17
+        },
+        {
+          "name": "rows_from_response",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "fetch_daily",
+          "kind": "FunctionDef",
+          "line": 26
+        },
+        {
+          "name": "backfill_intraday",
+          "kind": "FunctionDef",
+          "line": 54
+        },
+        {
+          "name": "catch_up_intraday",
+          "kind": "FunctionDef",
+          "line": 101
+        }
+      ],
+      "lines": 124,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/live_feed.py",
+      "sha256": "ee3f6c1476097c5f3394280ff015e29dd1cddcbde4dcf4cd59cbb043944f7d92",
+      "bytes": 1794,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "LiveFeed",
+          "kind": "ClassDef",
+          "line": 11
+        }
+      ],
+      "lines": 54,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/option_chain.py",
+      "sha256": "4ae2b56d4e17a9b1abc2b3bcb0db7905018e8e6df9de7f6b700cb08973cea3a0",
+      "bytes": 3230,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OptionChainError",
+          "kind": "ClassDef",
+          "line": 13
+        },
+        {
+          "name": "OptionChainResult",
+          "kind": "ClassDef",
+          "line": 18
+        },
+        {
+          "name": "fetch_expiry_list",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "fetch_option_chain",
+          "kind": "FunctionDef",
+          "line": 35
+        }
+      ],
+      "lines": 81,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/option_ohlc.py",
+      "sha256": "d773bfcbd5990c52a7ef229461fcd709d0fa3b9076f09f58e9136944d578f063",
+      "bytes": 4777,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OptionOhlcError",
+          "kind": "ClassDef",
+          "line": 41
+        },
+        {
+          "name": "SessionOhlc",
+          "kind": "ClassDef",
+          "line": 46
+        },
+        {
+          "name": "last_completed_trading_day",
+          "kind": "FunctionDef",
+          "line": 52
+        },
+        {
+          "name": "next_trading_day",
+          "kind": "FunctionDef",
+          "line": 68
+        },
+        {
+          "name": "fetch_session_ohlc",
+          "kind": "FunctionDef",
+          "line": 80
+        }
+      ],
+      "lines": 119,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/providers.py",
+      "sha256": "82352466f84856bbbc124a6d0a10d62567f7d43f2e157393a2d3188f93beab04",
+      "bytes": 650,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "MarketDataProvider",
+          "kind": "ClassDef",
+          "line": 12
+        }
+      ],
+      "lines": 16,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/quality.py",
+      "sha256": "2392d0e357f65750fcafdfc5cb1666bbbf5f90b686b6c1dda93b2c52bbbb86fa",
+      "bytes": 12128,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "DataQualityError",
+          "kind": "ClassDef",
+          "line": 22
+        },
+        {
+          "name": "ValidatedCandleBatch",
+          "kind": "ClassDef",
+          "line": 27
+        },
+        {
+          "name": "_as_array",
+          "kind": "FunctionDef",
+          "line": 62
+        },
+        {
+          "name": "_number",
+          "kind": "FunctionDef",
+          "line": 68
+        },
+        {
+          "name": "_integer",
+          "kind": "FunctionDef",
+          "line": 80
+        },
+        {
+          "name": "_payload",
+          "kind": "FunctionDef",
+          "line": 96
+        },
+        {
+          "name": "parse_candle_response",
+          "kind": "FunctionDef",
+          "line": 112
+        },
+        {
+          "name": "is_regular_session",
+          "kind": "FunctionDef",
+          "line": 219
+        },
+        {
+          "name": "require_fresh_latest_bar",
+          "kind": "FunctionDef",
+          "line": 225
+        },
+        {
+          "name": "validate_option_chain",
+          "kind": "FunctionDef",
+          "line": 246
+        }
+      ],
+      "lines": 286,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/ingestion/scheduler.py",
+      "sha256": "7f11666ff855ba68b324d90d7f34fdf8560b988b46804cbc3f2dca56010cf157",
+      "bytes": 1802,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OptionChainPoller",
+          "kind": "ClassDef",
+          "line": 16
+        }
+      ],
+      "lines": 52,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/instruments.py",
+      "sha256": "d6fc9c76daa8462890075704999df2131a458e17f3042e4e390837e23bb062e6",
+      "bytes": 4699,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OptionContract",
+          "kind": "ClassDef",
+          "line": 33
+        },
+        {
+          "name": "_download_scrip_master",
+          "kind": "FunctionDef",
+          "line": 41
+        },
+        {
+          "name": "_load_scrip_master",
+          "kind": "FunctionDef",
+          "line": 49
+        },
+        {
+          "name": "InstrumentResolutionError",
+          "kind": "ClassDef",
+          "line": 59
+        },
+        {
+          "name": "resolve_index_security_id",
+          "kind": "FunctionDef",
+          "line": 63
+        },
+        {
+          "name": "list_expiries",
+          "kind": "FunctionDef",
+          "line": 78
+        },
+        {
+          "name": "lot_size_for_expiry",
+          "kind": "FunctionDef",
+          "line": 90
+        },
+        {
+          "name": "option_contracts_for_expiry",
+          "kind": "FunctionDef",
+          "line": 104
+        }
+      ],
+      "lines": 127,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/logging_setup.py",
+      "sha256": "08681c6ab8f1e32a40c75b31f87b7a524b6559aa887f41e39e3fb6f9c048ef28",
+      "bytes": 417,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "setup_logging",
+          "kind": "FunctionDef",
+          "line": 8
+        }
+      ],
+      "lines": 14,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/main.py",
+      "sha256": "b79cc60d1383b21480341cc8b74b3ce714edee77b5384c2ba3e3a8ce270f6684",
+      "bytes": 3525,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "run",
+          "kind": "FunctionDef",
+          "line": 22
+        }
+      ],
+      "lines": 89,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/pipeline.py",
+      "sha256": "5ac0ab73bc1b8a07349baeeb446d37001670874bb69f3845fa31f7f762612141",
+      "bytes": 3637,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "CycleResult",
+          "kind": "ClassDef",
+          "line": 30
+        },
+        {
+          "name": "run_cycle",
+          "kind": "FunctionDef",
+          "line": 41
+        }
+      ],
+      "lines": 99,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/presentation/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/presentation/cli_dashboard.py",
+      "sha256": "e1439e7090932e06b1dd4302715b6c09edbbdfdb031d32ab124ff8e887377688",
+      "bytes": 6562,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_bias_text",
+          "kind": "FunctionDef",
+          "line": 19
+        },
+        {
+          "name": "_trend_panel",
+          "kind": "FunctionDef",
+          "line": 23
+        },
+        {
+          "name": "_sentiment_panel",
+          "kind": "FunctionDef",
+          "line": 39
+        },
+        {
+          "name": "_chain_table",
+          "kind": "FunctionDef",
+          "line": 64
+        },
+        {
+          "name": "_suggestion_panel",
+          "kind": "FunctionDef",
+          "line": 105
+        },
+        {
+          "name": "render",
+          "kind": "FunctionDef",
+          "line": 125
+        },
+        {
+          "name": "Dashboard",
+          "kind": "ClassDef",
+          "line": 144
+        }
+      ],
+      "lines": 158,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/backtest_stats.py",
+      "sha256": "198a47e3a20c16bacb6f49a635b7b003c13a0d9da940275c99a14ca0ed398798",
+      "bytes": 4410,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "GradedTrade",
+          "kind": "ClassDef",
+          "line": 25
+        },
+        {
+          "name": "BacktestStats",
+          "kind": "ClassDef",
+          "line": 33
+        },
+        {
+          "name": "compute_stats",
+          "kind": "FunctionDef",
+          "line": 49
+        }
+      ],
+      "lines": 103,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/calibration.py",
+      "sha256": "21b2d1c428bb23410b4506fd40d52ce3d69b866738fdd0767e0ce8ec837b3b14",
+      "bytes": 12516,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "SliceStats",
+          "kind": "ClassDef",
+          "line": 45
+        },
+        {
+          "name": "SetupRecord",
+          "kind": "ClassDef",
+          "line": 57
+        },
+        {
+          "name": "RegimeReport",
+          "kind": "ClassDef",
+          "line": 78
+        },
+        {
+          "name": "_mean",
+          "kind": "FunctionDef",
+          "line": 89
+        },
+        {
+          "name": "_slice",
+          "kind": "FunctionDef",
+          "line": 94
+        },
+        {
+          "name": "_group",
+          "kind": "FunctionDef",
+          "line": 108
+        },
+        {
+          "name": "_verdict",
+          "kind": "FunctionDef",
+          "line": 119
+        },
+        {
+          "name": "setup_record",
+          "kind": "FunctionDef",
+          "line": 154
+        },
+        {
+          "name": "all_setup_records",
+          "kind": "FunctionDef",
+          "line": 188
+        },
+        {
+          "name": "calibration_map",
+          "kind": "FunctionDef",
+          "line": 193
+        },
+        {
+          "name": "journal_by_regime",
+          "kind": "FunctionDef",
+          "line": 213
+        },
+        {
+          "name": "regime_report",
+          "kind": "FunctionDef",
+          "line": 250
+        }
+      ],
+      "lines": 313,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/combine.py",
+      "sha256": "a199481511ff6708adcb535a82168c1b1bfba03456971bf65025afdc7bbc9945",
+      "bytes": 4306,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "Suggestion",
+          "kind": "ClassDef",
+          "line": 17
+        },
+        {
+          "name": "_nearest_available_strike",
+          "kind": "FunctionDef",
+          "line": 30
+        },
+        {
+          "name": "combine",
+          "kind": "FunctionDef",
+          "line": 36
+        }
+      ],
+      "lines": 122,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/gex.py",
+      "sha256": "2337e617386300da33ae43d7c9bbb9b493bd90e1d0dff02f60ab1d7e69614782",
+      "bytes": 8696,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "StrikeGex",
+          "kind": "ClassDef",
+          "line": 53
+        },
+        {
+          "name": "GexSummary",
+          "kind": "ClassDef",
+          "line": 62
+        },
+        {
+          "name": "_empty",
+          "kind": "FunctionDef",
+          "line": 75
+        },
+        {
+          "name": "compute_strike_gex",
+          "kind": "FunctionDef",
+          "line": 79
+        },
+        {
+          "name": "gamma_flip_strike",
+          "kind": "FunctionDef",
+          "line": 126
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 152
+        }
+      ],
+      "lines": 196,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/hlc_strategy.py",
+      "sha256": "134a23ea887934b8fdb016c1a31c6e5d6bcb0bd8a4d0c91e34e0d498c20a477b",
+      "bytes": 11538,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "HlcAnalysisError",
+          "kind": "ClassDef",
+          "line": 31
+        },
+        {
+          "name": "StrikeQuote",
+          "kind": "ClassDef",
+          "line": 36
+        },
+        {
+          "name": "LegAnalysis",
+          "kind": "ClassDef",
+          "line": 43
+        },
+        {
+          "name": "RangeBand",
+          "kind": "ClassDef",
+          "line": 54
+        },
+        {
+          "name": "TradeLeg",
+          "kind": "ClassDef",
+          "line": 72
+        },
+        {
+          "name": "TradePlan",
+          "kind": "ClassDef",
+          "line": 93
+        },
+        {
+          "name": "HlcResult",
+          "kind": "ClassDef",
+          "line": 110
+        },
+        {
+          "name": "select_atm",
+          "kind": "FunctionDef",
+          "line": 129
+        },
+        {
+          "name": "analyze_leg",
+          "kind": "FunctionDef",
+          "line": 136
+        },
+        {
+          "name": "combined_signal",
+          "kind": "FunctionDef",
+          "line": 160
+        },
+        {
+          "name": "range_strikes",
+          "kind": "FunctionDef",
+          "line": 172
+        },
+        {
+          "name": "range_band",
+          "kind": "FunctionDef",
+          "line": 183
+        },
+        {
+          "name": "analyze",
+          "kind": "FunctionDef",
+          "line": 199
+        },
+        {
+          "name": "_sell_leg",
+          "kind": "FunctionDef",
+          "line": 234
+        },
+        {
+          "name": "build_trade_plan",
+          "kind": "FunctionDef",
+          "line": 246
+        }
+      ],
+      "lines": 297,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/journal_grading.py",
+      "sha256": "92b794b664ac1955cc4816bbfbf2f9485576932adc96d8f3d819887cdac7144c",
+      "bytes": 2139,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "GradeResult",
+          "kind": "ClassDef",
+          "line": 27
+        },
+        {
+          "name": "grade_leg",
+          "kind": "FunctionDef",
+          "line": 32
+        }
+      ],
+      "lines": 49,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/ledger.py",
+      "sha256": "b5700a4b04340bbb5d6d33a789e106d216ecca5b43fb45c1d6f8acc0abd66a7e",
+      "bytes": 17653,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "GradedOutcome",
+          "kind": "ClassDef",
+          "line": 65
+        },
+        {
+          "name": "daily_feature_row",
+          "kind": "FunctionDef",
+          "line": 80
+        },
+        {
+          "name": "daily_outcome_row",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "setup_event_row",
+          "kind": "FunctionDef",
+          "line": 144
+        },
+        {
+          "name": "_bars_after",
+          "kind": "FunctionDef",
+          "line": 195
+        },
+        {
+          "name": "_grade_buy_premium",
+          "kind": "FunctionDef",
+          "line": 199
+        },
+        {
+          "name": "_grade_sell_level",
+          "kind": "FunctionDef",
+          "line": 287
+        },
+        {
+          "name": "_grade_straddle",
+          "kind": "FunctionDef",
+          "line": 346
+        },
+        {
+          "name": "grade_event",
+          "kind": "FunctionDef",
+          "line": 397
+        },
+        {
+          "name": "outcome_row",
+          "kind": "FunctionDef",
+          "line": 416
+        },
+        {
+          "name": "parse_trade_date",
+          "kind": "FunctionDef",
+          "line": 435
+        }
+      ],
+      "lines": 436,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/market_structure.py",
+      "sha256": "31ffd3e8a8f19e4ae2b95e3d341d3db7237441ee30dfee31a05915e1ab33d81c",
+      "bytes": 21417,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "SwingPoint",
+          "kind": "ClassDef",
+          "line": 41
+        },
+        {
+          "name": "StructureEvent",
+          "kind": "ClassDef",
+          "line": 49
+        },
+        {
+          "name": "DayTypeResult",
+          "kind": "ClassDef",
+          "line": 58
+        },
+        {
+          "name": "TimeframeStructure",
+          "kind": "ClassDef",
+          "line": 67
+        },
+        {
+          "name": "MarketStructureSummary",
+          "kind": "ClassDef",
+          "line": 86
+        },
+        {
+          "name": "_true_range",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "_atr",
+          "kind": "FunctionDef",
+          "line": 107
+        },
+        {
+          "name": "find_swings",
+          "kind": "FunctionDef",
+          "line": 111
+        },
+        {
+          "name": "classify_structure",
+          "kind": "FunctionDef",
+          "line": 171
+        },
+        {
+          "name": "initial_balance",
+          "kind": "FunctionDef",
+          "line": 240
+        },
+        {
+          "name": "classify_day_type",
+          "kind": "FunctionDef",
+          "line": 251
+        },
+        {
+          "name": "_local_datetimes",
+          "kind": "FunctionDef",
+          "line": 301
+        },
+        {
+          "name": "resample",
+          "kind": "FunctionDef",
+          "line": 318
+        },
+        {
+          "name": "multi_timeframe",
+          "kind": "FunctionDef",
+          "line": 353
+        },
+        {
+          "name": "choppiness_index",
+          "kind": "FunctionDef",
+          "line": 405
+        },
+        {
+          "name": "_session_dates",
+          "kind": "FunctionDef",
+          "line": 419
+        },
+        {
+          "name": "session_slice",
+          "kind": "FunctionDef",
+          "line": 423
+        },
+        {
+          "name": "_previous_trading_date",
+          "kind": "FunctionDef",
+          "line": 428
+        },
+        {
+          "name": "previous_day_high_low",
+          "kind": "FunctionDef",
+          "line": 433
+        },
+        {
+          "name": "previous_day_close",
+          "kind": "FunctionDef",
+          "line": 443
+        },
+        {
+          "name": "previous_week_high_low",
+          "kind": "FunctionDef",
+          "line": 455
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 478
+        }
+      ],
+      "lines": 516,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/momentum.py",
+      "sha256": "62d96f68ac94af83585c7eb5e747a68b8c587810abb3d974da103dd5a1145e37",
+      "bytes": 3367,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "MomentumSummary",
+          "kind": "ClassDef",
+          "line": 10
+        },
+        {
+          "name": "rsi",
+          "kind": "FunctionDef",
+          "line": 18
+        },
+        {
+          "name": "rate_of_change",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "iv_rank",
+          "kind": "FunctionDef",
+          "line": 39
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 52
+        }
+      ],
+      "lines": 94,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/oi_behavior.py",
+      "sha256": "2828e108f7e52584fd63273e98362327a4e5cb87f12828d21a51e2d9f047f165",
+      "bytes": 2954,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OiBehaviorSummary",
+          "kind": "ClassDef",
+          "line": 15
+        },
+        {
+          "name": "_classify",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "classify",
+          "kind": "FunctionDef",
+          "line": 36
+        }
+      ],
+      "lines": 76,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/oi_walls.py",
+      "sha256": "d5ac490fa521a99d3b609e157692ea0ccfa53720cb04c70a60709faaafb4dc22",
+      "bytes": 4087,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "OiWall",
+          "kind": "ClassDef",
+          "line": 33
+        },
+        {
+          "name": "_freshness",
+          "kind": "FunctionDef",
+          "line": 44
+        },
+        {
+          "name": "detect_walls",
+          "kind": "FunctionDef",
+          "line": 55
+        }
+      ],
+      "lines": 95,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/regime.py",
+      "sha256": "a1a2652347071105428305c37d64533e525119feaf0fddb9a0ac2b846ef20524",
+      "bytes": 29254,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "RegimeReason",
+          "kind": "ClassDef",
+          "line": 101
+        },
+        {
+          "name": "RegimeSummary",
+          "kind": "ClassDef",
+          "line": 112
+        },
+        {
+          "name": "is_expiry_day",
+          "kind": "FunctionDef",
+          "line": 148
+        },
+        {
+          "name": "trading_days_to_expiry",
+          "kind": "FunctionDef",
+          "line": 161
+        },
+        {
+          "name": "atm_straddle",
+          "kind": "FunctionDef",
+          "line": 175
+        },
+        {
+          "name": "implied_daily_move",
+          "kind": "FunctionDef",
+          "line": 198
+        },
+        {
+          "name": "daily_from_intraday",
+          "kind": "FunctionDef",
+          "line": 219
+        },
+        {
+          "name": "realized_daily_move",
+          "kind": "FunctionDef",
+          "line": 254
+        },
+        {
+          "name": "realized_daily_range",
+          "kind": "FunctionDef",
+          "line": 290
+        },
+        {
+          "name": "_movement_source",
+          "kind": "FunctionDef",
+          "line": 320
+        },
+        {
+          "name": "_drop_gap_rows",
+          "kind": "FunctionDef",
+          "line": 333
+        },
+        {
+          "name": "iv_percentile",
+          "kind": "FunctionDef",
+          "line": 350
+        },
+        {
+          "name": "classify_structure_regime",
+          "kind": "FunctionDef",
+          "line": 367
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 411
+        }
+      ],
+      "lines": 705,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/risk.py",
+      "sha256": "577e141b3a414af7fb7d711564274d34a594907ea7589ae5f65d90222fc76dbf",
+      "bytes": 8188,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "RiskAssessment",
+          "kind": "ClassDef",
+          "line": 59
+        },
+        {
+          "name": "PositionSizeRow",
+          "kind": "ClassDef",
+          "line": 68
+        },
+        {
+          "name": "PositionSizing",
+          "kind": "ClassDef",
+          "line": 76
+        },
+        {
+          "name": "DailyRiskStatus",
+          "kind": "ClassDef",
+          "line": 86
+        },
+        {
+          "name": "classify_session_window",
+          "kind": "FunctionDef",
+          "line": 95
+        },
+        {
+          "name": "assess_risk",
+          "kind": "FunctionDef",
+          "line": 120
+        },
+        {
+          "name": "_size_row",
+          "kind": "FunctionDef",
+          "line": 126
+        },
+        {
+          "name": "position_sizing",
+          "kind": "FunctionDef",
+          "line": 136
+        },
+        {
+          "name": "daily_risk_status",
+          "kind": "FunctionDef",
+          "line": 160
+        }
+      ],
+      "lines": 175,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/scenarios.py",
+      "sha256": "620bd831e8c9523ca7157400ef4e647af948e3449a24cb77fc1fb5e416f43f32",
+      "bytes": 21631,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ScenarioEvidence",
+          "kind": "ClassDef",
+          "line": 70
+        },
+        {
+          "name": "Scenario",
+          "kind": "ClassDef",
+          "line": 78
+        },
+        {
+          "name": "ChecklistItem",
+          "kind": "ClassDef",
+          "line": 93
+        },
+        {
+          "name": "ScenarioSet",
+          "kind": "ClassDef",
+          "line": 100
+        },
+        {
+          "name": "_vote",
+          "kind": "FunctionDef",
+          "line": 114
+        },
+        {
+          "name": "_collect_votes",
+          "kind": "FunctionDef",
+          "line": 120
+        },
+        {
+          "name": "_nearest",
+          "kind": "FunctionDef",
+          "line": 243
+        },
+        {
+          "name": "_checklist",
+          "kind": "FunctionDef",
+          "line": 254
+        },
+        {
+          "name": "build",
+          "kind": "FunctionDef",
+          "line": 337
+        }
+      ],
+      "lines": 477,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/sentiment.py",
+      "sha256": "45877d76a2333bd9393ba21ac0505f9fbbc621e4a47c28e59cd4e18cb16ed88b",
+      "bytes": 3882,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "SentimentSummary",
+          "kind": "ClassDef",
+          "line": 9
+        },
+        {
+          "name": "_pcr",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "max_pain",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "_nearest_strike",
+          "kind": "FunctionDef",
+          "line": 54
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 61
+        }
+      ],
+      "lines": 105,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/setups.py",
+      "sha256": "d6f85b0202115e18134c8a826e865b837f9d2a09f7246c1448e3f70b72d49009",
+      "bytes": 58547,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "Gate",
+          "kind": "ClassDef",
+          "line": 105
+        },
+        {
+          "name": "Evidence",
+          "kind": "ClassDef",
+          "line": 114
+        },
+        {
+          "name": "CalibrationRead",
+          "kind": "ClassDef",
+          "line": 125
+        },
+        {
+          "name": "SetupSignal",
+          "kind": "ClassDef",
+          "line": 137
+        },
+        {
+          "name": "SetupContext",
+          "kind": "ClassDef",
+          "line": 174
+        },
+        {
+          "name": "_grade",
+          "kind": "FunctionDef",
+          "line": 200
+        },
+        {
+          "name": "_sample_warning",
+          "kind": "FunctionDef",
+          "line": 225
+        },
+        {
+          "name": "_delta_at",
+          "kind": "FunctionDef",
+          "line": 241
+        },
+        {
+          "name": "_nearest_strike",
+          "kind": "FunctionDef",
+          "line": 250
+        },
+        {
+          "name": "_premium_from_underlying",
+          "kind": "FunctionDef",
+          "line": 259
+        },
+        {
+          "name": "_readiness",
+          "kind": "FunctionDef",
+          "line": 278
+        },
+        {
+          "name": "_build",
+          "kind": "FunctionDef",
+          "line": 364
+        },
+        {
+          "name": "_market_open",
+          "kind": "FunctionDef",
+          "line": 446
+        },
+        {
+          "name": "_tradeable_window",
+          "kind": "FunctionDef",
+          "line": 459
+        },
+        {
+          "name": "_ev",
+          "kind": "FunctionDef",
+          "line": 485
+        },
+        {
+          "name": "_initial_balance_breakout",
+          "kind": "FunctionDef",
+          "line": 500
+        },
+        {
+          "name": "_initial_balance_failure",
+          "kind": "FunctionDef",
+          "line": 643
+        },
+        {
+          "name": "_wall_fade",
+          "kind": "FunctionDef",
+          "line": 787
+        },
+        {
+          "name": "_trend_pullback",
+          "kind": "FunctionDef",
+          "line": 928
+        },
+        {
+          "name": "_range_short_straddle",
+          "kind": "FunctionDef",
+          "line": 1053
+        },
+        {
+          "name": "_expiry_pin_fade",
+          "kind": "FunctionDef",
+          "line": 1190
+        },
+        {
+          "name": "evaluate",
+          "kind": "FunctionDef",
+          "line": 1319
+        },
+        {
+          "name": "best_setup",
+          "kind": "FunctionDef",
+          "line": 1360
+        }
+      ],
+      "lines": 1377,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/support_resistance.py",
+      "sha256": "2ee900c4ff4d5e7de1efb77cb9ff8dee0a3ee8b6027bc156fd8140c7f9b13c25",
+      "bytes": 8506,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "ZoneFactor",
+          "kind": "ClassDef",
+          "line": 42
+        },
+        {
+          "name": "Zone",
+          "kind": "ClassDef",
+          "line": 48
+        },
+        {
+          "name": "_Candidate",
+          "kind": "ClassDef",
+          "line": 58
+        },
+        {
+          "name": "classify_score",
+          "kind": "FunctionDef",
+          "line": 64
+        },
+        {
+          "name": "classic_pivots",
+          "kind": "FunctionDef",
+          "line": 76
+        },
+        {
+          "name": "_gather_candidates",
+          "kind": "FunctionDef",
+          "line": 89
+        },
+        {
+          "name": "_cluster",
+          "kind": "FunctionDef",
+          "line": 149
+        },
+        {
+          "name": "build_zones",
+          "kind": "FunctionDef",
+          "line": 166
+        }
+      ],
+      "lines": 211,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/signals/trend.py",
+      "sha256": "d2f8f59281b2e53d3c958b1914fe690e906c8566a96b9bfe193efa15d4c7c6c9",
+      "bytes": 5631,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "TrendSummary",
+          "kind": "ClassDef",
+          "line": 10
+        },
+        {
+          "name": "vwap",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "moving_average",
+          "kind": "FunctionDef",
+          "line": 54
+        },
+        {
+          "name": "adx",
+          "kind": "FunctionDef",
+          "line": 58
+        },
+        {
+          "name": "summarize",
+          "kind": "FunctionDef",
+          "line": 78
+        }
+      ],
+      "lines": 139,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/storage/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "src",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/storage/db.py",
+      "sha256": "e276c8b29e4e8371449d03c1d2e1be3290c5703e3a1afa4544515e92ace17462",
+      "bytes": 3170,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_migrate_journal_entries_table",
+          "kind": "FunctionDef",
+          "line": 13
+        },
+        {
+          "name": "_add_missing_columns",
+          "kind": "FunctionDef",
+          "line": 38
+        },
+        {
+          "name": "connect",
+          "kind": "FunctionDef",
+          "line": 50
+        }
+      ],
+      "lines": 74,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/storage/models.py",
+      "sha256": "d0c637be5542c6195e065d7cd2e612f81f27714ca230f10679b9e4609ef8f509",
+      "bytes": 10346,
+      "group": "src",
+      "symbols": [],
+      "lines": 243,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx/research/storage/repository.py",
+      "sha256": "af89a4db45309a706ec35d138549167f2dc3ba9d7ad696a0761c79e1fd9f034d",
+      "bytes": 23042,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "_locked",
+          "kind": "FunctionDef",
+          "line": 23
+        },
+        {
+          "name": "upsert_candle_batch",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "get_candle_ingestion_batches",
+          "kind": "FunctionDef",
+          "line": 71
+        },
+        {
+          "name": "upsert_candles",
+          "kind": "FunctionDef",
+          "line": 84
+        },
+        {
+          "name": "last_candle_ts",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "get_candles",
+          "kind": "FunctionDef",
+          "line": 113
+        },
+        {
+          "name": "get_close_on_date",
+          "kind": "FunctionDef",
+          "line": 126
+        },
+        {
+          "name": "insert_option_chain_snapshot",
+          "kind": "FunctionDef",
+          "line": 143
+        },
+        {
+          "name": "prune_option_chain_snapshots",
+          "kind": "FunctionDef",
+          "line": 169
+        },
+        {
+          "name": "latest_snapshot_ts",
+          "kind": "FunctionDef",
+          "line": 183
+        },
+        {
+          "name": "get_snapshot_at",
+          "kind": "FunctionDef",
+          "line": 192
+        },
+        {
+          "name": "get_oi_timeseries",
+          "kind": "FunctionDef",
+          "line": 204
+        },
+        {
+          "name": "get_latest_two_snapshots",
+          "kind": "FunctionDef",
+          "line": 261
+        },
+        {
+          "name": "log_signal",
+          "kind": "FunctionDef",
+          "line": 291
+        },
+        {
+          "name": "insert_journal_entry",
+          "kind": "FunctionDef",
+          "line": 319
+        },
+        {
+          "name": "insert_no_trade_entry",
+          "kind": "FunctionDef",
+          "line": 354
+        },
+        {
+          "name": "has_journal_entries_for_trade_date",
+          "kind": "FunctionDef",
+          "line": 377
+        },
+        {
+          "name": "get_pending_journal_entries",
+          "kind": "FunctionDef",
+          "line": 385
+        },
+        {
+          "name": "update_journal_outcome",
+          "kind": "FunctionDef",
+          "line": 395
+        },
+        {
+          "name": "get_most_recent_graded_day",
+          "kind": "FunctionDef",
+          "line": 404
+        },
+        {
+          "name": "get_journal_entries",
+          "kind": "FunctionDef",
+          "line": 424
+        },
+        {
+          "name": "get_journal_entries_in_range",
+          "kind": "FunctionDef",
+          "line": 432
+        },
+        {
+          "name": "insert_backtest_run",
+          "kind": "FunctionDef",
+          "line": 447
+        },
+        {
+          "name": "get_backtest_runs",
+          "kind": "FunctionDef",
+          "line": 460
+        },
+        {
+          "name": "upsert_daily_features",
+          "kind": "FunctionDef",
+          "line": 474
+        },
+        {
+          "name": "get_daily_features",
+          "kind": "FunctionDef",
+          "line": 492
+        },
+        {
+          "name": "record_setup_event",
+          "kind": "FunctionDef",
+          "line": 499
+        },
+        {
+          "name": "get_setup_events_for_date",
+          "kind": "FunctionDef",
+          "line": 517
+        },
+        {
+          "name": "get_ungraded_setup_events",
+          "kind": "FunctionDef",
+          "line": 524
+        },
+        {
+          "name": "record_setup_outcome",
+          "kind": "FunctionDef",
+          "line": 539
+        },
+        {
+          "name": "get_setup_outcomes",
+          "kind": "FunctionDef",
+          "line": 549
+        },
+        {
+          "name": "get_session_candles",
+          "kind": "FunctionDef",
+          "line": 568
+        },
+        {
+          "name": "get_journal_entries_with_regime",
+          "kind": "FunctionDef",
+          "line": 587
+        }
+      ],
+      "lines": 606,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/__init__.py",
+      "sha256": "543053be7f81ab728c9ce58943b36894764f684ebf3a686b6b0f7066e3885478",
+      "bytes": 82,
+      "group": "src",
+      "symbols": [],
+      "lines": 1,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/agents/architect.json",
+      "sha256": "14f31f5d101755544651830a3eea9f4485fd4beb98526ab72281ddd2ab1f87f4",
+      "bytes": 963,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/backend-engineer.json",
+      "sha256": "8a2c0b94ac06a4c18e6e3924e0ab4523c087ea0feb6c7f7dea043141485ff5f2",
+      "bytes": 959,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/e2e-engineer.json",
+      "sha256": "1e2e76e9c258fb495e3d9829b2f40bf4883fb71b178822ec760598e2fd99e29b",
+      "bytes": 1006,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/frontend-engineer.json",
+      "sha256": "2b51da5d10438b7fa3c56df661009355afbde0f229634ade3c8a71b96ee7d0f8",
+      "bytes": 956,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/independent-validator.json",
+      "sha256": "b091558378b9af56609a16c7d4fa10d6349e1083ae0a67c4dbe7e8140f619eba",
+      "bytes": 1095,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/ml-engineer.json",
+      "sha256": "618d3ed6684e422811549fd71247262c8678bd8809ebf218b1ce87f0694e4097",
+      "bytes": 990,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/product.json",
+      "sha256": "e32ea8f414d5d49515f41cf04b9e1313bec83e1f5552f5c2a42e84368ef1a785",
+      "bytes": 953,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/quant-researcher.json",
+      "sha256": "019244fdd07ad4bc3aa3745f0e12c7b3026cf3fc6b05815555a66c21045a1d40",
+      "bytes": 1018,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/release-governor.json",
+      "sha256": "bbe1042aaceb416b4c6e87a92fd2e2e0e1c9c4c093ed3aea8bbbd395740f1fb1",
+      "bytes": 1063,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/requirements-validator.json",
+      "sha256": "1da8eb61efe9aa8acf4242a4de9a32bd7ecae56fde97b6be9094e2d2adb7402a",
+      "bytes": 994,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/risk-engineer.json",
+      "sha256": "ceaefb0fc5ada7062446fa623f8411e94304cbe038b56b11d53db3f2d0dcd0de",
+      "bytes": 986,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/security-engineer.json",
+      "sha256": "60173a312edfa8eac87e369e88f9bd0814f2898c0c4141ba8e13e2a494a0d4cf",
+      "bytes": 987,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/agents/test-engineer.json",
+      "sha256": "b3ffc583193fe1f5c879346c609ba6f5fb0b4696afbe8dcd4ec57c9b30dd43d6",
+      "bytes": 968,
+      "group": "src",
+      "symbols": [],
+      "lines": 26
+    },
+    {
+      "path": "src/algooptionx_harness/agents/ui-designer.json",
+      "sha256": "c370d627b11a08dee408b4c588a4ffc306ff7fb92ffa85a2ca25b9814f26a783",
+      "bytes": 964,
+      "group": "src",
+      "symbols": [],
+      "lines": 25
+    },
+    {
+      "path": "src/algooptionx_harness/approvals.py",
+      "sha256": "f74ed4eb7aa7387a8ae43c002a30f90cb33226d1537fae726fbccab696bf134c",
+      "bytes": 6313,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "signing_payload",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "load_policy",
+          "kind": "FunctionDef",
+          "line": 25
+        },
+        {
+          "name": "verify_receipt",
+          "kind": "FunctionDef",
+          "line": 38
+        },
+        {
+          "name": "verify_gate",
+          "kind": "FunctionDef",
+          "line": 80
+        }
+      ],
+      "lines": 156,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/chat.py",
+      "sha256": "f876736c8121a21c39fefad6428b0b4a5a775c1b8ca378de985925c8dbfcadb1",
+      "bytes": 8155,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "request",
+          "kind": "FunctionDef",
+          "line": 15
+        },
+        {
+          "name": "record",
+          "kind": "FunctionDef",
+          "line": 45
+        },
+        {
+          "name": "verify_record",
+          "kind": "FunctionDef",
+          "line": 76
+        },
+        {
+          "name": "queue",
+          "kind": "FunctionDef",
+          "line": 127
+        }
+      ],
+      "lines": 215,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/cli.py",
+      "sha256": "b01b7b3202918e6093ba0e0bf6fd7bf41b71734173cbe25315ec6fa965060dd7",
+      "bytes": 19066,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "gate",
+          "kind": "FunctionDef",
+          "line": 43
+        },
+        {
+          "name": "main",
+          "kind": "FunctionDef",
+          "line": 91
+        }
+      ],
+      "lines": 486,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/examples/task.template.json",
+      "sha256": "1711e0e1f75783c4a0f9a374a29bbec9c4ebdbeaae1e0f5313359bec28f9afa3",
+      "bytes": 2820,
+      "group": "src",
+      "symbols": [],
+      "lines": 114
+    },
+    {
+      "path": "src/algooptionx_harness/examples/trust-policy.template.json",
+      "sha256": "0419297595b5ff5f9861b64cc1fa3652291640ce132b51ced1187fee0a1ec580",
+      "bytes": 144,
+      "group": "src",
+      "symbols": [],
+      "lines": 7
+    },
+    {
+      "path": "src/algooptionx_harness/github_readiness.py",
+      "sha256": "57354b976933f012df377830ca9b3b06999e1a61a71d73c4d170fe4621d0d34a",
+      "bytes": 5996,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "inspect",
+          "kind": "FunctionDef",
+          "line": 12
+        },
+        {
+          "name": "main",
+          "kind": "FunctionDef",
+          "line": 128
+        }
+      ],
+      "lines": 152,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/impact.py",
+      "sha256": "b6ae723abec8dcaa57c139f1338a192cae9862ea76c7338e6da8241d6109843d",
+      "bytes": 11932,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "resolve_commit",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "changed_files",
+          "kind": "FunctionDef",
+          "line": 42
+        },
+        {
+          "name": "select_checks",
+          "kind": "FunctionDef",
+          "line": 63
+        },
+        {
+          "name": "plan_changes",
+          "kind": "FunctionDef",
+          "line": 209
+        },
+        {
+          "name": "run_changes",
+          "kind": "FunctionDef",
+          "line": 239
+        },
+        {
+          "name": "watch_changes",
+          "kind": "FunctionDef",
+          "line": 289
+        }
+      ],
+      "lines": 324,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/models.py",
+      "sha256": "cae7f5da948d5fbbd6db219c61b4be85daa68c2e0747157cdb7f480e8ebfe762",
+      "bytes": 7482,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "Contract",
+          "kind": "ClassDef",
+          "line": 30
+        },
+        {
+          "name": "Check",
+          "kind": "ClassDef",
+          "line": 34
+        },
+        {
+          "name": "Task",
+          "kind": "ClassDef",
+          "line": 57
+        },
+        {
+          "name": "Artifact",
+          "kind": "ClassDef",
+          "line": 93
+        },
+        {
+          "name": "TestOutcome",
+          "kind": "ClassDef",
+          "line": 98
+        },
+        {
+          "name": "Result",
+          "kind": "ClassDef",
+          "line": 104
+        },
+        {
+          "name": "Evidence",
+          "kind": "ClassDef",
+          "line": 117
+        },
+        {
+          "name": "Approval",
+          "kind": "ClassDef",
+          "line": 133
+        },
+        {
+          "name": "Principal",
+          "kind": "ClassDef",
+          "line": 158
+        },
+        {
+          "name": "TrustPolicy",
+          "kind": "ClassDef",
+          "line": 165
+        },
+        {
+          "name": "Finding",
+          "kind": "ClassDef",
+          "line": 173
+        },
+        {
+          "name": "Handoff",
+          "kind": "ClassDef",
+          "line": 179
+        },
+        {
+          "name": "AgentRole",
+          "kind": "ClassDef",
+          "line": 194
+        },
+        {
+          "name": "ChatRequest",
+          "kind": "ClassDef",
+          "line": 207
+        },
+        {
+          "name": "ChatDecision",
+          "kind": "ClassDef",
+          "line": 223
+        }
+      ],
+      "lines": 236,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/orchestration.py",
+      "sha256": "4efdf720285a3ed6ff4eab6355db2c6afbcec654d2770a4a015e15384150e5a2",
+      "bytes": 11624,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "load_role",
+          "kind": "FunctionDef",
+          "line": 25
+        },
+        {
+          "name": "dispatch",
+          "kind": "FunctionDef",
+          "line": 43
+        },
+        {
+          "name": "accept_handoff",
+          "kind": "FunctionDef",
+          "line": 66
+        },
+        {
+          "name": "codex_worker",
+          "kind": "FunctionDef",
+          "line": 102
+        },
+        {
+          "name": "validate_configuration",
+          "kind": "FunctionDef",
+          "line": 301
+        }
+      ],
+      "lines": 316,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/runner.py",
+      "sha256": "be2c2b137a69ba64e3b5c38d83631bfe8f2025856f57daa5bd7c0d4e839555f5",
+      "bytes": 15183,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "parse_report",
+          "kind": "FunctionDef",
+          "line": 36
+        },
+        {
+          "name": "enforce_outcomes",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "clean_environment",
+          "kind": "FunctionDef",
+          "line": 120
+        },
+        {
+          "name": "execute",
+          "kind": "FunctionDef",
+          "line": 151
+        },
+        {
+          "name": "run_task",
+          "kind": "FunctionDef",
+          "line": 204
+        },
+        {
+          "name": "verify_evidence",
+          "kind": "FunctionDef",
+          "line": 327
+        }
+      ],
+      "lines": 384,
+      "test_functions": 0
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/agent.schema.json",
+      "sha256": "72d6e5a4b0920825b79c638c07921500dbe9a146bfdda3688336dd9b28dc917a",
+      "bytes": 1488,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/approval.schema.json",
+      "sha256": "42157990bd3975354cf410d045ba7f4c0ab2e5fea7826d21e17b69cd4dc70865",
+      "bytes": 1345,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/chat-decision.schema.json",
+      "sha256": "27e87389c178c42426af19a199461f7243d2195d4e83ceb8390cb2a6aab6a24a",
+      "bytes": 1284,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/chat-request.schema.json",
+      "sha256": "52ef187cebcda3079a0c4483e52da796e9b82a5f417dc704ba6dd7b4d5742433",
+      "bytes": 1251,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/evidence.schema.json",
+      "sha256": "8c77c936280d197bae89fabac3465447a2546985006ae4ac04cbca1521a0b03a",
+      "bytes": 2596,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/handoff.schema.json",
+      "sha256": "1dbdf6e850e99cb5cca332398e6e227439e4b4eb62c0e7e651a4fd7db4d30f26",
+      "bytes": 2246,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/task.schema.json",
+      "sha256": "ddc1be4a09d035dc5b9e7941884b2bc160b29a64b2b3997d515064366d4ac5ed",
+      "bytes": 2125,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/schemas/trust-policy.schema.json",
+      "sha256": "70d5cfb7d6512f95c67c5de11302e664acbbb93e12f3031c310b358f2aa5ae5e",
+      "bytes": 1092,
+      "group": "src",
+      "symbols": [],
+      "lines": 1
+    },
+    {
+      "path": "src/algooptionx_harness/workspace.py",
+      "sha256": "214be47af7c83dddb850bdccb5f0ad2e01c94e9f22dc5af6666d75e961bf9b0e",
+      "bytes": 5839,
+      "group": "src",
+      "symbols": [
+        {
+          "name": "HarnessError",
+          "kind": "ClassDef",
+          "line": 15
+        },
+        {
+          "name": "canonical",
+          "kind": "FunctionDef",
+          "line": 19
+        },
+        {
+          "name": "digest",
+          "kind": "FunctionDef",
+          "line": 31
+        },
+        {
+          "name": "file_digest",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "relative_path",
+          "kind": "FunctionDef",
+          "line": 39
+        },
+        {
+          "name": "contained",
+          "kind": "FunctionDef",
+          "line": 54
+        },
+        {
+          "name": "git",
+          "kind": "FunctionDef",
+          "line": 68
+        },
+        {
+          "name": "snapshot",
+          "kind": "FunctionDef",
+          "line": 75
+        },
+        {
+          "name": "changed_paths",
+          "kind": "FunctionDef",
+          "line": 95
+        },
+        {
+          "name": "validate_scope",
+          "kind": "FunctionDef",
+          "line": 103
+        },
+        {
+          "name": "load_task",
+          "kind": "FunctionDef",
+          "line": 131
+        },
+        {
+          "name": "write_json",
+          "kind": "FunctionDef",
+          "line": 142
+        },
+        {
+          "name": "capture_task",
+          "kind": "FunctionDef",
+          "line": 152
+        }
+      ],
+      "lines": 173,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "3d49d18acbd344543d9bfe8a451abf7a875014982aa3edf9510f25ab534ef8da",
+      "bytes": 752,
+      "group": "tests",
+      "symbols": [],
+      "lines": 8
+    },
+    {
+      "path": "tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "tests",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/architecture/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "tests",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/architecture/test_boundaries.py",
+      "sha256": "9440bc501d58a7b93766c8b7a395c9c1f3690a005afe5a1ad1a335d19ac28383",
+      "bytes": 2584,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_offline_workspace_cannot_depend_on_broker_research_or_development_tools",
+          "kind": "FunctionDef",
+          "line": 11
+        },
+        {
+          "name": "test_repository_paths_keep_config_assets_and_existing_financial_storage",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "test_installed_entrypoints_resolve_the_canonical_source_packages",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "test_shared_web_primitives_do_not_import_feature_modules",
+          "kind": "FunctionDef",
+          "line": 52
+        }
+      ],
+      "lines": 63,
+      "test_functions": 4
+    },
+    {
+      "path": "tests/control_plane/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "tests",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/control_plane/test_impact.py",
+      "sha256": "97151531bb66e24263c87c046cc8b537a6255607a13be5b78223e47d3d881ddd",
+      "bytes": 10518,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "git",
+          "kind": "FunctionDef",
+          "line": 18
+        },
+        {
+          "name": "commit",
+          "kind": "FunctionDef",
+          "line": 26
+        },
+        {
+          "name": "repo",
+          "kind": "FunctionDef",
+          "line": 42
+        },
+        {
+          "name": "test_conservative_component_selection",
+          "kind": "FunctionDef",
+          "line": 87
+        },
+        {
+          "name": "test_mixed_changes_union_suites_and_frontend_builds",
+          "kind": "FunctionDef",
+          "line": 95
+        },
+        {
+          "name": "test_detects_committed_staged_unstaged_renamed_deleted_and_untracked",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "test_staged_change_is_not_hidden_by_worktree_reverting_to_head",
+          "kind": "FunctionDef",
+          "line": 140
+        },
+        {
+          "name": "test_empty_checkout_diff_does_not_claim_passing_tests",
+          "kind": "FunctionDef",
+          "line": 148
+        },
+        {
+          "name": "test_bad_base_fails_and_explicit_full_runs_without_it",
+          "kind": "FunctionDef",
+          "line": 157
+        },
+        {
+          "name": "test_disconnected_history_falls_back_to_all_tests",
+          "kind": "FunctionDef",
+          "line": 165
+        },
+        {
+          "name": "test_stale_selection_cannot_run",
+          "kind": "FunctionDef",
+          "line": 177
+        },
+        {
+          "name": "test_real_selected_execution_retains_and_verifies_exit_status",
+          "kind": "FunctionDef",
+          "line": 185
+        },
+        {
+          "name": "test_watch_debounces_serializes_and_retests_edits_during_run",
+          "kind": "FunctionDef",
+          "line": 215
+        },
+        {
+          "name": "test_watch_freezes_base_across_new_commits",
+          "kind": "FunctionDef",
+          "line": 244
+        },
+        {
+          "name": "test_cli_plan_and_no_change_exit_codes",
+          "kind": "FunctionDef",
+          "line": 272
+        },
+        {
+          "name": "test_watch_interval_limits_and_symlink_safety",
+          "kind": "FunctionDef",
+          "line": 280
+        },
+        {
+          "name": "test_full_fallback_uses_discovery_so_new_test_directories_are_included",
+          "kind": "FunctionDef",
+          "line": 288
+        },
+        {
+          "name": "test_explicit_full_preserves_comparison_files",
+          "kind": "FunctionDef",
+          "line": 295
+        }
+      ],
+      "lines": 301,
+      "test_functions": 15
+    },
+    {
+      "path": "tests/control_plane/test_workflow.py",
+      "sha256": "2b064297a90c81a981b6e9614b230a12da2967997d5bb7dc3f861341e1e1b728",
+      "bytes": 35056,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "project",
+          "kind": "FunctionDef",
+          "line": 50
+        },
+        {
+          "name": "trust",
+          "kind": "FunctionDef",
+          "line": 123
+        },
+        {
+          "name": "receipt",
+          "kind": "FunctionDef",
+          "line": 150
+        },
+        {
+          "name": "implementation_chain",
+          "kind": "FunctionDef",
+          "line": 176
+        },
+        {
+          "name": "test_real_human_signatures_and_complete_release_chain",
+          "kind": "FunctionDef",
+          "line": 188
+        },
+        {
+          "name": "test_approval_bypass_denied",
+          "kind": "FunctionDef",
+          "line": 225
+        },
+        {
+          "name": "test_no_self_qa_release_or_stale_evidence",
+          "kind": "FunctionDef",
+          "line": 262
+        },
+        {
+          "name": "test_external_trust_boundary_and_strict_contracts",
+          "kind": "FunctionDef",
+          "line": 291
+        },
+        {
+          "name": "test_scope_spec_changes_and_symlinks_fail",
+          "kind": "FunctionDef",
+          "line": 310
+        },
+        {
+          "name": "test_runner_real_pytest_evidence_and_tamper",
+          "kind": "FunctionDef",
+          "line": 324
+        },
+        {
+          "name": "test_failure_is_not_green_and_recovery_reruns",
+          "kind": "FunctionDef",
+          "line": 337
+        },
+        {
+          "name": "test_stale_source_and_false_summary_rejected",
+          "kind": "FunctionDef",
+          "line": 353
+        },
+        {
+          "name": "test_zero_tests_skips_failures_and_duplicates_rejected",
+          "kind": "FunctionDef",
+          "line": 379
+        },
+        {
+          "name": "test_expected_skips_are_explicit_and_critical_never_skipped",
+          "kind": "FunctionDef",
+          "line": 389
+        },
+        {
+          "name": "test_time_budget_environment_and_output_redaction",
+          "kind": "FunctionDef",
+          "line": 409
+        },
+        {
+          "name": "test_validation_source_mutation_is_detected",
+          "kind": "FunctionDef",
+          "line": 437
+        },
+        {
+          "name": "test_handoffs_and_role_capabilities",
+          "kind": "FunctionDef",
+          "line": 458
+        },
+        {
+          "name": "test_cli_fails_closed_without_receipts",
+          "kind": "FunctionDef",
+          "line": 491
+        },
+        {
+          "name": "test_committed_schemas_match_runtime_models",
+          "kind": "FunctionDef",
+          "line": 504
+        },
+        {
+          "name": "test_role_privilege_escalation_is_rejected",
+          "kind": "FunctionDef",
+          "line": 533
+        },
+        {
+          "name": "test_frontend_scope_cannot_omit_ui_approval",
+          "kind": "FunctionDef",
+          "line": 545
+        },
+        {
+          "name": "test_browser_failures_flaky_and_zero_results_cannot_pass",
+          "kind": "FunctionDef",
+          "line": 551
+        },
+        {
+          "name": "test_all_role_definitions_and_candidate_hashes",
+          "kind": "FunctionDef",
+          "line": 583
+        },
+        {
+          "name": "test_real_worker_adapter_dispatch_and_schema_handoff",
+          "kind": "FunctionDef",
+          "line": 606
+        },
+        {
+          "name": "test_qa_release_cli_requires_independent_review_bound_to_signature",
+          "kind": "FunctionDef",
+          "line": 652
+        },
+        {
+          "name": "test_single_human_can_approve_qa_and_release_when_policy_allows",
+          "kind": "FunctionDef",
+          "line": 729
+        },
+        {
+          "name": "test_chat_approval_is_honest_procedural_record_not_signature",
+          "kind": "FunctionDef",
+          "line": 747
+        },
+        {
+          "name": "test_cli_task_capture_preserves_dirty_baseline_and_never_overwrites",
+          "kind": "FunctionDef",
+          "line": 779
+        },
+        {
+          "name": "test_github_metadata_readiness_does_not_mutate_or_claim_unknown",
+          "kind": "FunctionDef",
+          "line": 805
+        },
+        {
+          "name": "test_report_fifo_and_log_symlink_cannot_overwrite_source",
+          "kind": "FunctionDef",
+          "line": 825
+        },
+        {
+          "name": "test_worker_always_reports_out_of_scope_changes_on_unsuccessful_exit",
+          "kind": "FunctionDef",
+          "line": 845
+        },
+        {
+          "name": "test_canceled_worker_preserves_cancellation_and_records_integrity",
+          "kind": "FunctionDef",
+          "line": 896
+        },
+        {
+          "name": "test_worker_outcome_cannot_promote_incomplete_handoff",
+          "kind": "FunctionDef",
+          "line": 947
+        }
+      ],
+      "lines": 979,
+      "test_functions": 29
+    },
+    {
+      "path": "tests/paper/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "tests",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/paper/test_engine.py",
+      "sha256": "65c1d4d72689a0301e9c0d9f0365005a000562185b78403ac150c6bc64c8cba3",
+      "bytes": 11416,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "engine",
+          "kind": "FunctionDef",
+          "line": 16
+        },
+        {
+          "name": "first_contract",
+          "kind": "FunctionDef",
+          "line": 20
+        },
+        {
+          "name": "test_funding_restart_and_idempotency",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "test_round_trip_exact_money_and_history",
+          "kind": "FunctionDef",
+          "line": 41
+        },
+        {
+          "name": "test_kill_flattens_and_blocks_entries",
+          "kind": "FunctionDef",
+          "line": 62
+        },
+        {
+          "name": "test_limits_and_failed_command_rollback",
+          "kind": "FunctionDef",
+          "line": 76
+        },
+        {
+          "name": "test_concurrent_entry_limit",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "test_autonomous_exits_restart_and_session_close",
+          "kind": "FunctionDef",
+          "line": 119
+        },
+        {
+          "name": "test_hash_chain_reconstructs",
+          "kind": "FunctionDef",
+          "line": 142
+        },
+        {
+          "name": "test_accounting_conservation",
+          "kind": "FunctionDef",
+          "line": 163
+        },
+        {
+          "name": "test_api_offline_commands_replay_and_security",
+          "kind": "FunctionDef",
+          "line": 197
+        },
+        {
+          "name": "test_future_market_calls_cannot_change_past",
+          "kind": "FunctionDef",
+          "line": 244
+        },
+        {
+          "name": "test_event_failure_rolls_back_economic_effect",
+          "kind": "FunctionDef",
+          "line": 250
+        },
+        {
+          "name": "test_entry_cash_boundary_and_denial_evidence",
+          "kind": "FunctionDef",
+          "line": 263
+        },
+        {
+          "name": "test_stop_and_target_exit_at_executable_quote",
+          "kind": "FunctionDef",
+          "line": 277
+        }
+      ],
+      "lines": 293,
+      "test_functions": 13
+    },
+    {
+      "path": "tests/research/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "group": "tests",
+      "symbols": [],
+      "lines": 0,
+      "test_functions": 0
+    },
+    {
+      "path": "tests/research/test_backtest_stats.py",
+      "sha256": "26fcd6e1a8de9ab322797e91b20ac653cae3e49c129b358ced546ef27cfcf727",
+      "bytes": 2666,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_trades",
+          "kind": "FunctionDef",
+          "line": 8
+        },
+        {
+          "name": "test_compute_stats_known_sequence",
+          "kind": "FunctionDef",
+          "line": 18
+        },
+        {
+          "name": "test_compute_stats_open_at_close_counts_as_realized",
+          "kind": "FunctionDef",
+          "line": 40
+        },
+        {
+          "name": "test_compute_stats_no_graded_trades_returns_none_ratios_not_crash",
+          "kind": "FunctionDef",
+          "line": 48
+        },
+        {
+          "name": "test_compute_stats_all_wins_profit_factor_is_none_no_losses_to_divide_by",
+          "kind": "FunctionDef",
+          "line": 65
+        },
+        {
+          "name": "test_compute_stats_empty_input",
+          "kind": "FunctionDef",
+          "line": 72
+        }
+      ],
+      "lines": 77,
+      "test_functions": 5
+    },
+    {
+      "path": "tests/research/test_backtest_worker.py",
+      "sha256": "c17baa96c9d9ed6de5a4328162e064c46df045ff35f872776061cd8a6c546798",
+      "bytes": 739,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_trading_days_excludes_weekends",
+          "kind": "FunctionDef",
+          "line": 6
+        },
+        {
+          "name": "test_trading_days_single_weekday",
+          "kind": "FunctionDef",
+          "line": 12
+        },
+        {
+          "name": "test_trading_days_single_weekend_day_is_empty",
+          "kind": "FunctionDef",
+          "line": 16
+        },
+        {
+          "name": "test_trading_days_start_after_end_is_empty",
+          "kind": "FunctionDef",
+          "line": 20
+        }
+      ],
+      "lines": 21,
+      "test_functions": 4
+    },
+    {
+      "path": "tests/research/test_calibration.py",
+      "sha256": "66556b1bb82334c5164e219e200a64f9da30ae9229129a2591bd89dc5af29d2d",
+      "bytes": 7192,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "conn",
+          "kind": "FunctionDef",
+          "line": 11
+        },
+        {
+          "name": "add_event",
+          "kind": "FunctionDef",
+          "line": 19
+        },
+        {
+          "name": "add_outcome",
+          "kind": "FunctionDef",
+          "line": 41
+        },
+        {
+          "name": "seed",
+          "kind": "FunctionDef",
+          "line": 63
+        },
+        {
+          "name": "test_the_same_setup_cannot_be_recorded_twice_in_one_session",
+          "kind": "FunctionDef",
+          "line": 73
+        },
+        {
+          "name": "_fresh",
+          "kind": "FunctionDef",
+          "line": 81
+        },
+        {
+          "name": "test_empty_ledger_yields_no_calibration_rather_than_a_default",
+          "kind": "FunctionDef",
+          "line": 91
+        },
+        {
+          "name": "test_hit_rate_counts_only_decided_outcomes",
+          "kind": "FunctionDef",
+          "line": 95
+        },
+        {
+          "name": "test_not_triggered_events_are_excluded_from_the_hit_rate",
+          "kind": "FunctionDef",
+          "line": 102
+        },
+        {
+          "name": "test_a_thin_sample_is_labelled_unreliable",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "test_a_full_sample_is_labelled_reliable",
+          "kind": "FunctionDef",
+          "line": 123
+        },
+        {
+          "name": "test_results_are_sliced_by_the_regime_that_was_live",
+          "kind": "FunctionDef",
+          "line": 130
+        },
+        {
+          "name": "test_calibration_map_feeds_setups_with_sample_size",
+          "kind": "FunctionDef",
+          "line": 143
+        },
+        {
+          "name": "add_day",
+          "kind": "FunctionDef",
+          "line": 154
+        },
+        {
+          "name": "test_regime_report_needs_sessions_before_it_says_anything",
+          "kind": "FunctionDef",
+          "line": 166
+        },
+        {
+          "name": "test_regime_report_confirms_a_label_that_separates",
+          "kind": "FunctionDef",
+          "line": 172
+        },
+        {
+          "name": "test_regime_report_calls_out_a_label_that_does_not_separate",
+          "kind": "FunctionDef",
+          "line": 181
+        },
+        {
+          "name": "test_daily_features_upsert_does_not_blank_the_earlier_write",
+          "kind": "FunctionDef",
+          "line": 192
+        }
+      ],
+      "lines": 203,
+      "test_functions": 12
+    },
+    {
+      "path": "tests/research/test_execution_policy.py",
+      "sha256": "380e06f87560ea33cda52a09f2b04b0670482595049ed52276d76d6f49b44fc2",
+      "bytes": 2872,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_execution_policy_defaults_to_paper",
+          "kind": "FunctionDef",
+          "line": 10
+        },
+        {
+          "name": "test_execution_policy_accepts_only_paper",
+          "kind": "FunctionDef",
+          "line": 14
+        },
+        {
+          "name": "test_execution_policy_rejects_malformed_or_unknown_settings",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "_write_settings",
+          "kind": "FunctionDef",
+          "line": 26
+        },
+        {
+          "name": "_set_dummy_credentials",
+          "kind": "FunctionDef",
+          "line": 38
+        },
+        {
+          "name": "test_load_settings_defaults_missing_execution_section_to_paper",
+          "kind": "FunctionDef",
+          "line": 45
+        },
+        {
+          "name": "test_load_settings_rejects_live_mode_in_toml",
+          "kind": "FunctionDef",
+          "line": 55
+        },
+        {
+          "name": "test_load_settings_rejects_live_mode_environment_override",
+          "kind": "FunctionDef",
+          "line": 64
+        }
+      ],
+      "lines": 71,
+      "test_functions": 6
+    },
+    {
+      "path": "tests/research/test_gex.py",
+      "sha256": "4f1e6a20baef07e88a4961e8c6d61f08485d387b214f10849fe817f64e325036",
+      "bytes": 2890,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "chain_rows",
+          "kind": "FunctionDef",
+          "line": 6
+        },
+        {
+          "name": "_row",
+          "kind": "FunctionDef",
+          "line": 10
+        },
+        {
+          "name": "test_calls_count_positive_and_puts_negative",
+          "kind": "FunctionDef",
+          "line": 14
+        },
+        {
+          "name": "test_put_gamma_is_negated_even_if_feed_signs_it_negative",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "test_far_strikes_are_excluded_by_range",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "test_gamma_flip_is_where_cumulative_net_changes_sign",
+          "kind": "FunctionDef",
+          "line": 43
+        },
+        {
+          "name": "test_no_flip_when_all_one_sided",
+          "kind": "FunctionDef",
+          "line": 56
+        },
+        {
+          "name": "test_summarize_reports_negative_gamma_when_puts_dominate",
+          "kind": "FunctionDef",
+          "line": 62
+        },
+        {
+          "name": "test_summarize_degrades_cleanly_without_gamma_data",
+          "kind": "FunctionDef",
+          "line": 72
+        }
+      ],
+      "lines": 77,
+      "test_functions": 7
+    },
+    {
+      "path": "tests/research/test_hlc_strategy.py",
+      "sha256": "32764481924d5cb86bf53af7137b713f9bac015c0643b44e2f17ee4162964d85",
+      "bytes": 8568,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_select_atm_picks_smallest_ce_pe_diff",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "test_analyze_leg_buyer_domination",
+          "kind": "FunctionDef",
+          "line": 34
+        },
+        {
+          "name": "test_analyze_leg_seller_domination",
+          "kind": "FunctionDef",
+          "line": 41
+        },
+        {
+          "name": "test_analyze_leg_indecision_when_neither_within_threshold",
+          "kind": "FunctionDef",
+          "line": 48
+        },
+        {
+          "name": "test_analyze_leg_close_equals_high_is_indecision_not_buyer",
+          "kind": "FunctionDef",
+          "line": 53
+        },
+        {
+          "name": "test_combined_signal_matrix",
+          "kind": "FunctionDef",
+          "line": 61
+        },
+        {
+          "name": "test_analyze_full_worked_example",
+          "kind": "FunctionDef",
+          "line": 69
+        },
+        {
+          "name": "test_range_strikes_weekly_example",
+          "kind": "FunctionDef",
+          "line": 96
+        },
+        {
+          "name": "test_range_strikes_monthly_example",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "test_range_strikes_exact_multiple_bumps_high",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "test_range_band_weekly_example",
+          "kind": "FunctionDef",
+          "line": 109
+        },
+        {
+          "name": "test_range_band_monthly_example",
+          "kind": "FunctionDef",
+          "line": 117
+        },
+        {
+          "name": "test_trade_plan_worked_example_sells_the_seller_leg",
+          "kind": "FunctionDef",
+          "line": 128
+        },
+        {
+          "name": "test_trade_plan_strong_bearish_sells_both_legs_split_target",
+          "kind": "FunctionDef",
+          "line": 145
+        },
+        {
+          "name": "test_trade_plan_strong_bullish_sits_out",
+          "kind": "FunctionDef",
+          "line": 160
+        },
+        {
+          "name": "test_trade_plan_indecision_sits_out",
+          "kind": "FunctionDef",
+          "line": 173
+        },
+        {
+          "name": "test_trade_plan_seller_paired_with_indecision_sits_out",
+          "kind": "FunctionDef",
+          "line": 186
+        },
+        {
+          "name": "test_trade_plan_caps_at_max_trades_per_day",
+          "kind": "FunctionDef",
+          "line": 209
+        }
+      ],
+      "lines": 215,
+      "test_functions": 18
+    },
+    {
+      "path": "tests/research/test_hlc_worker_dates.py",
+      "sha256": "e48c0d9c3250cc08d649c966d5357cbb30a93cd62b269fc3d3212b13ec11c51c",
+      "bytes": 1380,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_weekly_anchor_date_from_tracked_expiry",
+          "kind": "FunctionDef",
+          "line": 13
+        },
+        {
+          "name": "test_monthly_expiry_is_last_tuesday_of_month",
+          "kind": "FunctionDef",
+          "line": 19
+        },
+        {
+          "name": "test_monthly_anchor_date_is_wednesday_after_previous_months_last_tuesday",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "test_monthly_anchor_date_handles_december_to_january_rollover",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "test_monthly_expiry_handles_january_itself",
+          "kind": "FunctionDef",
+          "line": 34
+        }
+      ],
+      "lines": 36,
+      "test_functions": 5
+    },
+    {
+      "path": "tests/research/test_journal_grading.py",
+      "sha256": "5d24aab532bb8d92e001da7f5e1cc2a632bb8f18959f8e6def94b8339c6fd319",
+      "bytes": 1687,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_candle",
+          "kind": "FunctionDef",
+          "line": 10
+        },
+        {
+          "name": "test_never_triggers_if_price_never_reaches_entry",
+          "kind": "FunctionDef",
+          "line": 14
+        },
+        {
+          "name": "test_triggers_then_hits_target",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "test_triggers_then_hits_stop",
+          "kind": "FunctionDef",
+          "line": 32
+        },
+        {
+          "name": "test_triggers_but_neither_hit_by_session_end",
+          "kind": "FunctionDef",
+          "line": 42
+        }
+      ],
+      "lines": 49,
+      "test_functions": 4
+    },
+    {
+      "path": "tests/research/test_ledger.py",
+      "sha256": "ffd43681fd7815e08078911f148de8d5d21bfa72d048205a3d94130966b1dda2",
+      "bytes": 8949,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "bars",
+          "kind": "FunctionDef",
+          "line": 8
+        },
+        {
+          "name": "buy_event",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "test_never_triggered_is_its_own_result_not_a_loss",
+          "kind": "FunctionDef",
+          "line": 51
+        },
+        {
+          "name": "test_target_reached_before_invalidation_is_a_win",
+          "kind": "FunctionDef",
+          "line": 61
+        },
+        {
+          "name": "test_invalidation_before_target_is_a_loss",
+          "kind": "FunctionDef",
+          "line": 71
+        },
+        {
+          "name": "test_drift_without_either_level_is_flat",
+          "kind": "FunctionDef",
+          "line": 79
+        },
+        {
+          "name": "test_bearish_setup_triggers_on_a_close_below_the_level",
+          "kind": "FunctionDef",
+          "line": 86
+        },
+        {
+          "name": "test_excursions_are_recorded_for_both_directions",
+          "kind": "FunctionDef",
+          "line": 97
+        },
+        {
+          "name": "test_bars_before_the_arm_time_are_ignored",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "sell_event",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "test_sold_call_level_holding_is_a_win",
+          "kind": "FunctionDef",
+          "line": 134
+        },
+        {
+          "name": "test_sold_call_level_breaking_is_a_loss",
+          "kind": "FunctionDef",
+          "line": 142
+        },
+        {
+          "name": "test_sold_put_level_uses_the_opposite_direction",
+          "kind": "FunctionDef",
+          "line": 149
+        },
+        {
+          "name": "test_a_wick_through_the_level_is_not_a_break",
+          "kind": "FunctionDef",
+          "line": 157
+        },
+        {
+          "name": "straddle_event",
+          "kind": "FunctionDef",
+          "line": 170
+        },
+        {
+          "name": "test_straddle_is_graded_on_where_the_session_finished",
+          "kind": "FunctionDef",
+          "line": 189
+        },
+        {
+          "name": "test_a_round_trip_through_the_band_is_still_recorded_as_adverse",
+          "kind": "FunctionDef",
+          "line": 197
+        },
+        {
+          "name": "test_finishing_outside_the_band_is_a_loss",
+          "kind": "FunctionDef",
+          "line": 204
+        },
+        {
+          "name": "test_straddle_without_a_recorded_band_is_not_graded",
+          "kind": "FunctionDef",
+          "line": 210
+        },
+        {
+          "name": "test_daily_outcome_row_reports_gap_range_and_net",
+          "kind": "FunctionDef",
+          "line": 218
+        },
+        {
+          "name": "test_daily_outcome_row_is_none_without_candles",
+          "kind": "FunctionDef",
+          "line": 226
+        },
+        {
+          "name": "test_outcome_row_carries_the_event_identity",
+          "kind": "FunctionDef",
+          "line": 230
+        },
+        {
+          "name": "test_a_broken_sell_level_reports_a_negative_result",
+          "kind": "FunctionDef",
+          "line": 238
+        }
+      ],
+      "lines": 245,
+      "test_functions": 19
+    },
+    {
+      "path": "tests/research/test_market_data_quality.py",
+      "sha256": "e094cdfbe901f9efd8d2ec9156d872b9f49234a0afd76fb65b3e960bb9d7415e",
+      "bytes": 5721,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_ts",
+          "kind": "FunctionDef",
+          "line": 20
+        },
+        {
+          "name": "_response",
+          "kind": "FunctionDef",
+          "line": 24
+        },
+        {
+          "name": "test_parser_validates_and_excludes_unfinished_intraday_bar",
+          "kind": "FunctionDef",
+          "line": 40
+        },
+        {
+          "name": "test_parser_records_stable_content_hash_and_provenance",
+          "kind": "FunctionDef",
+          "line": 47
+        },
+        {
+          "name": "test_parser_rejects_array_length_mismatch",
+          "kind": "FunctionDef",
+          "line": 58
+        },
+        {
+          "name": "test_parser_rejects_malformed_empty_payload",
+          "kind": "FunctionDef",
+          "line": 65
+        },
+        {
+          "name": "test_parser_rejects_invalid_timestamp_sequences",
+          "kind": "FunctionDef",
+          "line": 80
+        },
+        {
+          "name": "test_parser_rejects_future_timestamp",
+          "kind": "FunctionDef",
+          "line": 85
+        },
+        {
+          "name": "test_parser_rejects_invalid_ohlc_and_nonfinite_values",
+          "kind": "FunctionDef",
+          "line": 90
+        },
+        {
+          "name": "test_parser_accepts_provider_envelopes_and_empty_success",
+          "kind": "FunctionDef",
+          "line": 101
+        },
+        {
+          "name": "test_freshness_gate_handles_regular_session_boundary",
+          "kind": "FunctionDef",
+          "line": 108
+        },
+        {
+          "name": "test_option_chain_rejects_duplicate_or_crossed_quotes",
+          "kind": "FunctionDef",
+          "line": 118
+        },
+        {
+          "name": "test_persisted_candle_batch_has_hash_and_requested_window",
+          "kind": "FunctionDef",
+          "line": 131
+        }
+      ],
+      "lines": 148,
+      "test_functions": 11
+    },
+    {
+      "path": "tests/research/test_market_structure.py",
+      "sha256": "a6234be0d6ddf4c7c8779aeb62b2353ab8be81c669d757d6b475b24816f2d25f",
+      "bytes": 13127,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_candles",
+          "kind": "FunctionDef",
+          "line": 35
+        },
+        {
+          "name": "test_find_swings_detects_a_clear_fractal_high",
+          "kind": "FunctionDef",
+          "line": 48
+        },
+        {
+          "name": "test_find_swings_same_kind_replacement_keeps_more_extreme",
+          "kind": "FunctionDef",
+          "line": 58
+        },
+        {
+          "name": "test_find_swings_rejects_move_smaller_than_atr_filter",
+          "kind": "FunctionDef",
+          "line": 73
+        },
+        {
+          "name": "test_find_swings_too_short_series_returns_empty",
+          "kind": "FunctionDef",
+          "line": 87
+        },
+        {
+          "name": "_swing",
+          "kind": "FunctionDef",
+          "line": 94
+        },
+        {
+          "name": "test_classify_structure_establishes_bullish_trend_from_hh_hl",
+          "kind": "FunctionDef",
+          "line": 98
+        },
+        {
+          "name": "test_classify_structure_bos_on_continuation",
+          "kind": "FunctionDef",
+          "line": 110
+        },
+        {
+          "name": "test_classify_structure_choch_flips_trend_on_counter_break",
+          "kind": "FunctionDef",
+          "line": 127
+        },
+        {
+          "name": "test_classify_structure_no_swings_is_unclear",
+          "kind": "FunctionDef",
+          "line": 145
+        },
+        {
+          "name": "test_classify_day_type_forming_before_ib_completes",
+          "kind": "FunctionDef",
+          "line": 154
+        },
+        {
+          "name": "test_classify_day_type_non_trend_day_stays_inside_ib",
+          "kind": "FunctionDef",
+          "line": 161
+        },
+        {
+          "name": "test_classify_day_type_trend_day_extends_and_closes_at_extreme",
+          "kind": "FunctionDef",
+          "line": 172
+        },
+        {
+          "name": "test_classify_day_type_neutral_day_extends_both_sides",
+          "kind": "FunctionDef",
+          "line": 181
+        },
+        {
+          "name": "test_classify_day_type_normal_variation_moderate_one_sided_extension",
+          "kind": "FunctionDef",
+          "line": 189
+        },
+        {
+          "name": "test_previous_day_high_low_picks_most_recent_earlier_session",
+          "kind": "FunctionDef",
+          "line": 201
+        },
+        {
+          "name": "test_previous_day_close_matches_last_bar_of_previous_session",
+          "kind": "FunctionDef",
+          "line": 218
+        },
+        {
+          "name": "test_previous_day_high_low_none_when_no_earlier_session",
+          "kind": "FunctionDef",
+          "line": 234
+        },
+        {
+          "name": "test_previous_week_high_low_uses_most_recent_completed_week",
+          "kind": "FunctionDef",
+          "line": 241
+        },
+        {
+          "name": "_five_min_bars",
+          "kind": "FunctionDef",
+          "line": 264
+        },
+        {
+          "name": "test_resample_folds_bars_and_keeps_true_extremes",
+          "kind": "FunctionDef",
+          "line": 291
+        },
+        {
+          "name": "test_daily_resample_never_merges_two_sessions",
+          "kind": "FunctionDef",
+          "line": 300
+        },
+        {
+          "name": "test_hourly_resample_is_anchored_to_the_session_open",
+          "kind": "FunctionDef",
+          "line": 308
+        },
+        {
+          "name": "test_multi_timeframe_says_so_rather_than_guessing_on_thin_history",
+          "kind": "FunctionDef",
+          "line": 317
+        },
+        {
+          "name": "test_every_timeframe_is_reported_with_its_own_bar_count",
+          "kind": "FunctionDef",
+          "line": 336
+        },
+        {
+          "name": "test_summary_exposes_the_timeframe_read",
+          "kind": "FunctionDef",
+          "line": 346
+        }
+      ],
+      "lines": 351,
+      "test_functions": 23
+    },
+    {
+      "path": "tests/research/test_momentum.py",
+      "sha256": "f6e726a3952a167468510901fb68c44336692a2953bc822ffd0fe8efd3202bc8",
+      "bytes": 1008,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_uptrend_candles",
+          "kind": "FunctionDef",
+          "line": 7
+        },
+        {
+          "name": "test_insufficient_data_returns_none_summary",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "test_uptrend_yields_high_rsi_and_bullish_lean",
+          "kind": "FunctionDef",
+          "line": 27
+        },
+        {
+          "name": "test_iv_rank_needs_minimum_history",
+          "kind": "FunctionDef",
+          "line": 34
+        }
+      ],
+      "lines": 36,
+      "test_functions": 3
+    },
+    {
+      "path": "tests/research/test_oi_behavior.py",
+      "sha256": "eecd34de2df3135034217ba7f18bf0d41c9bf6955ce34c387f9f984a89d862a1",
+      "bytes": 2365,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_classify_all_four_quadrants",
+          "kind": "FunctionDef",
+          "line": 6
+        },
+        {
+          "name": "test_classify_with_no_previous_snapshot_returns_neutral_summary",
+          "kind": "FunctionDef",
+          "line": 33
+        },
+        {
+          "name": "test_bias_lean_follows_dominant_long_buildup_side",
+          "kind": "FunctionDef",
+          "line": 40
+        }
+      ],
+      "lines": 58,
+      "test_functions": 3
+    },
+    {
+      "path": "tests/research/test_oi_walls.py",
+      "sha256": "715c51efc84ce3f0444f94e943be219b0f35f26e97557c23ae144a5df6a719d1",
+      "bytes": 2315,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_row",
+          "kind": "FunctionDef",
+          "line": 6
+        },
+        {
+          "name": "test_detect_walls_picks_top_n_within_range_by_oi",
+          "kind": "FunctionDef",
+          "line": 16
+        },
+        {
+          "name": "test_detect_walls_fresh_high_volume_rising_oi",
+          "kind": "FunctionDef",
+          "line": 29
+        },
+        {
+          "name": "test_detect_walls_stale_high_volume_falling_oi_warns_unwinding",
+          "kind": "FunctionDef",
+          "line": 37
+        },
+        {
+          "name": "test_detect_walls_low_volume_stays_stale_even_with_oi_change",
+          "kind": "FunctionDef",
+          "line": 45
+        },
+        {
+          "name": "test_detect_walls_missing_prev_day_oi_degrades_gracefully",
+          "kind": "FunctionDef",
+          "line": 53
+        },
+        {
+          "name": "test_detect_walls_empty_chain_returns_empty",
+          "kind": "FunctionDef",
+          "line": 62
+        }
+      ],
+      "lines": 63,
+      "test_functions": 6
+    },
+    {
+      "path": "tests/research/test_option_ohlc.py",
+      "sha256": "3bc562764cbc1c7fd230b5dc27747843f370a46b4cebb8ba797ec9d91966ff06",
+      "bytes": 1193,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "test_before_market_close_uses_previous_day",
+          "kind": "FunctionDef",
+          "line": 8
+        },
+        {
+          "name": "test_after_market_close_uses_same_day",
+          "kind": "FunctionDef",
+          "line": 13
+        },
+        {
+          "name": "test_weekend_falls_back_to_friday",
+          "kind": "FunctionDef",
+          "line": 18
+        },
+        {
+          "name": "test_monday_before_open_falls_back_to_friday",
+          "kind": "FunctionDef",
+          "line": 23
+        },
+        {
+          "name": "test_back_parameter_steps_further_for_holiday_retry",
+          "kind": "FunctionDef",
+          "line": 28
+        }
+      ],
+      "lines": 30,
+      "test_functions": 5
+    },
+    {
+      "path": "tests/research/test_prediction.py",
+      "sha256": "2131589f3064951bc74f99b6ee89d69cbfd3ed833a361b38e554e8ac1843dabb",
+      "bytes": 14653,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "conn",
+          "kind": "FunctionDef",
+          "line": 26
+        },
+        {
+          "name": "_session_bars",
+          "kind": "FunctionDef",
+          "line": 34
+        },
+        {
+          "name": "seed_candles",
+          "kind": "FunctionDef",
+          "line": 55
+        },
+        {
+          "name": "seed_chain",
+          "kind": "FunctionDef",
+          "line": 71
+        },
+        {
+          "name": "test_no_spot_price_yields_an_explanation_not_an_error",
+          "kind": "FunctionDef",
+          "line": 102
+        },
+        {
+          "name": "test_build_degrades_without_any_stored_history",
+          "kind": "FunctionDef",
+          "line": 111
+        },
+        {
+          "name": "test_build_writes_nothing_to_the_ledger",
+          "kind": "FunctionDef",
+          "line": 123
+        },
+        {
+          "name": "test_build_produces_the_whole_catalog",
+          "kind": "FunctionDef",
+          "line": 135
+        },
+        {
+          "name": "test_recording_is_idempotent_within_a_session",
+          "kind": "FunctionDef",
+          "line": 151
+        },
+        {
+          "name": "test_recorded_event_keeps_the_full_signal_and_its_conditions",
+          "kind": "FunctionDef",
+          "line": 170
+        },
+        {
+          "name": "test_daily_features_records_the_engines_read",
+          "kind": "FunctionDef",
+          "line": 189
+        },
+        {
+          "name": "test_grading_fills_in_outcomes_and_the_sessions_own_result",
+          "kind": "FunctionDef",
+          "line": 206
+        },
+        {
+          "name": "test_grading_is_a_no_op_once_a_session_is_graded",
+          "kind": "FunctionDef",
+          "line": 230
+        },
+        {
+          "name": "test_the_current_session_is_never_graded_early",
+          "kind": "FunctionDef",
+          "line": 247
+        },
+        {
+          "name": "test_a_session_without_stored_candles_stays_ungraded",
+          "kind": "FunctionDef",
+          "line": 261
+        },
+        {
+          "name": "test_the_payload_is_json_safe",
+          "kind": "FunctionDef",
+          "line": 281
+        },
+        {
+          "name": "test_learning_payload_is_json_safe_on_an_empty_ledger",
+          "kind": "FunctionDef",
+          "line": 298
+        },
+        {
+          "name": "test_key_levels_are_sorted_high_to_low_with_spot_in_place",
+          "kind": "FunctionDef",
+          "line": 310
+        },
+        {
+          "name": "test_key_levels_do_not_repeat_the_same_price",
+          "kind": "FunctionDef",
+          "line": 328
+        },
+        {
+          "name": "test_every_key_level_explains_itself",
+          "kind": "FunctionDef",
+          "line": 342
+        },
+        {
+          "name": "test_every_signal_carries_a_readiness_verdict",
+          "kind": "FunctionDef",
+          "line": 353
+        },
+        {
+          "name": "test_levels_sharing_a_price_are_merged_not_dropped",
+          "kind": "FunctionDef",
+          "line": 366
+        }
+      ],
+      "lines": 382,
+      "test_functions": 18
+    },
+    {
+      "path": "tests/research/test_regime.py",
+      "sha256": "fb57c653dbdfccfd320503f4b69d76cdc11cd00101cd8f6f5cc2063020e796b5",
+      "bytes": 9745,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "sessions",
+          "kind": "FunctionDef",
+          "line": 9
+        },
+        {
+          "name": "intraday",
+          "kind": "FunctionDef",
+          "line": 27
+        },
+        {
+          "name": "test_expiry_weekday_fallback_is_tuesday_not_thursday",
+          "kind": "FunctionDef",
+          "line": 39
+        },
+        {
+          "name": "test_tracked_expiry_overrides_the_weekday_rule",
+          "kind": "FunctionDef",
+          "line": 45
+        },
+        {
+          "name": "test_realized_move_measures_displacement_not_range",
+          "kind": "FunctionDef",
+          "line": 55
+        },
+        {
+          "name": "test_gap_in_stored_history_is_not_counted_as_one_session_move",
+          "kind": "FunctionDef",
+          "line": 68
+        },
+        {
+          "name": "test_intraday_bars_are_folded_into_sessions",
+          "kind": "FunctionDef",
+          "line": 85
+        },
+        {
+          "name": "test_intraday_source_is_preferred_over_shorter_daily_history",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "test_implied_daily_move_scales_by_square_root_of_time",
+          "kind": "FunctionDef",
+          "line": 115
+        },
+        {
+          "name": "test_implied_daily_move_is_none_without_a_straddle",
+          "kind": "FunctionDef",
+          "line": 120
+        },
+        {
+          "name": "test_atm_straddle_picks_nearest_strike_to_spot",
+          "kind": "FunctionDef",
+          "line": 125
+        },
+        {
+          "name": "test_day_type_can_outvote_a_single_indicator",
+          "kind": "FunctionDef",
+          "line": 142
+        },
+        {
+          "name": "test_regime_is_unknown_when_nothing_is_readable",
+          "kind": "FunctionDef",
+          "line": 147
+        },
+        {
+          "name": "_chain",
+          "kind": "FunctionDef",
+          "line": 157
+        },
+        {
+          "name": "_quiet_daily",
+          "kind": "FunctionDef",
+          "line": 166
+        },
+        {
+          "name": "test_rich_premium_and_contained_day_produce_a_sell_stance",
+          "kind": "FunctionDef",
+          "line": 171
+        },
+        {
+          "name": "test_every_factor_is_reported_even_when_it_contributes_nothing",
+          "kind": "FunctionDef",
+          "line": 186
+        },
+        {
+          "name": "test_thin_history_halves_the_pricing_weight_and_warns",
+          "kind": "FunctionDef",
+          "line": 204
+        },
+        {
+          "name": "test_expiry_day_warns_about_gamma",
+          "kind": "FunctionDef",
+          "line": 220
+        },
+        {
+          "name": "test_opening_window_warns_against_new_positions",
+          "kind": "FunctionDef",
+          "line": 234
+        },
+        {
+          "name": "test_missing_pricing_inputs_warn_rather_than_silently_neutralise",
+          "kind": "FunctionDef",
+          "line": 248
+        },
+        {
+          "name": "test_iv_percentile_needs_a_real_sample",
+          "kind": "FunctionDef",
+          "line": 262
+        },
+        {
+          "name": "test_trading_days_to_expiry_excludes_weekends",
+          "kind": "FunctionDef",
+          "line": 267
+        }
+      ],
+      "lines": 270,
+      "test_functions": 19
+    },
+    {
+      "path": "tests/research/test_repository.py",
+      "sha256": "ebf13cf68e626e430188f9bbde5180fbe8dd5086c29ba36a24a7ae3a18cd5711",
+      "bytes": 3736,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_conn",
+          "kind": "FunctionDef",
+          "line": 7
+        },
+        {
+          "name": "_insert",
+          "kind": "FunctionDef",
+          "line": 14
+        },
+        {
+          "name": "test_get_most_recent_graded_day_none_when_all_pending",
+          "kind": "FunctionDef",
+          "line": 27
+        },
+        {
+          "name": "test_get_most_recent_graded_day_sums_both_legs_on_the_same_date",
+          "kind": "FunctionDef",
+          "line": 33
+        },
+        {
+          "name": "test_get_most_recent_graded_day_picks_latest_date_not_highest_id",
+          "kind": "FunctionDef",
+          "line": 40
+        },
+        {
+          "name": "test_get_most_recent_graded_day_ignores_pending_rows_on_a_later_date",
+          "kind": "FunctionDef",
+          "line": 49
+        },
+        {
+          "name": "test_get_journal_entries_in_range_filters_dates_and_excludes_pending",
+          "kind": "FunctionDef",
+          "line": 58
+        },
+        {
+          "name": "test_get_journal_entries_in_range_chronological_order",
+          "kind": "FunctionDef",
+          "line": 69
+        },
+        {
+          "name": "test_insert_and_get_backtest_runs",
+          "kind": "FunctionDef",
+          "line": 78
+        }
+      ],
+      "lines": 93,
+      "test_functions": 7
+    },
+    {
+      "path": "tests/research/test_risk.py",
+      "sha256": "60778efd165386ff2e4b26237662c6c16a9d9e94e735715553a26a72057537a2",
+      "bytes": 5522,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_at",
+          "kind": "FunctionDef",
+          "line": 16
+        },
+        {
+          "name": "test_classify_session_window_opening_boundary",
+          "kind": "FunctionDef",
+          "line": 22
+        },
+        {
+          "name": "test_classify_session_window_closing_boundary",
+          "kind": "FunctionDef",
+          "line": 28
+        },
+        {
+          "name": "test_classify_session_window_midday",
+          "kind": "FunctionDef",
+          "line": 34
+        },
+        {
+          "name": "test_assess_risk_midday_normal_day_is_full_size_no_avoid",
+          "kind": "FunctionDef",
+          "line": 40
+        },
+        {
+          "name": "test_assess_risk_opening_always_avoids_new_entries",
+          "kind": "FunctionDef",
+          "line": 48
+        },
+        {
+          "name": "test_assess_risk_closing_on_expiry_is_the_worst_case",
+          "kind": "FunctionDef",
+          "line": 57
+        },
+        {
+          "name": "test_position_sizing_table_math_full_size",
+          "kind": "FunctionDef",
+          "line": 76
+        },
+        {
+          "name": "test_position_sizing_applies_time_of_day_multiplier",
+          "kind": "FunctionDef",
+          "line": 90
+        },
+        {
+          "name": "test_position_sizing_includes_estimated_row_when_given",
+          "kind": "FunctionDef",
+          "line": 100
+        },
+        {
+          "name": "test_position_sizing_zero_stop_distance_is_zero_lots_not_a_crash",
+          "kind": "FunctionDef",
+          "line": 110
+        },
+        {
+          "name": "test_daily_risk_status_no_prior_graded_day",
+          "kind": "FunctionDef",
+          "line": 121
+        },
+        {
+          "name": "test_daily_risk_status_loss_reduces_remaining_budget",
+          "kind": "FunctionDef",
+          "line": 128
+        },
+        {
+          "name": "test_daily_risk_status_locks_when_loss_meets_daily_limit",
+          "kind": "FunctionDef",
+          "line": 136
+        },
+        {
+          "name": "test_daily_risk_status_gain_does_not_increase_remaining_beyond_cap",
+          "kind": "FunctionDef",
+          "line": 143
+        }
+      ],
+      "lines": 147,
+      "test_functions": 14
+    },
+    {
+      "path": "tests/research/test_scenarios.py",
+      "sha256": "ae500bc95b1af9c6c274e1b0bbeaf513a5f4099f8234998ab1286027532564b5",
+      "bytes": 8324,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_Level",
+          "kind": "ClassDef",
+          "line": 14
+        },
+        {
+          "name": "_regime",
+          "kind": "FunctionDef",
+          "line": 22
+        },
+        {
+          "name": "_structure",
+          "kind": "FunctionDef",
+          "line": 37
+        },
+        {
+          "name": "_levels",
+          "kind": "FunctionDef",
+          "line": 50
+        },
+        {
+          "name": "_signal",
+          "kind": "FunctionDef",
+          "line": 55
+        },
+        {
+          "name": "_build",
+          "kind": "FunctionDef",
+          "line": 66
+        },
+        {
+          "name": "test_always_exactly_three_scenarios",
+          "kind": "FunctionDef",
+          "line": 86
+        },
+        {
+          "name": "test_shares_total_one_hundred_and_are_labelled_as_evidence",
+          "kind": "FunctionDef",
+          "line": 93
+        },
+        {
+          "name": "test_unreadable_factors_are_excluded_rather_than_counted_as_range",
+          "kind": "FunctionDef",
+          "line": 99
+        },
+        {
+          "name": "test_bullish_evidence_lands_on_the_upside_scenario",
+          "kind": "FunctionDef",
+          "line": 118
+        },
+        {
+          "name": "test_damped_choppy_conditions_favour_the_range",
+          "kind": "FunctionDef",
+          "line": 126
+        },
+        {
+          "name": "test_triggers_use_the_nearest_real_levels",
+          "kind": "FunctionDef",
+          "line": 138
+        },
+        {
+          "name": "test_scenarios_are_ordered_by_evidence",
+          "kind": "FunctionDef",
+          "line": 147
+        },
+        {
+          "name": "test_checklist_conditions_are_all_real_and_can_fail",
+          "kind": "FunctionDef",
+          "line": 155
+        },
+        {
+          "name": "test_closed_market_stands_down_however_good_the_evidence",
+          "kind": "FunctionDef",
+          "line": 172
+        },
+        {
+          "name": "test_an_armed_setup_at_its_level_reads_as_trade",
+          "kind": "FunctionDef",
+          "line": 178
+        },
+        {
+          "name": "test_armed_but_far_from_the_level_reads_as_wait",
+          "kind": "FunctionDef",
+          "line": 186
+        },
+        {
+          "name": "test_no_armed_setup_stands_down",
+          "kind": "FunctionDef",
+          "line": 190
+        },
+        {
+          "name": "test_fresh_walls_satisfy_the_open_interest_condition",
+          "kind": "FunctionDef",
+          "line": 194
+        }
+      ],
+      "lines": 199,
+      "test_functions": 13
+    },
+    {
+      "path": "tests/research/test_sentiment.py",
+      "sha256": "fc674dfbec15fafd5368252bd151b4b2d4c03f341dcef7d545b5b4a235d173d0",
+      "bytes": 1990,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_chain",
+          "kind": "FunctionDef",
+          "line": 6
+        },
+        {
+          "name": "test_pcr_oi_bullish_when_puts_dominate",
+          "kind": "FunctionDef",
+          "line": 17
+        },
+        {
+          "name": "test_pcr_oi_neutral_when_balanced",
+          "kind": "FunctionDef",
+          "line": 23
+        },
+        {
+          "name": "test_max_pain_prefers_high_oi_strike_cluster",
+          "kind": "FunctionDef",
+          "line": 31
+        },
+        {
+          "name": "test_atm_iv_and_skew",
+          "kind": "FunctionDef",
+          "line": 45
+        }
+      ],
+      "lines": 49,
+      "test_functions": 4
+    },
+    {
+      "path": "tests/research/test_setups.py",
+      "sha256": "3e3a2735406b2f913bd39f450c3d8d93035a82c0f82e64e25d3529ad2678d6bf",
+      "bytes": 11916,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_bars",
+          "kind": "FunctionDef",
+          "line": 10
+        },
+        {
+          "name": "_chain",
+          "kind": "FunctionDef",
+          "line": 22
+        },
+        {
+          "name": "_structure",
+          "kind": "FunctionDef",
+          "line": 30
+        },
+        {
+          "name": "_regime",
+          "kind": "FunctionDef",
+          "line": 46
+        },
+        {
+          "name": "_ctx",
+          "kind": "FunctionDef",
+          "line": 77
+        },
+        {
+          "name": "_by_key",
+          "kind": "FunctionDef",
+          "line": 97
+        },
+        {
+          "name": "test_a_failed_gate_blocks_regardless_of_score",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "test_blocked_reasons_read_as_the_failure_not_the_requirement",
+          "kind": "FunctionDef",
+          "line": 114
+        },
+        {
+          "name": "test_short_straddle_refuses_to_fire_in_a_trend",
+          "kind": "FunctionDef",
+          "line": 122
+        },
+        {
+          "name": "test_short_straddle_arms_in_a_contained_richly_priced_session",
+          "kind": "FunctionDef",
+          "line": 131
+        },
+        {
+          "name": "test_expiry_closing_window_shuts_off_every_premium_sale",
+          "kind": "FunctionDef",
+          "line": 148
+        },
+        {
+          "name": "test_wall_being_unwound_blocks_the_fade",
+          "kind": "FunctionDef",
+          "line": 166
+        },
+        {
+          "name": "test_wall_fade_needs_the_wall_on_the_correct_side_of_price",
+          "kind": "FunctionDef",
+          "line": 180
+        },
+        {
+          "name": "test_catalog_covers_buying_and_selling",
+          "kind": "FunctionDef",
+          "line": 193
+        },
+        {
+          "name": "test_blocked_setups_are_returned_not_hidden",
+          "kind": "FunctionDef",
+          "line": 201
+        },
+        {
+          "name": "test_grade_is_capped_without_history_however_good_the_evidence",
+          "kind": "FunctionDef",
+          "line": 210
+        },
+        {
+          "name": "test_every_signal_without_history_says_so",
+          "kind": "FunctionDef",
+          "line": 217
+        },
+        {
+          "name": "test_calibration_is_attached_when_present",
+          "kind": "FunctionDef",
+          "line": 222
+        },
+        {
+          "name": "test_every_signal_states_assumption_trigger_and_invalidation",
+          "kind": "FunctionDef",
+          "line": 233
+        },
+        {
+          "name": "test_evidence_weights_sum_to_one_hundred_per_setup",
+          "kind": "FunctionDef",
+          "line": 240
+        },
+        {
+          "name": "test_score_reflects_only_earned_evidence",
+          "kind": "FunctionDef",
+          "line": 245
+        },
+        {
+          "name": "test_expected_premium_uses_delta_and_stays_conservative",
+          "kind": "FunctionDef",
+          "line": 251
+        },
+        {
+          "name": "test_best_setup_returns_none_when_nothing_qualifies",
+          "kind": "FunctionDef",
+          "line": 261
+        },
+        {
+          "name": "test_best_setup_prefers_an_armed_signal_over_a_higher_scoring_blocked_one",
+          "kind": "FunctionDef",
+          "line": 266
+        },
+        {
+          "name": "test_setups_degrade_rather_than_crash_without_structure_or_chain",
+          "kind": "FunctionDef",
+          "line": 281
+        },
+        {
+          "name": "test_nothing_arms_while_the_market_is_closed",
+          "kind": "FunctionDef",
+          "line": 287
+        }
+      ],
+      "lines": 307,
+      "test_functions": 20
+    },
+    {
+      "path": "tests/research/test_support_resistance.py",
+      "sha256": "98c5bd17fdf9c51fcf269a8e5c250d68d306c31b7df9deba4c860fb4baf8bbae",
+      "bytes": 4217,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_wall",
+          "kind": "FunctionDef",
+          "line": 17
+        },
+        {
+          "name": "test_classify_score_boundaries",
+          "kind": "FunctionDef",
+          "line": 27
+        },
+        {
+          "name": "test_classic_pivots_known_values",
+          "kind": "FunctionDef",
+          "line": 40
+        },
+        {
+          "name": "test_build_zones_clusters_confirming_factors_and_sums_score",
+          "kind": "FunctionDef",
+          "line": 51
+        },
+        {
+          "name": "test_build_zones_score_capped_at_100",
+          "kind": "FunctionDef",
+          "line": 68
+        },
+        {
+          "name": "test_build_zones_keeps_far_apart_candidates_separate",
+          "kind": "FunctionDef",
+          "line": 85
+        },
+        {
+          "name": "test_build_zones_vwap_support_below_spot_resistance_above",
+          "kind": "FunctionDef",
+          "line": 96
+        },
+        {
+          "name": "test_build_zones_caps_max_zones_per_side",
+          "kind": "FunctionDef",
+          "line": 104
+        },
+        {
+          "name": "test_build_zones_no_inputs_returns_empty",
+          "kind": "FunctionDef",
+          "line": 115
+        }
+      ],
+      "lines": 116,
+      "test_functions": 8
+    },
+    {
+      "path": "tests/research/test_trend.py",
+      "sha256": "6120eea952216def9e316b0f33b2cd67bf036c5baf9813c029fec54bac662c1d",
+      "bytes": 2323,
+      "group": "tests",
+      "symbols": [
+        {
+          "name": "_uptrend_candles",
+          "kind": "FunctionDef",
+          "line": 7
+        },
+        {
+          "name": "test_insufficient_data_returns_none_summary",
+          "kind": "FunctionDef",
+          "line": 21
+        },
+        {
+          "name": "test_uptrend_yields_bullish_lean_and_price_above_vwap",
+          "kind": "FunctionDef",
+          "line": 27
+        },
+        {
+          "name": "test_downtrend_yields_bearish_lean",
+          "kind": "FunctionDef",
+          "line": 34
+        },
+        {
+          "name": "test_vwap_resets_each_session",
+          "kind": "FunctionDef",
+          "line": 41
+        }
+      ],
+      "lines": 67,
+      "test_functions": 4
+    },
+    {
+      "path": "uv.lock",
+      "sha256": "1957337963fc605cd46218837635be3a77a6593a1a1e59435290a52366478c23",
+      "bytes": 306087,
+      "group": "uv.lock",
+      "symbols": [],
+      "lines": 1405
+    }
+  ]
+}

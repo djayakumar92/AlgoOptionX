@@ -4,21 +4,21 @@ Updated: 28 October 2026. This file tracks authorized work and future proposals;
 
 | Order / ID | Work item | Status | Next action / dependencies |
 |---|---|---|---|
-| 1 · HARNESS-CHANGE-001 | Change-aware harness testing and local watch mode | Implemented; local validation passed | Integration and current GitHub status are tracked in [PR #3](https://github.com/djayakumar92/AlgoOptionX/pull/3). Require source-bound evidence, independent review and passing GitHub checks before merge. Existing authorization covers this harness work. |
-| 2 · MASTER-PLAN-001 | [Enterprise product/architecture/development master plan](enterprise-master-plan.md) | Documented; delivery phases remain proposed | All 14 source sections preserved, plus repository reconciliation, explicit gaps, coverage and delivery gates. Review concrete phase tasks before implementation. |
-| 3 · INTEL-PLAN-001 | [Trading knowledge and AI skills enhancement](trading-knowledge-ai-skills-enhancement.md) | **QUEUED — planning only; not started** | After baseline work, perform a read-only repository audit and prepare the 15 required planning artifacts. Ebook extraction also requires the missing reference PDF. Present findings and wait for the user's explicit approval before implementing this work item. |
+| 1 · HARNESS-CHANGE-001 | Change-aware harness testing and local watch mode | Merged and validated | [PR #3](https://github.com/djayakumar92/AlgoOptionX/pull/3) merged with passing GitHub checks; changed-file testing/watch mode are available. |
+| 2 · MASTER-PLAN-001 | [Enterprise product/architecture/development master plan](enterprise-master-plan.md) | Documented; step-by-step execution begun | All14 source sections preserved. The [phase-one delivery package](../research/trading-intelligence/README.md) now provides the audit, concrete requirements/designs and24 planned implementation tasks. |
+| 3 · INTEL-PLAN-001 | [Trading knowledge and AI skills enhancement](trading-knowledge-ai-skills-enhancement.md) | **PHASE1 PACKAGE PREPARED — review pending; ebook blocked** | [All15 artifact slots](../research/trading-intelligence/README.md) now exist: the source assessment and design drafts are delivered, ebook extraction is explicitly blocked and original enterprise visual references remain pending. Runtime changes await the actual review required by the supplied specification. |
 
 ## INTEL-PLAN-001 scope and boundaries
 
 Source of truth: the complete [supplied enhancement specification](trading-knowledge-ai-skills-enhancement.md). It extends the master plan's KNOW-01–06, DATA-01, INTEL-01, PAPER-01, EVAL-01 and MODEL-01 work packages; it does not duplicate implementation into another architecture.
 
-The first phase is **read-only audit and planning**. Do not change application code, delete functionality, install dependencies, enable brokers/live orders, change production rules, deploy models or execute future implementation tasks. No work in this queued phase has been started by recording it here. Existing implementations may be classified KEEP, ENHANCE, REFACTOR, REPLACE, REMOVE or NOT VERIFIED only after inspection. Removal requires documented justification and explicit approval.
+The first phase is **read-only audit and planning**. Do not change application code, delete functionality, install dependencies, enable brokers/live orders, change production rules, deploy models or execute future implementation tasks. The user subsequently requested execution in order. The read-only audit/planning package is now prepared; application implementation, dependencies, strategies and models remain unchanged in this phase. Existing implementations may be classified KEEP, ENHANCE, REFACTOR, REPLACE, REMOVE or NOT VERIFIED only after inspection. Removal requires documented justification and explicit approval.
 
 Reference prerequisite: `docs/references/CANDLE STICK PATTERN EBOOK.pdf` is absent from the current tracked/untracked repository inventory. Do not fabricate its contents, pattern illustrations, citations or verification. When it is available, inspect the entire PDF including illustrations, independently verify detection definitions and respect reproduction rights. The ebook is educational material, not profitability evidence.
 
 ### Planning subqueue and required artifacts
 
-Artifact paths below are proposed deliverables, not files claimed to exist. These tasks are queued and have not been executed.
+Draft artifacts now exist at the paths below; see the [delivery index](../research/trading-intelligence/README.md) for exact status. TK-01/03/04/05/06/08/09 planning drafts are prepared. TK-02 extraction is BLOCKED (the record contains no invented book content). TK-07 text/state specifications are prepared, but new image references and design approval are PENDING. Future implementation tests and commercial/model outcomes are not claimed complete.
 
 | Task | Prerequisites | Expected planning files | Acceptance, tests/evidence and rollback |
 |---|---|---|---|
@@ -41,3 +41,12 @@ The files in this table collectively cover all **15** deliverables from source �
 - OI is not evidence of institutional intent, sellers do not universally control direction, and patterns alone cannot authorize orders.
 - Independent review checks the assessment and proposed tasks in a context distinct from their author; actual test results are separate from planned tests.
 - The user's explicit approval is required before beginning this item's implementation. No human approval, ebook review, historical profitability or production readiness is invented.
+
+
+## Current ordered execution checkpoint
+
+1. Source audit:289 tracked files indexed at `ff8027a`, with findings and preservation classifications. Baseline Python suite actually ran:336 passed,1 existing skip.
+2. Requirements/design:39 proposed trading skills,18 provisional candlestick definitions, complete causal decision/risk/learning architecture, proposed schema and24 scoped future implementation tasks are documented.
+3. Independent review and current source-bound validation are required before the planning package is called reviewed; actual evidence is retained with the final PR. Drafts and placeholders are never approval.
+4. Next concrete runtime batch for user review: **SAFE-01→SAFE-02→DATA-01→DATA-02** (history-preserving legacy migration and pure causal data foundation). No strategy/risk/model activation in that first batch.
+5. Missing book blocks extraction; new enterprise images, licensed historical data, business/customer research, legal/provider/payment/hosting inputs and live authority remain explicit dependencies.

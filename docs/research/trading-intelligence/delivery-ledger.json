@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "audited_source_commit": "ff8027ab8a9a54e6eed2deaef895eab91151145f",
+  "artifact_kind": "planning-only-roadmap",
+  "grants_deployment": false,
+  "tasks": [
+    {
+      "id": "SAFE-01",
+      "title": "Preserve legacy journal history",
+      "status": "PLANNED",
+      "prerequisites": "Actual review of assessment and this batch; temporary legacy fixtures",
+      "expected_files": "src/algooptionx/research/storage/db.py; tests/research/test_repository.py or migration-specific tests",
+      "acceptance": "Remove destructive automatic DROP behavior through a versioned compatible migration or fail-closed unsupported-layout path; all legacy rows/IDs and unknown columns preserved in source/backup; never infer unknown trade_date",
+      "tests": "Known old/new schemas, nonnullable leg fields, unknown schema, interrupted upgrade, row-count/hash and restore tests",
+      "evidence": "Before/after schema/row hashes and actual JUnit; independent review",
+      "rollback": "Preserve original database/backup and schema journal; restore only under verified maintenance procedure"
+    },
+    {
+      "id": "SAFE-02",
+      "title": "Make first account funding atomic across startup failures",
+      "status": "PLANNED",
+      "prerequisites": "Review AUD-08 and initialization recovery; temporary DB fixtures only",
+      "expected_files": "src/algooptionx/paper/engine.py; tests/paper/test_engine.py or bootstrap tests",
+      "acceptance": "Schema setup separate from explicit atomic account/active/FUNDING transaction; failed startup leaves no partial funding; restart funds exactly once; old histories unchanged",
+      "tests": "Fault before/after bootstrap writes; partial failure then restart; funding count/hash/cash; all existing paper invariants",
+      "evidence": "Actual temporary DB snapshots, JUnit, event-chain reconciliation and source-bound independent review",
+      "rollback": "Preserve existing data and reports; compatible code/verified backup only; no fabricated funding history"
+    },
+    {
+      "id": "DATA-01",
+      "title": "Define and validate causal OHLCV contracts",
+      "status": "PLANNED",
+      "prerequisites": "Approved pure-data design; no broker connection needed",
+      "expected_files": "src/algooptionx/market/contracts.py; tests/market/test_contracts.py",
+      "acceptance": "Explicit units/source/session/open/close/available/as_of; invalid/nonfinite/duplicate/mixed-instrument inputs rejected; source metadata frozen",
+      "tests": "TIME-02/04; malformed OHLCV, bool/numeric types, temporal consistency, property fixtures",
+      "evidence": "Current source-bound JUnit and fixture hashes",
+      "rollback": "Remove unused additive domain code if unintegrated; no account/database changes"
+    },
+    {
+      "id": "DATA-02",
+      "title": "Aggregate completed 5/30-minute windows",
+      "status": "PLANNED",
+      "prerequisites": "DATA-01; pinned fixture session calendar",
+      "expected_files": "src/algooptionx/market/aggregation.py; tests/market/test_aggregation.py",
+      "acceptance": "Exact contiguous child intervals, session anchoring and closed/available gate; first30-minute close09:45 fixture; no partial bucket presented as complete",
+      "tests": "TIME-01/02/04; timezone/session/missing-child/late-arrival and prefix-invariance properties",
+      "evidence": "Aggregate expected fixtures, test IDs and source/report hashes",
+      "rollback": "Rollback pure module/adapter; retain fixture history"
+    },
+    {
+      "id": "GOV-01",
+      "title": "Evaluate OpenSpec and specialized development contracts",
+      "status": "PLANNED",
+      "prerequisites": "Current native role/schema inventory and approved governance scope",
+      "expected_files": "ADR/spec adapter design; scoped .agents/skills and role JSON only after review",
+      "acceptance": "One authoritative requirement/task mapping; explicit options/data/leakage/framework skill I/O/tools/failure/evidence; no new signer or deployment authority",
+      "tests": "Config/schema and round-trip traceability/negative capability tests",
+      "evidence": "ADR, actual config checks, independent handoff",
+      "rollback": "Keep native specs and prior role contracts; no dependency install unless separately authorized"
+    },
+    {
+      "id": "OBS-01",
+      "title": "Introduce versioned observation/decision envelope",
+      "status": "PLANNED",
+      "prerequisites": "DATA-02 and reviewed decision schema",
+      "expected_files": "src/algooptionx/intelligence/contracts.py; decision.py; tests/intelligence/test_contracts.py",
+      "acceptance": "Five states, units/evidence/availability/uncertainty/invalidation; rule probabilities null; candidate cannot execute by itself",
+      "tests": "DEC-01/02/03 and LINEAGE-01; extra keys, stale source, missing/contradictory inputs",
+      "evidence": "Contract report and comparison showing old API unchanged",
+      "rollback": "Keep old workspace response/route; additive new contract behind inactive adapter"
+    },
+    {
+      "id": "OBS-02",
+      "title": "Shadow reuse of existing structure/regime/chain analytics",
+      "status": "PLANNED",
+      "prerequisites": "OBS-01; availability adapter semantics reviewed",
+      "expected_files": "Pure observation adapters; tests/intelligence/test_observations.py",
+      "acceptance": "Research multi-timeframe reuse explicitly respects confirmation lag; no broker/runtime/harness dependency in offline core; no change to active paper commands",
+      "tests": "TIME-03/04, empty/conflicting data, existing research regressions and architecture boundaries",
+      "evidence": "Old/new observation fixtures, absence of economic effects",
+      "rollback": "Disable shadow adapter; preserve research outputs and account events"
+    },
+    {
+      "id": "PAT-01",
+      "title": "Verify and implement first morphology subset",
+      "status": "PLANNED",
+      "prerequisites": "Book/source review where applicable; independent definitions; DATA-02/OBS-01",
+      "expected_files": "src/algooptionx/intelligence/patterns.py; tests/intelligence/test_patterns.py",
+      "acceptance": "Start with body engulfing and pin-bar contextual naming; exact versioned rules and12-field source record; observations only",
+      "tests": "PAT-01 + U/B/P/F/I/L/R/X; invalid OHLC, context inverse, wick-only negative, no future bars",
+      "evidence": "Definition/source citations, actual tests, planned historical evaluation clearly distinguished",
+      "rollback": "Disable new morphology observations; no strategy removal or automatic activation"
+    },
+    {
+      "id": "INTEL-01",
+      "title": "Complete remaining knowledge observations",
+      "status": "PLANNED",
+      "prerequisites": "OBS-02/PAT-01 and each of39 catalog dependencies",
+      "expected_files": "Incremental intelligence modules/fixtures; specific paths scoped per subtask",
+      "acceptance": "One small task per skill or tightly coupled group; resolve observation conflicts; no one giant39-skill code dump",
+      "tests": "Each catalog case and all applicable10-category requirements; historical gates remain explicit",
+      "evidence": "Per-skill coverage/evaluation ledger and independent findings",
+      "rollback": "Remove/disable only added inactive observation; preserve prior contracts/results"
+    },
+    {
+      "id": "RISK-01",
+      "title": "Version reviewed 0.5%/1% paper policy",
+      "status": "PLANNED",
+      "prerequisites": "Explicit policy basis/new-session migration review; DATA-02/OBS-01",
+      "expected_files": "src/algooptionx/paper policy/migrations; tests/paper",
+      "acceptance": "50bps planned trade budget/100bps daily basis as actually approved, integer arithmetic/costs and persistent session lock; old sessions retain old semantics",
+      "tests": "RISK-01 through05, concurrency, fees, one-paise equality, restart/kill and rollback properties",
+      "evidence": "Policy/session migration report and source-bound critical tests",
+      "rollback": "Disable v2 for new sessions, preserve prior policy/event versions and validated DB backup"
+    },
+    {
+      "id": "PAPER-01",
+      "title": "Integrate completed-timeframe decisions with buying only",
+      "status": "PLANNED",
+      "prerequisites": "OBS-02, selected verified intelligence, RISK-01; compatibility design",
+      "expected_files": "Engine/API observation integration; tests/paper; apps/web API adapter if needed",
+      "acceptance": "Mandatory completed5/30 confirmation; every abstention/rejection/fill has lineage; same transactional risk gate; no naked sell",
+      "tests": "Full data\u2192proposal\u2192risk\u2192fill\u2192account\u2192audit journey; MONEY/LINEAGE/TIME/RISK and functional E2E",
+      "evidence": "Commands/outcomes/reconciliation with current source/test/browser reports",
+      "rollback": "Revert new-session strategy flag/version; retain old positions/stops/history and all events"
+    },
+    {
+      "id": "DESIGN-01",
+      "title": "Create and review enterprise image/state references",
+      "status": "PLANNED",
+      "prerequisites": "UI state inventory; current data contracts; original image rights",
+      "expected_files": "Original design image candidates, token/component/state specs and manifest",
+      "acceptance": "All12 modules and actual subpages/tabs/dialogs/tables/charts/errors across3 widths/2 themes; actual user design review, no fake approval",
+      "tests": "Keyboard/state design review, contrast analysis and planned functional/visual mappings",
+      "evidence": "Candidate hashes/profile and real user decision; missing images stay pending",
+      "rollback": "Preserve previous candidates; no source/UI replacement until reviewed"
+    },
+    {
+      "id": "UI-01",
+      "title": "Implement reviewed intelligence UI incrementally",
+      "status": "PLANNED",
+      "prerequisites": "DESIGN-01 reviewed subset; PAPER/OBS contracts",
+      "expected_files": "Existing app/shared/workspace files and apps/web/tests scoped per screen",
+      "acceptance": "Readable source/uncertainty/available_at, all five states, charts with text alternatives, accessible responsive theme behavior",
+      "tests": "Functional E2E, lint/build, keyboard/screen-reader/contrast checks and reviewed-profile visual comparisons",
+      "evidence": "Actual reports/traces/images; no auto-update baselines",
+      "rollback": "Feature flag/new route rollback with old routes/data/history retained"
+    },
+    {
+      "id": "SPREAD-01",
+      "title": "Design and validate defined-risk selling",
+      "status": "PLANNED",
+      "prerequisites": "Separate explicit spread/margin design approval; PAPER-01",
+      "expected_files": "New max-loss/reservation/payoff/leg-lifecycle domain and tests scoped after design",
+      "acceptance": "Known bounded payoff, collateral reservation, fill/leg risk, fees/expiry/settlement/cancel/kill behavior; no unhedged selling",
+      "tests": "Payoff/property, max-loss/gap, partial-leg, concurrent reservation and accounting tests",
+      "evidence": "Reviewed design and fixture/backtest evidence",
+      "rollback": "Keep selling disabled; reconcile and close controlled test positions before rollback"
+    },
+    {
+      "id": "EVAL-01",
+      "title": "Version licensed historical datasets and evaluation",
+      "status": "PLANNED",
+      "prerequisites": "Provider rights and actual options history including bid/ask/expiry/lot/calendar",
+      "expected_files": "Dataset manifest and evaluation pipeline/tests scoped in research",
+      "acceptance": "Point-in-time available contracts, costs, gaps/corrections/label availability; immutable raw/source hashes",
+      "tests": "H/W/L + cost sensitivity, overlap/purge/embargo, label cutoff and holdout contamination tests",
+      "evidence": "Licensing record, reproducible split manifests/report and independent review",
+      "rollback": "Retain raw manifests/prior study; invalidate derived artifacts rather than overwrite them"
+    },
+    {
+      "id": "MODEL-01",
+      "title": "Train approved offline challengers",
+      "status": "PLANNED",
+      "prerequisites": "EVAL-01 and approved experiment/compute budget",
+      "expected_files": "Feature/model/evaluation manifests; registry adapter only if justified",
+      "acceptance": "Training-only fitted transformations; baselines/calibration/uncertainty/drift; no active pointer writes",
+      "tests": "Leakage, calibration, reproducibility, corrupted artifact, absent model and resource-budget tests",
+      "evidence": "Pinned datasets/source/artifact hashes, metrics/CIs and evaluation constraints",
+      "rollback": "Retain prior artifacts; no current active model is replaced"
+    },
+    {
+      "id": "MODEL-02",
+      "title": "Promotion, paper shadow observation and rollback",
+      "status": "PLANNED",
+      "prerequisites": "MODEL-01, current independent evidence and actual human decision",
+      "expected_files": "Protected promotion integration and rollback/runbooks scoped separately",
+      "acceptance": "Versioned active pointer, criteria/approver/evidence, prior artifact restore and risk independence;90-day horizon not auto-pass",
+      "tests": "Tampered/stale approval, failed metrics, unavailable model, interrupted promotion, rollback/determinism",
+      "evidence": "Real decision and trusted deployment-control observation where applicable",
+      "rollback": "Restore verified previous artifact/config; preserve all experiment and trading events"
+    },
+    {
+      "id": "DEMAND-01",
+      "title": "Validate customer demand and pricing",
+      "status": "PLANNED",
+      "prerequisites": "Usable prototype, consent and approved interview/pilot plan",
+      "expected_files": "docs/product/customer-research and cost/pricing experiment records",
+      "acceptance": "20\u201330 real prospect interviews and opt-in usage/purchase experiment; retention/support/paid conversion evidence; no fake users/results",
+      "tests": "Predeclared observation window/decision thresholds; check consent, cohort/sample and cost arithmetic",
+      "evidence": "Actual anonymized research and paid-conversion evidence stored with appropriate privacy",
+      "rollback": "Stop experiment/expense, retain lawful audit/consent records; do not fabricate demand"
+    },
+    {
+      "id": "LEGAL-01",
+      "title": "Review data, advice/algo, privacy and payment obligations",
+      "status": "PLANNED",
+      "prerequisites": "Actual product/provider/jurisdiction/service scope",
+      "expected_files": "Dated compliance/licensing/retention/incident requirements and decisions",
+      "acceptance": "Current SEBI/exchange/broker permissions, redistribution/advice applicability, Indian privacy/payment/tax/cyber requirements reviewed",
+      "tests": "Control/permission checklist and expert findings; legal correctness not inferred from unit tests",
+      "evidence": "Actual provider agreements and qualified review, not model-generated clearance",
+      "rollback": "Keep restricted capabilities disabled; stop unauthorized use and follow documented retention obligations"
+    },
+    {
+      "id": "FEED-01",
+      "title": "Integrate licensed read-only market data",
+      "status": "PLANNED",
+      "prerequisites": "LEGAL-01 and actual licensed provider access",
+      "expected_files": "Provider adapter/auth integration/contracts and data-quality tests",
+      "acceptance": "Entitlement/effective metadata, reconnection/correction/rate-limit/staleness; no broker order methods in data interface",
+      "tests": "Recorded/synthetic adapter contracts first, authorized licensed staging checks separately",
+      "evidence": "Provider rights/metadata, scoped secure credentials, actual integration outcome",
+      "rollback": "Disable feed and fall back only to clearly labeled allowed fixtures; preserve provider batches"
+    },
+    {
+      "id": "SAAS-01",
+      "title": "Design and implement hosted identity/tenant isolation",
+      "status": "PLANNED",
+      "prerequisites": "DEMAND-01,LEGAL-01 and separately reviewed hosting scope",
+      "expected_files": "Auth/authorization/tenant storage/secure-config modules and threat model",
+      "acceptance": "Server-owned tenant identity, least privilege, secret rotation, cross-tenant isolation and auditable access",
+      "tests": "Auth/tenant/IDOR/injection/session/secret/adversarial and restore tests",
+      "evidence": "Actual staging evidence and user approval before hosted exposure",
+      "rollback": "Keep local mode, disable hosted ingress, restore verified tenant-safe backup within approved procedure"
+    },
+    {
+      "id": "OPS-01",
+      "title": "Storage/worker/observability and recovery operations",
+      "status": "PLANNED",
+      "prerequisites": "Measured SLO/capacity/RPO/RTO requirements and hosting approval",
+      "expected_files": "ADRs, database/queue/telemetry adapters, deployment and incident runbooks",
+      "acceptance": "Choose Postgres/queue/Timescale only with evidence; durable job retries/cancel, alerts, backups/restore and no secret logs",
+      "tests": "Load/recovery/idempotency/restore/alert drill and rollout/rollback tests",
+      "evidence": "Actual environment measurements and authorized operator drill records",
+      "rollback": "Known-good deployment/config and verified backup; no destructive migration or silent history rewrite"
+    },
+    {
+      "id": "BILLING-01",
+      "title": "Implement validated plans and secure entitlement",
+      "status": "PLANNED",
+      "prerequisites": "DEMAND-01,LEGAL-01,SAAS-01 and payment-provider setup",
+      "expected_files": "Billing/entitlement/webhook contracts, UI and tests scoped after design",
+      "acceptance": "Free/Starter/Pro/Advanced/Enterprise hypotheses refined by costs/demand; signed/idempotent webhook, refunds/cancel/tax and server enforcement",
+      "tests": "Forged/replayed/out-of-order webhooks, downgrade/cancel, failed payment, tenant crossover and reconciliation",
+      "evidence": "Sandbox provider outcomes, cost/retention experiment and real commercial decision",
+      "rollback": "Disable new charging, preserve invoices/entitlements and follow provider refund/reconciliation policy"
+    },
+    {
+      "id": "LIVE-01",
+      "title": "Separately authorize multi-broker live execution",
+      "status": "PLANNED",
+      "prerequisites": "Stable research/paper/evaluation evidence,FEED/LEGAL/OPS and explicit live authorization",
+      "expected_files": "Broker adapter/order-state/reconciliation/kill design and protected deployment tasks",
+      "acceptance": "No auto-activation from paper profits; broker-specific order/fill/cancel/retry/partial-fill and independent maximum-risk controls",
+      "tests": "Sandbox fault/duplicate/partial-fill/disconnect/kill/reconciliation, then separately authorized controlled live checks",
+      "evidence": "Actual broker/regulatory permissions, external policy verification, real user activation decision and operational readiness",
+      "rollback": "Live remains disabled until gates met; approved cancel/flatten/reconcile plan and known-good recovery under human authority"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "BOOK-01",
+      "status": "BLOCKED",
+      "reason": "Required reference PDF absent; no extraction performed."
+    },
+    {
+      "id": "REVIEW-01",
+      "status": "AWAITING_HUMAN_REVIEW",
+      "reason": "Supplied Phase1 restriction requires presentation and explicit approval before implementation."
+    },
+    {
+      "id": "VISUAL-01",
+      "status": "PENDING",
+      "reason": "Original enterprise screen/state image references and actual design review not yet completed."
+    }
+  ]
+}

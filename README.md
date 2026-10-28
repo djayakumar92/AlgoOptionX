@@ -86,7 +86,7 @@ The local harness is implemented and tested. You are the human approver here in 
 
 ## Product master plan
 
-See the [AlgoOptionX enterprise master plan](docs/product/enterprise-master-plan.md) for the complete product blueprint, current implementation gaps, agent/skill coverage and phased acceptance gates. Proposed risk limits and future capabilities in that document do not change the current application. The [work queue](docs/product/work-queue.md) tracks follow-on work, including the queued trading-knowledge and AI-skills audit.
+See the [AlgoOptionX enterprise master plan](docs/product/enterprise-master-plan.md) for the complete product blueprint, current implementation gaps, agent/skill coverage and phased acceptance gates. Proposed risk limits and future capabilities in that document do not change the current application. The [work queue](docs/product/work-queue.md) tracks step-by-step execution. The [phase-one audit and delivery package](docs/research/trading-intelligence/README.md) contains the source assessment,39-skill catalog, architecture, test matrix and24 scoped implementation tasks; missing ebook/visual/external prerequisites remain explicit.
 
 ## Repository layout
 
