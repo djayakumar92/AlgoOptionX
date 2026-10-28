@@ -3,7 +3,7 @@ import argparse
 import json
 import sys
 import uuid
-import shutil
+import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -13,7 +13,6 @@ from algooptionx_harness.approvals import load_policy, verify_gate
 from algooptionx_harness import chat
 from algooptionx_harness.models import (
     Approval,
-    Check,
     Evidence,
     Handoff,
     Task,
@@ -31,6 +30,7 @@ from algooptionx_harness.orchestration import (
 from algooptionx_harness.runner import run_task, verify_evidence
 from algooptionx_harness.workspace import (
     HarnessError,
+    capture_task,
     digest,
     load_task,
     snapshot,
@@ -142,6 +142,31 @@ def main(argv=None):
                 ],
                 required=True,
             )
+    changes = sub.add_parser(
+        "test-changes", help="Select and run tests affected by Git changes."
+    )
+    changes.add_argument(
+        "--base",
+        default="HEAD",
+        help="Compare the branch and local files against this base (default: HEAD).",
+    )
+    changes.add_argument(
+        "--plan",
+        action="store_true",
+        help="Print selected checks without executing them.",
+    )
+    changes.add_argument(
+        "--full",
+        action="store_true",
+        help="Run all functional suites regardless of detected paths.",
+    )
+    changes.add_argument(
+        "--watch",
+        action="store_true",
+        help="Run again after stable source edits; stop with Ctrl+C.",
+    )
+    changes.add_argument("--interval", type=float, default=2)
+    changes.add_argument("--debounce", type=float, default=1)
     sub.add_parser("schemas")
     sub.add_parser("validate-config")
     record_cmd = sub.add_parser("record-chat")
@@ -152,7 +177,33 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
-        if args.command == "validate-config":
+        if args.command == "test-changes":
+            from algooptionx_harness.impact import (
+                plan_changes,
+                run_changes,
+                watch_changes,
+            )
+
+            if args.watch:
+                if args.plan:
+                    raise HarnessError("Choose --watch or --plan, not both.")
+                try:
+                    watch_changes(
+                        root,
+                        args.base,
+                        full=args.full,
+                        interval=args.interval,
+                        debounce=args.debounce,
+                    )
+                except KeyboardInterrupt:
+                    print(json.dumps({"status": "stopped", "human_approval": False}))
+                    return 130
+                return 0
+            plan = plan_changes(root, args.base, full=args.full)
+            output = plan if args.plan else run_changes(root, plan)
+            print(json.dumps(output, ensure_ascii=False, indent=2))
+            return 1 if output["status"] == "failed" else 0
+        elif args.command == "validate-config":
             output = validate_configuration(root)
         elif args.command == "record-chat":
             review = ChatRequest.model_validate_json(args.request.read_text())
@@ -196,26 +247,8 @@ def main(argv=None):
             )
             task = Task.model_validate(template)
             validate_scope(task, baseline, baseline)
-            destination = args.output.resolve()
-            if (
-                not destination.is_relative_to(root / ".harness/tasks")
-                or destination.exists()
-            ):
-                raise HarnessError(
-                    "Task directory must be new and inside .harness/tasks."
-                )
-            destination.mkdir(parents=True)
-            write_json(destination / "task.json", task)
-            write_json(destination / "baseline.json", baseline)
-            for name, metadata in baseline["files"].items():
-                if not metadata.get("deleted"):
-                    backup = destination / "baseline-files" / name
-                    backup.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copyfile(root / name, backup)
-                    if file_digest(backup) != metadata["sha256"]:
-                        raise HarnessError(
-                            "Source changed while capturing recoverable baseline."
-                        )
+            destination = args.output.absolute()
+            capture_task(root, task, baseline, destination)
             output = {
                 "status": "created",
                 "task": str(destination / "task.json"),
@@ -438,7 +471,13 @@ def main(argv=None):
                 }
         print(json.dumps(output, ensure_ascii=False, indent=2))
         return 0
-    except (HarnessError, ValidationError, OSError, ValueError) as exc:
+    except (
+        HarnessError,
+        ValidationError,
+        OSError,
+        ValueError,
+        subprocess.CalledProcessError,
+    ) as exc:
         print(json.dumps({"status": "blocked", "reason": str(exc)}), file=sys.stderr)
         return 2
 

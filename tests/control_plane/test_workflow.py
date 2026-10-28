@@ -412,7 +412,9 @@ def test_time_budget_environment_and_output_redaction(project, monkeypatch):
     run.mkdir(parents=True)
     monkeypatch.setenv("DHAN_ACCESS_TOKEN", "never-pass-this-value")
     monkeypatch.setenv("GH_TOKEN", "also-private")
+    monkeypatch.setenv("PLAYWRIGHT_BROWSERS_PATH", str(root / ".harness/browsers"))
     env = clean_environment(root, run)
+    assert env["PLAYWRIGHT_BROWSERS_PATH"] == str(root / ".harness/browsers")
     assert "DHAN_ACCESS_TOKEN" not in env and "GH_TOKEN" not in env
     code, timed, _, problem = execute(
         [sys.executable, "-c", "import time;time.sleep(20)"], root, env, 1

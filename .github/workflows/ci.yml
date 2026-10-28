@@ -6,32 +6,76 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      IMPACT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.harness/browsers
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v6
         with:
           version: '0.12.23'
           enable-cache: true
+      - run: uv sync --frozen --extra dev --python 3.12
+      - name: Select checks from changed files
+        id: impact
+        shell: bash
+        run: |
+          mkdir -p .harness/ci
+          if [[ -z "$IMPACT_BASE" || "$IMPACT_BASE" =~ ^0+$ ]] || ! git cat-file -e "$IMPACT_BASE^{commit}" 2>/dev/null; then
+            selection_args=(--full)
+          elif [[ "$GITHUB_EVENT_NAME" == 'push' ]] && ! git merge-base --is-ancestor "$IMPACT_BASE" HEAD; then
+            # A force push may remove changes from the old tip; do not narrow to the new side.
+            selection_args=(--base "$IMPACT_BASE" --full)
+          else
+            selection_args=(--base "$IMPACT_BASE")
+          fi
+          uv run algooptionx-harness test-changes "${selection_args[@]}" --plan > .harness/ci/selection.json
+          cat .harness/ci/selection.json
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          plan = json.loads(Path('.harness/ci/selection.json').read_text())
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for key in ('needs_node', 'needs_browser'):
+                  output.write(f'{key}={str(plan[key]).lower()}\n')
+              output.write(f'base_commit={plan["base_commit"]}\n')
+              output.write(f'force_full={str(plan["mode"] == "full").lower()}\n')
+          PY
       - uses: actions/setup-node@v4
+        if: steps.impact.outputs.needs_node == 'true'
         with:
           node-version: '24'
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
-      - run: uv sync --frozen --extra dev --python 3.12
-      - run: uv run pytest -q -rs --junitxml=pytest-results.xml
       - run: npm --prefix apps/web ci
-      - run: npm --prefix apps/web run lint
-      - run: npm --prefix apps/web run build:research
-      - run: npm --prefix apps/web run build
+        if: steps.impact.outputs.needs_node == 'true'
       - run: npx playwright install --with-deps chromium
+        if: steps.impact.outputs.needs_browser == 'true'
         working-directory: apps/web
-      - run: npm --prefix apps/web run test:e2e
+      - name: Run selected checks and verify evidence
+        env:
+          FORCE_FULL: ${{ steps.impact.outputs.force_full }}
+          BASE_COMMIT: ${{ steps.impact.outputs.base_commit }}
+        shell: bash
+        run: |
+          if [[ "$FORCE_FULL" == 'true' ]]; then
+            uv run algooptionx-harness test-changes --base "$BASE_COMMIT" --full
+          else
+            uv run algooptionx-harness test-changes --base "$BASE_COMMIT"
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: algooptionx-validation
+          include-hidden-files: true
           path: |
-            pytest-results.xml
+            .harness/ci/selection.json
+            .harness/runs/
+            .harness/tasks/IMPACT-*/task.json
+            .harness/tasks/IMPACT-*/baseline.json
+            .harness/tasks/IMPACT-*/selection.json
             apps/web/playwright-report/
             apps/web/test-results/
           retention-days: 14
@@ -44,6 +88,7 @@ jobs:
         with:
           version: '0.12.23'
       - run: uv sync --frozen --extra dev --python 3.12
+      # Always test the selector/runner itself, even when the selected app suite is small.
       - run: uv run algooptionx-harness validate-config
       - run: uv run pytest tests/control_plane -q -rs --junitxml=harness-results.xml
       - uses: actions/upload-artifact@v4

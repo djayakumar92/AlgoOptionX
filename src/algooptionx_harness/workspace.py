@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path, PurePosixPath
@@ -146,3 +147,27 @@ def write_json(path: Path, value):
         tmp = Path(stream.name)
         stream.write(canonical(value) + b"\n")
     os.replace(tmp, path)
+
+
+def capture_task(root: Path, task: Task, baseline: dict, destination: Path):
+    """Persist an immutable task and verified backups without overwriting existing work."""
+    root = root.resolve()
+    destination = destination.absolute()
+    if not destination.is_relative_to(root / ".harness/tasks"):
+        raise HarnessError("Task directory must be new and inside .harness/tasks.")
+    contained(root, str(destination.relative_to(root)))
+    if destination.exists():
+        raise HarnessError("Task directory must be new and inside .harness/tasks.")
+    validate_scope(task, baseline, snapshot(root))
+    destination.mkdir(parents=True)
+    write_json(destination / "task.json", task)
+    write_json(destination / "baseline.json", baseline)
+    for name, metadata in baseline["files"].items():
+        if not metadata.get("deleted"):
+            backup = destination / "baseline-files" / name
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(contained(root, name), backup)
+            if file_digest(backup) != metadata["sha256"]:
+                raise HarnessError(
+                    "Source changed while capturing recoverable baseline."
+                )
