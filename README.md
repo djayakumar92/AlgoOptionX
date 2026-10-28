@@ -32,6 +32,8 @@ Playback advances one synthetic minute every two real seconds. `+1 bar` advances
 
 Use **Theme** in the top bar to choose Light, Dark, or System. Your preference is saved in this browser; System follows device appearance changes. Dark remains the default.
 
+See the [safety and causal-data guide](docs/development/safety-and-causal-data.md) for history-preserving journal upgrades, atomic first funding, and the new pure 5/30-minute aggregation contracts. These helpers do not change the current autonomous paper strategy or risk limits.
+
 ## Accounting and assumptions
 
 Money is stored as integer paise. Virtual buys fill at ask + ₹0.05, sells at bid − ₹0.05, with ₹20 per fill. One fixture lot is 65 units; this is **not a claim about current exchange lot sizes**. Entries enforce a 1% planned stop-risk budget, 20% premium exposure cap, at most three distinct contracts, available cash and a 2% session loss entry lock. Stops are 8% below entry, targets 12% above entry. Gaps may exceed planned risk. Market and strategy are deliberately simple fixtures, not realistic options pricing or validated predictive models.

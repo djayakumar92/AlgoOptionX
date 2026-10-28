@@ -10,7 +10,7 @@ import hashlib
 import json
 import sqlite3
 import uuid
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from pathlib import Path
 
 from algooptionx.market.simulator import LOT, MAX_TICK, market
@@ -27,8 +27,11 @@ class Engine:
     def __init__(self, path: str | Path):
         self.path = str(path)
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        with self.tx() as c:
+        # executescript commits any pending transaction. Keep schema installation
+        # separate from the transaction containing account/active/FUNDING writes.
+        with closing(sqlite3.connect(self.path, timeout=15, isolation_level=None)) as c:
             c.executescript("""
+            BEGIN IMMEDIATE;
             CREATE TABLE IF NOT EXISTS accounts(id TEXT PRIMARY KEY, cash INTEGER NOT NULL, realized INTEGER NOT NULL DEFAULT 0,
                 fees INTEGER NOT NULL DEFAULT 0, tick INTEGER NOT NULL DEFAULT 0, running INTEGER NOT NULL DEFAULT 0,
                 autonomous INTEGER NOT NULL DEFAULT 0, killed INTEGER NOT NULL DEFAULT 0, seed INTEGER NOT NULL DEFAULT 17);
@@ -39,9 +42,29 @@ class Engine:
                 kind TEXT NOT NULL, payload TEXT NOT NULL, previous_hash TEXT NOT NULL, hash TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS commands(account_id TEXT NOT NULL, key TEXT NOT NULL, request TEXT NOT NULL, result TEXT NOT NULL,
                 PRIMARY KEY(account_id,key));
+            COMMIT;
             """)
-            if not c.execute("SELECT 1 FROM active").fetchone():
+        with self.tx() as c:
+            active = c.execute("SELECT account_id FROM active WHERE id=1").fetchone()
+            if not active:
+                if c.execute("SELECT 1 FROM accounts").fetchone():
+                    raise PaperError(
+                        "Paper initialization is incomplete. Preserve the database and reconcile account history before restarting."
+                    )
                 self._new(c)
+            elif (
+                not c.execute(
+                    "SELECT 1 FROM accounts WHERE id=?", (active["account_id"],)
+                ).fetchone()
+                or c.execute(
+                    "SELECT COUNT(*) FROM events WHERE account_id=? AND kind='FUNDING'",
+                    (active["account_id"],),
+                ).fetchone()[0]
+                != 1
+            ):
+                raise PaperError(
+                    "Paper funding history is incomplete. Preserve the database for reconciliation; no funding event was inferred."
+                )
             # A restart always pauses playback. Resume is an explicit action.
             c.execute("UPDATE accounts SET running=0")
 

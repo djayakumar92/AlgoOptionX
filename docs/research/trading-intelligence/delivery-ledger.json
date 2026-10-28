@@ -7,46 +7,50 @@
     {
       "id": "SAFE-01",
       "title": "Preserve legacy journal history",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "Actual review of assessment and this batch; temporary legacy fixtures",
       "expected_files": "src/algooptionx/research/storage/db.py; tests/research/test_repository.py or migration-specific tests",
       "acceptance": "Remove destructive automatic DROP behavior through a versioned compatible migration or fail-closed unsupported-layout path; all legacy rows/IDs and unknown columns preserved in source/backup; never infer unknown trade_date",
       "tests": "Known old/new schemas, nonnullable leg fields, unknown schema, interrupted upgrade, row-count/hash and restore tests",
       "evidence": "Before/after schema/row hashes and actual JUnit; independent review",
-      "rollback": "Preserve original database/backup and schema journal; restore only under verified maintenance procedure"
+      "rollback": "Preserve original database/backup and schema journal; restore only under verified maintenance procedure",
+      "implementation_note": "Approved safety/data batch; current source-bound validation, independent review and merge status are tracked in its PR. No strategy/risk activation."
     },
     {
       "id": "SAFE-02",
       "title": "Make first account funding atomic across startup failures",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "Review AUD-08 and initialization recovery; temporary DB fixtures only",
       "expected_files": "src/algooptionx/paper/engine.py; tests/paper/test_engine.py or bootstrap tests",
       "acceptance": "Schema setup separate from explicit atomic account/active/FUNDING transaction; failed startup leaves no partial funding; restart funds exactly once; old histories unchanged",
       "tests": "Fault before/after bootstrap writes; partial failure then restart; funding count/hash/cash; all existing paper invariants",
       "evidence": "Actual temporary DB snapshots, JUnit, event-chain reconciliation and source-bound independent review",
-      "rollback": "Preserve existing data and reports; compatible code/verified backup only; no fabricated funding history"
+      "rollback": "Preserve existing data and reports; compatible code/verified backup only; no fabricated funding history",
+      "implementation_note": "Approved safety/data batch; current source-bound validation, independent review and merge status are tracked in its PR. No strategy/risk activation."
     },
     {
       "id": "DATA-01",
       "title": "Define and validate causal OHLCV contracts",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "Approved pure-data design; no broker connection needed",
       "expected_files": "src/algooptionx/market/contracts.py; tests/market/test_contracts.py",
       "acceptance": "Explicit units/source/session/open/close/available/as_of; invalid/nonfinite/duplicate/mixed-instrument inputs rejected; source metadata frozen",
       "tests": "TIME-02/04; malformed OHLCV, bool/numeric types, temporal consistency, property fixtures",
       "evidence": "Current source-bound JUnit and fixture hashes",
-      "rollback": "Remove unused additive domain code if unintegrated; no account/database changes"
+      "rollback": "Remove unused additive domain code if unintegrated; no account/database changes",
+      "implementation_note": "Approved safety/data batch; current source-bound validation, independent review and merge status are tracked in its PR. No strategy/risk activation."
     },
     {
       "id": "DATA-02",
       "title": "Aggregate completed 5/30-minute windows",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "DATA-01; pinned fixture session calendar",
       "expected_files": "src/algooptionx/market/aggregation.py; tests/market/test_aggregation.py",
       "acceptance": "Exact contiguous child intervals, session anchoring and closed/available gate; first30-minute close09:45 fixture; no partial bucket presented as complete",
       "tests": "TIME-01/02/04; timezone/session/missing-child/late-arrival and prefix-invariance properties",
       "evidence": "Aggregate expected fixtures, test IDs and source/report hashes",
-      "rollback": "Rollback pure module/adapter; retain fixture history"
+      "rollback": "Rollback pure module/adapter; retain fixture history",
+      "implementation_note": "Approved safety/data batch; current source-bound validation, independent review and merge status are tracked in its PR. No strategy/risk activation."
     },
     {
       "id": "GOV-01",
@@ -276,14 +280,30 @@
       "reason": "Required reference PDF absent; no extraction performed."
     },
     {
-      "id": "REVIEW-01",
-      "status": "AWAITING_HUMAN_REVIEW",
-      "reason": "Supplied Phase1 restriction requires presentation and explicit approval before implementation."
-    },
-    {
       "id": "VISUAL-01",
       "status": "PENDING",
       "reason": "Original enterprise screen/state image references and actual design review not yet completed."
+    },
+    {
+      "id": "LATER-SCOPE-01",
+      "status": "SCOPED_FUTURE_WORK",
+      "reason": "The user approved SAFE-01/SAFE-02/DATA-01/DATA-02. Later strategy/risk/model/hosted/live work remains separately scoped; this batch grants no deployment authority."
+    }
+  ],
+  "last_update": "2026-10-29",
+  "implementation_batches": [
+    {
+      "id": "SAFETY-DATA-001",
+      "tasks": [
+        "SAFE-01",
+        "SAFE-02",
+        "DATA-01",
+        "DATA-02"
+      ],
+      "status": "IMPLEMENTED",
+      "authorization_context": "User replied \"ok\" to the concrete first safety/data batch after the planning package was presented.",
+      "verification": "Operator-recorded conversation context, not cryptographic identity or deployment authority.",
+      "guide": "docs/development/safety-and-causal-data.md"
     }
   ]
 }

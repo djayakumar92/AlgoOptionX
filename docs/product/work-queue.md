@@ -1,12 +1,12 @@
 # AlgoOptionX work queue
 
-Updated: 28 October 2026. This file tracks authorized work and future proposals; a queued item is not implementation approval. Preserve source specifications and review actual evidence before advancing status.
+Updated: 29 October 2026. This file tracks authorized work and future proposals; a queued item is not implementation approval. Preserve source specifications and review actual evidence before advancing status.
 
 | Order / ID | Work item | Status | Next action / dependencies |
 |---|---|---|---|
 | 1 · HARNESS-CHANGE-001 | Change-aware harness testing and local watch mode | Merged and validated | [PR #3](https://github.com/djayakumar92/AlgoOptionX/pull/3) merged with passing GitHub checks; changed-file testing/watch mode are available. |
 | 2 · MASTER-PLAN-001 | [Enterprise product/architecture/development master plan](enterprise-master-plan.md) | Documented; step-by-step execution begun | All14 source sections preserved. The [phase-one delivery package](../research/trading-intelligence/README.md) now provides the audit, concrete requirements/designs and24 planned implementation tasks. |
-| 3 · INTEL-PLAN-001 | [Trading knowledge and AI skills enhancement](trading-knowledge-ai-skills-enhancement.md) | **PHASE1 PACKAGE PREPARED — review pending; ebook blocked** | [All15 artifact slots](../research/trading-intelligence/README.md) now exist: the source assessment and design drafts are delivered, ebook extraction is explicitly blocked and original enterprise visual references remain pending. Runtime changes await the actual review required by the supplied specification. |
+| 3 · INTEL-PLAN-001 | [Trading knowledge and AI skills enhancement](trading-knowledge-ai-skills-enhancement.md) | **PHASE1 PACKAGE PREPARED — review pending; ebook blocked** | [All15 artifact slots](../research/trading-intelligence/README.md) now exist: the source assessment and design drafts are delivered, ebook extraction is explicitly blocked and original enterprise visual references remain pending. The user subsequently approved the first safety/data batch; see the implementation checkpoint below. Other scope remains separately gated. |
 
 ## INTEL-PLAN-001 scope and boundaries
 
@@ -48,5 +48,5 @@ The files in this table collectively cover all **15** deliverables from source �
 1. Source audit:289 tracked files indexed at `ff8027a`, with findings and preservation classifications. Baseline Python suite actually ran:336 passed,1 existing skip.
 2. Requirements/design:39 proposed trading skills,18 provisional candlestick definitions, complete causal decision/risk/learning architecture, proposed schema and24 scoped future implementation tasks are documented.
 3. Independent review and current source-bound validation are required before the planning package is called reviewed; actual evidence is retained with the final PR. Drafts and placeholders are never approval.
-4. Next concrete runtime batch for user review: **SAFE-01→SAFE-02→DATA-01→DATA-02** (history-preserving legacy migration and pure causal data foundation). No strategy/risk/model activation in that first batch.
+4. **Approved and implemented: SAFE-01→SAFE-02→DATA-01→DATA-02.** The user replied “ok” after the concrete plan. [Implementation guide](../development/safety-and-causal-data.md) documents preservation/refusal behavior, atomic funding, immutable contracts and causal aggregation. Current full validation/independent review/merge is tracked in the batch PR. No strategy/risk/model activation. Next in dependency order: OBS-01/OBS-02 shadow decision contracts.
 5. Missing book blocks extraction; new enterprise images, licensed historical data, business/customer research, legal/provider/payment/hosting inputs and live authority remain explicit dependencies.
