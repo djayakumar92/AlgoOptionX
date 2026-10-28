@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:algooptionx:planning:decision-v1",
+  "title": "Proposed AlgoOptionX decision envelope \u2014 planning only",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "state",
+    "instrument_id",
+    "as_of",
+    "available_at",
+    "valid_until",
+    "source",
+    "strategy",
+    "evidence",
+    "uncertainty",
+    "invalidation",
+    "candidate",
+    "execution_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "BULLISH",
+        "BEARISH",
+        "SIDEWAYS",
+        "NO_TRADE",
+        "INSUFFICIENT_DATA"
+      ]
+    },
+    "instrument_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "available_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "dataset_id",
+        "sha256",
+        "calendar_version",
+        "instrument_version"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "SYNTHETIC",
+            "HISTORICAL",
+            "LICENSED_LIVE"
+          ]
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "calendar_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instrument_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "model_version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "probability",
+        "calibration_id",
+        "reason_codes"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "UNVALIDATED_RULE",
+            "CALIBRATED_MODEL",
+            "UNKNOWN"
+          ]
+        },
+        "probability": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "calibration_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "invalidation": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "candidate": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "right",
+            "lots",
+            "entry_paise",
+            "stop_paise",
+            "target_paise"
+          ],
+          "properties": {
+            "right": {
+              "enum": [
+                "CE",
+                "PE"
+              ]
+            },
+            "lots": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "entry_paise": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "stop_paise": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "target_paise": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "execution_mode": {
+      "const": "PAPER"
+    }
+  },
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill_id",
+        "version",
+        "status",
+        "event_at",
+        "available_at",
+        "value",
+        "unit",
+        "source_hash"
+      ],
+      "properties": {
+        "skill_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "OBSERVED",
+            "INSUFFICIENT_DATA",
+            "UNSUPPORTED",
+            "CONFLICT",
+            "INVALID_DATA"
+          ]
+        },
+        "event_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "available_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "value": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "null"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "NO_TRADE",
+              "INSUFFICIENT_DATA",
+              "SIDEWAYS"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "candidate": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "uncertainty": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "UNVALIDATED_RULE",
+                  "UNKNOWN"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "uncertainty": {
+            "properties": {
+              "probability": {
+                "type": "null"
+              },
+              "calibration_id": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
