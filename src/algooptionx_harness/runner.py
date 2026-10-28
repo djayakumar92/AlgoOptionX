@@ -127,6 +127,7 @@ def clean_environment(root: Path, run_dir: Path) -> dict[str, str]:
             "LANG",
             "LC_ALL",
             "PLAYWRIGHT_CHROMIUM_EXECUTABLE",
+            "PLAYWRIGHT_BROWSERS_PATH",
         )
         if name in os.environ
     }

@@ -13,6 +13,44 @@ This is a working, model-runtime adapter and validation/control plane. It is sep
 - Ordered human plan → architecture → UI (when affected) → implementation → independent QA → release review, with chat as the normal workflow and optional Ed25519 verification for external automation. Pre-implementation approval binds the recoverable baseline and task scope; QA/release bind the final source, test evidence and independent review.
 - A read-only GitHub readiness auditor and 25 screenshot comparisons (8 screens × 3 viewports + order dialog). Candidate capture and human approval are deliberately separate operations.
 
+## Automatic testing from changed files
+
+Use the same selector locally and in push/PR CI. Install dependencies first with `uv sync --frozen --extra dev`; frontend runs also need `npm --prefix apps/web ci` and a Playwright browser.
+
+```bash
+# Explain the selection without executing tests (staged, unstaged and untracked files):
+uv run algooptionx-harness test-changes --plan
+# Select and immediately run tests for local edits:
+uv run algooptionx-harness test-changes
+# Include committed branch changes as well as local edits:
+uv run algooptionx-harness test-changes --base origin/main
+# Keep testing after edits settle; stop with Ctrl+C:
+uv run algooptionx-harness test-changes --base origin/main --watch
+# Override selection with every functional suite:
+uv run algooptionx-harness test-changes --full
+```
+
+If using a system-installed Chromium, prefix the execution command with `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium`. For a downloaded Playwright browser, set `PLAYWRIGHT_BROWSERS_PATH` to an absolute shared installation directory when installing and running. The runner deliberately replaces HOME and strips inherited credentials, so a browser installed only in the original HOME's default cache is not found automatically. CI installs into `.harness/browsers` and passes that path through the filtered environment.
+
+| Changed area | Selected checks |
+|---|---|
+| Paper engine, simulator, paper API or paper tests | Architecture and paper Python tests; fresh workspace build; functional browser journeys |
+| Research backend, research tests or research configuration | Architecture and research Python tests |
+| Harness code/tests or native agent skills | Architecture and control-plane Python tests; role/schema configuration |
+| Any frontend file or frontend dependency | Architecture Python tests; lint; workspace and research builds; functional browser journeys including theme tests |
+| Markdown documentation | Architecture and role/schema smoke checks |
+| Shared paths, Python dependencies, CI, new/unmapped files, or unavailable merge ancestry | Full Python discovery, configuration, lint, both builds and functional browser journeys |
+
+Selections combine when several areas change. Architecture and role configuration are checked for every nonempty selection; the `harness-contracts` CI job always tests the selector/runner itself. A full run uses pytest discovery so newly added test directories are included. Renames count both old and new paths; deleted tests select their containing suite, never an absent test filename. Ignored secrets, databases and generated output are excluded. A clean comparison reports `no_changes`, never “tests passed.” Invalid base refs fail with a fetch/`--full` instruction; missing merge ancestry falls back to full validation. A new branch push without a usable before-SHA and a force push whose before-SHA is not an ancestor of HEAD also run full validation.
+
+This is a conservative component map, not proof of exact dependency coverage. Unmapped paths broaden validation. The legacy research frontend has build/lint coverage; research broker browser journeys still need separate credential-free fixtures. UI changes mark `visual_review_required`; the existing manual visual-comparison workflow remains separate, preserves failures, and never regenerates baselines to pass. `--full` means all functional checks, not human approval or a replacement for visual review.
+
+The watcher waits for stable source edits (default two-second polling, one-second debounce), runs one validation at a time, and fixes its Git base at startup so new commits cannot hide changes. Source changes during testing fail the existing evidence integrity check and trigger another run after the edits settle. A failed run is retained; the watcher waits for another source change instead of retrying indefinitely. Ctrl+C stops the watcher. It runs only while its process is active; saving a file without a running watcher does not start a background service. Push/PR testing starts automatically in GitHub Actions.
+
+Every run creates a new `.harness/tasks/IMPACT-*/` recoverable baseline plus `selection.json`, then uses the existing bounded, credential-filtered runner. `selection.json` explains the Git comparison and selected commands; its digest is included in the task. Runner `changed_paths` are relative to that fresh baseline and may be empty even when the Git comparison has changes. Hashed logs, JUnit/browser reports and current source binding remain under `.harness/runs/<id>/`. Passing evidence is verified before the command reports success; failures return nonzero. These test-only tasks never approve QA/release or deployment. They do not replace or narrow the explicitly reviewed checks of an existing task passed to `algooptionx-harness run`.
+
+CI preserves the existing `validate` and `harness-contracts` check names. It compares PRs to their base commit and pushes to their before-SHA, installs Node/browser dependencies only when needed, then reruns the selector and verifies fresh evidence. Reports and selection manifests are uploaded even after failure. Review workflow changes as executable code; candidate CI and local hashes are not an external trust boundary.
+
 ## Start a task
 
 From the existing checkout, after `uv sync --frozen --extra dev`:
@@ -108,9 +146,9 @@ The included review-candidate profile was rendered with Chromium 154 on Debian 1
 python -m algooptionx_harness.github_readiness --output .harness/github-readiness.json
 ```
 
-Use existing scoped GitHub authentication. Git read access does not establish API/admin access. This auditor makes no remote changes. Configure protected branches with an authenticated human approving reviewer, code-owner review, dismissal of stale approval, last-push approval, required `validate`/`harness-contracts` checks and no admin/force-push bypass. Configure the protected `release` environment with the designated verified human reviewer, self-review disabled and no admin bypass. Pin the trusted policy/verifier outside the patch. This chat currently cannot verify those settings because GitHub API access is forbidden; `api.github.com` was added to the draft network settings for review. `cdn.playwright.dev` was also added because the pinned browser download was forbidden. Saving the draft does not activate networking or publish the environment.
+Use existing scoped GitHub authentication. Git read access does not establish API/admin access. This auditor makes no remote changes. Configure protected branches with an authenticated human approving reviewer, code-owner review, dismissal of stale approval, last-push approval, required `validate`/`harness-contracts` checks and no admin/force-push bypass. Configure the protected `release` environment with the designated verified human reviewer, self-review disabled and no admin bypass. Pin the trusted policy/verifier outside the patch. The initial cloud setup could not verify those settings because GitHub API access was forbidden; `api.github.com` was added to the draft network settings for review. Subsequent access in this session allowed PR creation/merging and observation of passing validation on [PR #2](https://github.com/djayakumar92/AlgoOptionX/pull/2); that demonstrates workflow execution, not protected-branch or deployment-policy enforcement. `cdn.playwright.dev` was also added because the pinned browser download was forbidden. Saving the draft does not activate networking or publish the environment.
 
-Technical human-only deployment enforcement remains NOT VERIFIED until those external controls exist. The user can review and approve local design candidates in chat; no such approval is invented during setup. GitHub workflow execution after push is NOT VERIFIED. No human approvals are manufactured during setup, and no release is performed.
+Technical human-only deployment enforcement remains NOT VERIFIED until those external controls exist. The user can review and approve local design candidates in chat; no such approval is invented during setup. GitHub workflow execution was verified on PR #2; that does not attest to external release controls. No human approvals are manufactured during setup, and no release is performed.
 
 ### Cloud runtime checks from this setup
 

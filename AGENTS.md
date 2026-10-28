@@ -3,7 +3,7 @@
 The application name is AlgoOptionX. Use the existing checkout; cloud tasks are already isolated. Default development uses the credential-free `algooptionx.api.app` application. The original broker research server is `algooptionx.research.api.app` and requires Dhan credentials.
 
 - Read README.md and the applicable specs before changes. Treat synthetic fixtures and research outputs honestly; do not label rule scores as trained AI probabilities or real investment performance.
-- Run `uv run pytest -q -rs`, frontend build and lint. Run Playwright for affected journeys. Preserve failures and skips in reports.
+- After each coherent edit batch, run `uv run algooptionx-harness test-changes --base origin/main` (or the task's actual base). Use `--plan` to explain the selection and `--watch` for automatic testing after stable edits. Shared/unmapped changes trigger full Python, builds, lint and functional browser checks. Keep explicitly reviewed task checks intact; run `--full` before release. Preserve failures and skips in reports.
 - Keep money in integer paise and risk validation inside the same transaction as each economic effect. Do not add a path around the risk gate. Never weaken a test to manufacture a pass.
 - Keep broker credentials, account identity and deployment authority out of model/tool outputs, code, logs and evidence files.
 - Preserve existing research rules and their regression tests. New paper/replay state uses a separate database. Never delete user history or infer historical fills from research grades.
