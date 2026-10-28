@@ -4,7 +4,7 @@ Updated: 28 October 2026. This file tracks authorized work and future proposals;
 
 | Order / ID | Work item | Status | Next action / dependencies |
 |---|---|---|---|
-| 1 · HARNESS-CHANGE-001 | Change-aware harness testing and local watch mode | Implemented, tested locally and pushed in `bae879e`; GitHub checks/merge pending | Verify the existing source-bound evidence and independent review, create/update the PR and observe GitHub checks before merge. Existing authorization covers this harness work. |
+| 1 · HARNESS-CHANGE-001 | Change-aware harness testing and local watch mode | Implemented; local validation passed | Integration and current GitHub status are tracked in [PR #3](https://github.com/djayakumar92/AlgoOptionX/pull/3). Require source-bound evidence, independent review and passing GitHub checks before merge. Existing authorization covers this harness work. |
 | 2 · MASTER-PLAN-001 | [Enterprise product/architecture/development master plan](enterprise-master-plan.md) | Documented; delivery phases remain proposed | All 14 source sections preserved, plus repository reconciliation, explicit gaps, coverage and delivery gates. Review concrete phase tasks before implementation. |
 | 3 · INTEL-PLAN-001 | [Trading knowledge and AI skills enhancement](trading-knowledge-ai-skills-enhancement.md) | **QUEUED — planning only; not started** | After baseline work, perform a read-only repository audit and prepare the 15 required planning artifacts. Ebook extraction also requires the missing reference PDF. Present findings and wait for the user's explicit approval before implementing this work item. |
 
