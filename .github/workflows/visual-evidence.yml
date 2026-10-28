@@ -1,0 +1,33 @@
+name: Visual evidence (review required)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: uv sync --frozen --extra dev --python 3.12
+      - run: npm --prefix frontend ci
+      - run: npm --prefix frontend run build
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      # Missing/different renderer profiles fail. This job never updates snapshots
+      # and never acts as a human design/release approval.
+      - run: npm --prefix frontend run test:visual
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-comparison-for-human-review
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/
+            frontend/tests/visual-baselines/manifest.json

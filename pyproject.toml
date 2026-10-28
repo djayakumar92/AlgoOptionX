@@ -1,7 +1,7 @@
 [project]
-name = "dhan-analyzer"
-version = "0.1.0"
-description = "NIFTY option-chain sentiment/OI/trend/momentum analyzer on DhanHQ v2"
+name = "algooptionx"
+version = "0.2.0"
+description = "AlgoOptionX: NIFTY research, deterministic simulation and virtual paper trading"
 requires-python = ">=3.12"
 dependencies = [
     "dhanhq>=2.2.0",
@@ -12,12 +12,16 @@ dependencies = [
     "requests>=2.31.0",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.0.0",
+    "cryptography>=44.0.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0.0"]
+dev = ["pytest>=8.0.0", "httpx>=0.28.0", "hypothesis>=6.0.0"]
 
 [project.scripts]
+algooptionx = "dhan_analyzer.api.paper_app:run"
+algooptionx-harness = "harness.cli:main"
 dhan-analyzer = "dhan_analyzer.main:run"
 
 [build-system]
@@ -25,4 +29,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["dhan_analyzer*"]
+include = ["dhan_analyzer*", "harness*"]
+
+[tool.setuptools.package-data]
+harness = ["agents/*.json", "schemas/*.json", "examples/*.json", "README.md"]

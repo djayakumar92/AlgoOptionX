@@ -10,3 +10,10 @@ build/
 dist/
 .pytest_cache/
 frontend/node_modules/
+
+.hypothesis/
+frontend/test-results/
+frontend/playwright-report/
+frontend/research-dist/
+
+.harness/

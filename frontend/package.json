@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test workspace.spec.ts",
+    "test:visual": "playwright test visual.spec.ts",
+    "build:research": "tsc -b && vite build --mode research --outDir research-dist",
+    "visual:candidates": "node tests/capture-visual.mjs",
+    "test:all": "playwright test"
   },
   "dependencies": {
     "lightweight-charts": "^5.2.1",
@@ -18,6 +23,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

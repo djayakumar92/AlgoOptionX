@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "max_approval_age_hours": 72,
+  "max_evidence_age_hours": 24,
+  "keys": {},
+  "require_distinct_qa_release": false
+}

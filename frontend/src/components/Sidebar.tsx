@@ -22,10 +22,10 @@ export function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="brand">
-        <span className="brand-mark">SL</span>
+        <span className="brand-mark">AX</span>
         <div className="brand-text">
-          <span className="brand-name">StrikeLine</span>
-          <span className="brand-tagline">Make Plan Easy</span>
+          <span className="brand-name">AlgoOptionX</span>
+          <span className="brand-tagline">Research. Simulate. Evaluate.</span>
         </div>
       </div>
 

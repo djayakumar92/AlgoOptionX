@@ -1,0 +1,9 @@
+# Initial routing to the repository owner; verify collaborator eligibility and
+# use the user as human approver; independent QA is a separate AI context.
+# This file does not enforce reviews without external branch protection.
+/harness/ @djayakumar92
+/.agents/ @djayakumar92
+/.github/ @djayakumar92
+/AGENTS.md @djayakumar92
+/specs/ @djayakumar92
+/frontend/tests/visual-baselines/ @djayakumar92

@@ -8,6 +8,7 @@ double-clicks the .bat; the browser opens itself once the server is ready.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 import threading
 import time
@@ -15,6 +16,7 @@ import webbrowser
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from datetime import date, datetime
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -55,7 +57,7 @@ INSTRUMENT_TYPE_INDEX = "INDEX"
 RECENT_SWINGS_FOR_ZONES = 12
 MAX_BACKTEST_RANGE_DAYS = 120  # calendar days -- ~85 trading days, each a real paced DhanHQ fetch if not already graded
 HOST, PORT = "127.0.0.1", 8000
-FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
+FRONTEND_DIST = Path(os.environ.get("ALGOOPTIONX_RESEARCH_DIST", str(PROJECT_ROOT / "frontend" / "research-dist"))).resolve()
 STARTUP_RETRY_ATTEMPTS = 3
 STARTUP_RETRY_DELAY_SEC = 3.0
 

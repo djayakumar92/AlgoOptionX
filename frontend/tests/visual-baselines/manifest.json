@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "approval_status": "pending_human_review",
+  "files": [
+    {
+      "path": "chromium-154-linux/audit-1024.png",
+      "sha256": "a4067fcfe4dc6833c38a02658017c5ec7ace93546a31a02b71bd9a59ee1a4182"
+    },
+    {
+      "path": "chromium-154-linux/audit-1440.png",
+      "sha256": "d85908703a01df3366e7d2f92eb4540c1b2a84104bf7341be9ae40c66a130ce3"
+    },
+    {
+      "path": "chromium-154-linux/audit-390.png",
+      "sha256": "1d2a9b4c548423b9d1bb62bc770f59be9ec99237a7876a2e48b1446f6e1a6915"
+    },
+    {
+      "path": "chromium-154-linux/decisions-1024.png",
+      "sha256": "f5fc6ea07fe1371d5f504b8f68076b04506f664e0f32158aac24b07299cb2be8"
+    },
+    {
+      "path": "chromium-154-linux/decisions-1440.png",
+      "sha256": "e4107de84402d25f895c460fe3961c5f0a96fbb08ff85510e8916fc7198046bc"
+    },
+    {
+      "path": "chromium-154-linux/decisions-390.png",
+      "sha256": "27243653e23306bb0ef0c1e84fbd638295223b2e445119b49184dfebfa77f6e3"
+    },
+    {
+      "path": "chromium-154-linux/market-1024.png",
+      "sha256": "0810f82db644268f14be2d7d3c959f56ed00d2398929449e1f4b080d9f982e6c"
+    },
+    {
+      "path": "chromium-154-linux/market-1440.png",
+      "sha256": "8a86b6aa664e9ece59090d365b912178ad916d3965e6794197187f316a22c9f4"
+    },
+    {
+      "path": "chromium-154-linux/market-390.png",
+      "sha256": "92e9593d7919b95d44e5e31a88d603293d0b7d529bb3517cc4f2fb434c7bde4d"
+    },
+    {
+      "path": "chromium-154-linux/order-dialog.png",
+      "sha256": "edd09599f08eb0755afa8aa985346e707beec24cdc361ad6b43d20104fd544c2"
+    },
+    {
+      "path": "chromium-154-linux/overview-1024.png",
+      "sha256": "5c615660f8ff98cab9a9a59c7b9655cc3f984a47ff211589ba821cef0b3f5bdc"
+    },
+    {
+      "path": "chromium-154-linux/overview-1440.png",
+      "sha256": "3046bd8c12727e35acb65543d6e82166b5d50dda803d3892c6b3c038f63e9b98"
+    },
+    {
+      "path": "chromium-154-linux/overview-390.png",
+      "sha256": "f52e5df3fad90ecb7ef1ec575d5492e8cd7a906e8735b3524a9e33b25fde2729"
+    },
+    {
+      "path": "chromium-154-linux/performance-1024.png",
+      "sha256": "bc83e31a9ebbcc2074291b8ebb45ec19b9666107b7f26fed585eaec927af4081"
+    },
+    {
+      "path": "chromium-154-linux/performance-1440.png",
+      "sha256": "0dddc0c08c2113ea562c6018bd2ccd47bc8bca3883bb59d5f14c953386582acb"
+    },
+    {
+      "path": "chromium-154-linux/performance-390.png",
+      "sha256": "c47892a712ee0c1c8494ffdb23c775a5cbde53074c6a7b9d00ed43b0806b6e44"
+    },
+    {
+      "path": "chromium-154-linux/portfolio-1024.png",
+      "sha256": "df14b0927e080db9733e40a558ab6f87997239c21356635b4f5376265851ba6f"
+    },
+    {
+      "path": "chromium-154-linux/portfolio-1440.png",
+      "sha256": "2a3399ccfeba06bd12d2bfb39c4f31bbfeafa7a7a0c4f7e389273bc217e317ab"
+    },
+    {
+      "path": "chromium-154-linux/portfolio-390.png",
+      "sha256": "f0f25f7ee74867fdc88fc8951c1dff7473e1f72b9daf55e613abf3d7c629ea99"
+    },
+    {
+      "path": "chromium-154-linux/replay-1024.png",
+      "sha256": "96936b5606f51b48c9fb4b8cde502eb635090b19a3f639aa6004b8c3b1c76f2a"
+    },
+    {
+      "path": "chromium-154-linux/replay-1440.png",
+      "sha256": "8e5de0753ae0092c40448c51719065a8e8afb7b89864848fc08af4dcaf583b9a"
+    },
+    {
+      "path": "chromium-154-linux/replay-390.png",
+      "sha256": "ff98ff1c56b50f6463374c71dcfebc2cb310f25df00cf9b82b5cbed61c4c9601"
+    },
+    {
+      "path": "chromium-154-linux/settings-1024.png",
+      "sha256": "7b1f0fe00fa3dc804a18654a5e8470ad5e8d6c38570c15fe41044c5bdb755adb"
+    },
+    {
+      "path": "chromium-154-linux/settings-1440.png",
+      "sha256": "0b21c7a414cc23fa86085ac0a3981fe3251d2720368a6a2ef0747118333107ef"
+    },
+    {
+      "path": "chromium-154-linux/settings-390.png",
+      "sha256": "9880fbe4311a678ea3f26fda9edde775001a5772c25c87ea6284d96a4ce5b1e0"
+    }
+  ],
+  "masked_fields": [
+    "session UUID",
+    "global event sequence",
+    "event content hash"
+  ],
+  "environment": {
+    "platform": "linux",
+    "node": "v24.19.0"
+  },
+  "policy": "Comparison success is not design approval. External signed UI approval must bind this source and candidate manifest before release."
+}
