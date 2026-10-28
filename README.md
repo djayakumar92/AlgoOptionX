@@ -84,6 +84,10 @@ Push and PR checks automatically select tests from changed files. `test-changes 
 
 The local harness is implemented and tested. You are the human approver here in chat. Independent AI review, evidence and source-bound conversation decisions support the local workflow. Optional signed deployment enforcement requires externally protected identity/key controls; chat records are not forged signatures or deployment authorization.
 
+## Product master plan
+
+See the [AlgoOptionX enterprise master plan](docs/product/enterprise-master-plan.md) for the complete product blueprint, current implementation gaps, agent/skill coverage and phased acceptance gates. Proposed risk limits and future capabilities in that document do not change the current application. The [work queue](docs/product/work-queue.md) tracks follow-on work, including the queued trading-knowledge and AI-skills audit.
+
 ## Repository layout
 
 Application code is in `src/algooptionx`, development automation in `src/algooptionx_harness`, and the web app in `apps/web`. See [the repository architecture](docs/architecture/repository-layout.md) for module boundaries, renamed paths and the test layout. Windows launchers are under `scripts/windows/`. Existing database files and runtime history are preserved.
