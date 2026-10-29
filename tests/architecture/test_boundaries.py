@@ -61,3 +61,23 @@ def test_shared_web_primitives_do_not_import_feature_modules():
             if imported.startswith("."):
                 target = (path.parent / imported).resolve()
                 assert not target.is_relative_to(features), path
+
+
+def test_intelligence_contracts_cannot_import_research_execution_or_runtime():
+    forbidden = (
+        "algooptionx.research",
+        "algooptionx.paper",
+        "algooptionx.api",
+        "algooptionx_harness",
+        "sqlite3",
+        "requests",
+        "httpx",
+    )
+    for path in (PROJECT_ROOT / "src/algooptionx/intelligence").rglob("*.py"):
+        for node in ast.walk(ast.parse(path.read_text())):
+            modules = []
+            if isinstance(node, ast.ImportFrom):
+                modules = [node.module or ""]
+            elif isinstance(node, ast.Import):
+                modules = [item.name for item in node.names]
+            assert not any(module.startswith(forbidden) for module in modules), path

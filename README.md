@@ -34,6 +34,8 @@ Use **Theme** in the top bar to choose Light, Dark, or System. Your preference i
 
 See the [safety and causal-data guide](docs/development/safety-and-causal-data.md) for history-preserving journal upgrades, atomic first funding, and the new pure 5/30-minute aggregation contracts. These helpers do not change the current autonomous paper strategy or risk limits.
 
+For the new read-only decision report, run `uv run python -m algooptionx.research.shadow --demo`. The [decision/shadow guide](docs/development/decision-shadow.md) explains actual input/output schemas, missing/conflicting-data states and limitations. Shadow reports do not submit paper orders.
+
 ## Accounting and assumptions
 
 Money is stored as integer paise. Virtual buys fill at ask + ₹0.05, sells at bid − ₹0.05, with ₹20 per fill. One fixture lot is 65 units; this is **not a claim about current exchange lot sizes**. Entries enforce a 1% planned stop-risk budget, 20% premium exposure cap, at most three distinct contracts, available cash and a 2% session loss entry lock. Stops are 8% below entry, targets 12% above entry. Gaps may exceed planned risk. Market and strategy are deliberately simple fixtures, not realistic options pricing or validated predictive models.

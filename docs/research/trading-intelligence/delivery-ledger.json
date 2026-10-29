@@ -66,24 +66,26 @@
     {
       "id": "OBS-01",
       "title": "Introduce versioned observation/decision envelope",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "DATA-02 and reviewed decision schema",
       "expected_files": "src/algooptionx/intelligence/contracts.py; decision.py; tests/intelligence/test_contracts.py",
       "acceptance": "Five states, units/evidence/availability/uncertainty/invalidation; rule probabilities null; candidate cannot execute by itself",
       "tests": "DEC-01/02/03 and LINEAGE-01; extra keys, stale source, missing/contradictory inputs",
       "evidence": "Contract report and comparison showing old API unchanged",
-      "rollback": "Keep old workspace response/route; additive new contract behind inactive adapter"
+      "rollback": "Keep old workspace response/route; additive new contract behind inactive adapter",
+      "implementation_note": "Strict runtime records and read-only legacy analytics shadow adapter/CLI; no economic or model activation. Current validation/review/merge tracked in the batch PR."
     },
     {
       "id": "OBS-02",
       "title": "Shadow reuse of existing structure/regime/chain analytics",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "OBS-01; availability adapter semantics reviewed",
       "expected_files": "Pure observation adapters; tests/intelligence/test_observations.py",
       "acceptance": "Research multi-timeframe reuse explicitly respects confirmation lag; no broker/runtime/harness dependency in offline core; no change to active paper commands",
       "tests": "TIME-03/04, empty/conflicting data, existing research regressions and architecture boundaries",
       "evidence": "Old/new observation fixtures, absence of economic effects",
-      "rollback": "Disable shadow adapter; preserve research outputs and account events"
+      "rollback": "Disable shadow adapter; preserve research outputs and account events",
+      "implementation_note": "Strict runtime records and read-only legacy analytics shadow adapter/CLI; no economic or model activation. Current validation/review/merge tracked in the batch PR."
     },
     {
       "id": "PAT-01",
@@ -287,7 +289,7 @@
     {
       "id": "LATER-SCOPE-01",
       "status": "SCOPED_FUTURE_WORK",
-      "reason": "The user approved SAFE-01/SAFE-02/DATA-01/DATA-02. Later strategy/risk/model/hosted/live work remains separately scoped; this batch grants no deployment authority."
+      "reason": "Safety/data and read-only observation/shadow tasks have been authorized and implemented. Later strategy/risk/model/hosted/live activation remains separately scoped; these batches grant no deployment authority."
     }
   ],
   "last_update": "2026-10-29",
@@ -304,6 +306,17 @@
       "authorization_context": "User replied \"ok\" to the concrete first safety/data batch after the planning package was presented.",
       "verification": "Operator-recorded conversation context, not cryptographic identity or deployment authority.",
       "guide": "docs/development/safety-and-causal-data.md"
+    },
+    {
+      "id": "OBS-SHADOW-001",
+      "tasks": [
+        "OBS-01",
+        "OBS-02"
+      ],
+      "status": "IMPLEMENTED",
+      "authorization_context": "User instructed the assistant to start the next task instead of waiting, following the master-plan sequence.",
+      "verification": "Conversation scope only; no deployment/model/trading authority.",
+      "guide": "docs/development/decision-shadow.md"
     }
   ]
 }
