@@ -304,8 +304,21 @@ def validate_configuration(root: Path) -> dict:
         role = load_role(root, name)
         for skill in role["skills"]:
             path = contained(root, f".agents/skills/{skill}/SKILL.md")
-            if f"name: {skill}\n" not in path.read_text():
+            text = path.read_text()
+            if f"name: {skill}\n" not in text:
                 raise HarnessError(f"Skill identity mismatch: {skill}")
+            for heading in (
+                "Inputs",
+                "Outputs",
+                "Allowed actions",
+                "Validation",
+                "Failure conditions",
+                "Evidence",
+            ):
+                if not any(line == f"## {heading}" for line in text.splitlines()):
+                    raise HarnessError(
+                        f"Incomplete skill contract: {skill} missing {heading}"
+                    )
             skills.add(skill)
         count += 1
     return {

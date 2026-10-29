@@ -19,7 +19,8 @@
   ],
   "skills": [
     "evidence-review",
-    "security-review"
+    "security-review",
+    "evidence-verification"
   ],
   "default_next_role": "release-governor",
   "human_approval_authority": false

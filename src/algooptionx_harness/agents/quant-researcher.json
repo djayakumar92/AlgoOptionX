@@ -18,7 +18,10 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "quant-research"
+    "quant-research",
+    "options-domain-analysis",
+    "quant-backtesting",
+    "market-data-validation"
   ],
   "default_next_role": "risk-engineer",
   "human_approval_authority": false

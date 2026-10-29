@@ -4,7 +4,7 @@ This is a working, model-runtime adapter and validation/control plane. It is sep
 
 ## What is implemented
 
-- Fourteen schema-validated specialized agent roles in `src/algooptionx_harness/agents/`; nine reusable native skill packages in `.agents/skills/`.
+- Fourteen schema-validated specialized agent roles in `src/algooptionx_harness/agents/`; 23 reusable native skill packages in `.agents/skills/`.
 - Task manifests, recoverable baseline files (including existing uncommitted work), scope checks and immutable specification inputs.
 - Terminal worker outcomes retain exit status, changed paths and post-run integrity results, including timeouts and cancellation; blocked/failed handoffs are never promoted to completed.
 - Role dispatch bundles and a Codex `exec` adapter using `read-only` or `workspace-write` sandbox modes, schema-constrained handoffs and explicit timeouts. There is no unrestricted sandbox or automatic deployment option.
@@ -155,3 +155,24 @@ Technical human-only deployment enforcement remains NOT VERIFIED until those ext
 The harness itself and protocol-level Codex adapter tests pass. A real nested Codex CLI attempt could not initialize because its inherited runtime home is read-only. A separate empty writable runtime-home probe initialized, but the model transport to `api.openai.com` was denied by the network proxy (403). Consequently an independent review through the nested CLI was **not completed**. Native chat delegation is a separate runtime path and was used for independent review of the repository-layout refactor; it does not imply that the unattended CLI is activated. Use `dispatch` bundles in the existing chat session, or have the platform provide a supported writable authenticated Codex runtime before enabling unattended CLI workers. Existing authentication presence was checked without printing or copying values. Never copy model-auth files into a published workspace to work around this restriction.
 
 The observed model API destination `api.openai.com` was also added to the draft network settings; saving that draft does not activate connectivity or prove model authorization. These are optional unattended-runtime limits, not prerequisites for the user's normal chat approval workflow.
+
+## Specification crosswalk and specialized skills (GOV-01)
+
+The harness now validates **14 role contracts and23 referenced native skill packages**. Original skill names remain available, with14 additional packages covering the requested15 specializations (security-review already existed). Each package defines Inputs, Outputs, Allowed actions, Validation, Failure conditions and Evidence. Configuration validation checks identity/sections; it does not grant tools, editing privileges, human identity or deployment authority. Existing role sandboxes and forbidden actions remain unchanged.
+
+Use the read-only crosswalk to verify pinned requirement references:
+
+```bash
+uv run algooptionx-harness validate-config
+uv run algooptionx-harness validate-spec-map src/algooptionx_harness/examples/spec-map.template.json
+# For an explicitly prepared mapping covering a captured task's requirement set:
+uv run algooptionx-harness validate-spec-map PATH_TO_MAPPING.json --task .harness/tasks/TASK_ID/task.json
+```
+
+The example pins HARNESS-03/HARNESS-06 to the current development-harness requirements file. For a new change, prepare a new map with actual IDs/paths/SHA-256; do not rewrite an old map merely to hide specification drift. Mappings must be inside the checkout. References must be bounded regular Markdown under `docs/` or `openspec/`; symlinks/traversal are rejected. The source document hash and exact ID token are checked; duplicate requirement IDs, malformed maps and unknown authority fields fail.
+
+An optional captured-task binding checks its baseline/current scope, exact requirement-ID coverage and protected specification paths. `verified_references` means only those checks passed: it is not a test result, semantic requirement review, human approval, implementation gate or release decision. Source/task/mapping digests allow subsequent comparison; changed source/specs/task requires a fresh reviewed revision. Map input values from malformed payloads are not echoed in errors.
+
+[ADR0002](../architecture/decisions/0002-native-specification-crosswalk.md) records the OpenSpec evaluation. No OpenSpec CLI was installed or validated. An `openspec-layout` mapping label supports referencing such document locations without claiming external grammar/tool conformance; output says `external_tool_conformance: not_verified`. Actual third-party adoption still needs a pinned-tool integration evaluation. The native task/evidence/approval pipeline remains the single authority.
+
+All15 requested specializations are routed on demand: requirement-analysis/validation, architecture-review, ui-design-validation, react-development, fastapi-development, options-domain-analysis, quant-backtesting, market-data-validation, risk-control-testing, ml-leakage-prevention, security-review, playwright-testing, evidence-verification and release-readiness. They are reusable instructions, not permanently running services, proof of trader expertise or activated model/broker capabilities.

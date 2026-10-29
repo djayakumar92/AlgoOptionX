@@ -55,13 +55,14 @@
     {
       "id": "GOV-01",
       "title": "Evaluate OpenSpec and specialized development contracts",
-      "status": "PLANNED",
+      "status": "IMPLEMENTED",
       "prerequisites": "Current native role/schema inventory and approved governance scope",
       "expected_files": "ADR/spec adapter design; scoped .agents/skills and role JSON only after review",
       "acceptance": "One authoritative requirement/task mapping; explicit options/data/leakage/framework skill I/O/tools/failure/evidence; no new signer or deployment authority",
       "tests": "Config/schema and round-trip traceability/negative capability tests",
       "evidence": "ADR, actual config checks, independent handoff",
-      "rollback": "Keep native specs and prior role contracts; no dependency install unless separately authorized"
+      "rollback": "Keep native specs and prior role contracts; no dependency install unless separately authorized",
+      "implementation_note": "ADR0002 evaluates OpenSpec adoption limits; native pinned requirement crosswalk and23 fully structured skill packages preserve14 role authorities. Actual OpenSpec CLI conformance remains not verified."
     },
     {
       "id": "OBS-01",
@@ -317,6 +318,16 @@
       "authorization_context": "User instructed the assistant to start the next task instead of waiting, following the master-plan sequence.",
       "verification": "Conversation scope only; no deployment/model/trading authority.",
       "guide": "docs/development/decision-shadow.md"
+    },
+    {
+      "id": "GOV-CONTRACTS-001",
+      "tasks": [
+        "GOV-01"
+      ],
+      "status": "IMPLEMENTED",
+      "authorization_context": "Continued the user-authorized step-by-step master-plan work without another routine permission pause.",
+      "verification": "Native references/contracts only; no human or deployment authority.",
+      "guide": "docs/architecture/decisions/0002-native-specification-crosswalk.md"
     }
   ]
 }

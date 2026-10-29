@@ -18,7 +18,8 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "architecture"
+    "architecture",
+    "architecture-review"
   ],
   "default_next_role": "backend-engineer",
   "human_approval_authority": false

@@ -19,7 +19,8 @@
   ],
   "skills": [
     "implementation",
-    "risk-validation"
+    "risk-validation",
+    "fastapi-development"
   ],
   "default_next_role": "test-engineer",
   "human_approval_authority": false

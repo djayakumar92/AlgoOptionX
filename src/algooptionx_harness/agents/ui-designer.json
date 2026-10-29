@@ -18,7 +18,8 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "visual-review"
+    "visual-review",
+    "ui-design-validation"
   ],
   "default_next_role": "frontend-engineer",
   "human_approval_authority": false

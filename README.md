@@ -77,6 +77,7 @@ See [the harness guide](docs/development/ai-development-harness.md) for speciali
 
 ```bash
 uv run algooptionx-harness validate-config
+uv run algooptionx-harness validate-spec-map src/algooptionx_harness/examples/spec-map.template.json
 # Run the affected tests now, or keep watching saved edits:
 uv run algooptionx-harness test-changes --base origin/main
 uv run algooptionx-harness test-changes --base origin/main --watch

@@ -31,6 +31,7 @@ from algooptionx_harness.runner import run_task, verify_evidence
 from algooptionx_harness.workspace import (
     HarnessError,
     capture_task,
+    contained,
     digest,
     load_task,
     snapshot,
@@ -167,6 +168,12 @@ def main(argv=None):
     )
     changes.add_argument("--interval", type=float, default=2)
     changes.add_argument("--debounce", type=float, default=1)
+    spec = sub.add_parser(
+        "validate-spec-map",
+        help="Verify pinned requirement references and optional native task binding.",
+    )
+    spec.add_argument("mapping", type=Path)
+    spec.add_argument("--task", type=Path)
     sub.add_parser("schemas")
     sub.add_parser("validate-config")
     record_cmd = sub.add_parser("record-chat")
@@ -177,7 +184,45 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
-        if args.command == "test-changes":
+        if args.command == "validate-spec-map":
+            from algooptionx_harness.specifications import (
+                SpecificationMap,
+                check_specifications,
+            )
+
+            try:
+                path = args.mapping.absolute()
+                if not path.is_relative_to(root):
+                    raise HarnessError(
+                        "Specification mappings must be inside the checkout."
+                    )
+                contained(root, str(path.relative_to(root)))
+                if not path.is_file() or path.stat().st_size > 1024 * 1024:
+                    raise HarnessError(
+                        "Mapping must be a regular JSON file of at most1MiB."
+                    )
+                with path.open("rb") as stream:
+                    raw = stream.read(1024 * 1024 + 1)
+                if len(raw) > 1024 * 1024:
+                    raise HarnessError("Mapping exceeds1MiB.")
+                import hashlib
+
+                mapping_file_digest = hashlib.sha256(raw).hexdigest()
+                mapping = SpecificationMap.model_validate_json(raw)
+                output = check_specifications(root, mapping, args.task)
+                if file_digest(path) != mapping_file_digest:
+                    raise HarnessError(
+                        "Mapping file changed while checking; retry against a stable revision."
+                    )
+                output["mapping_file_sha256"] = mapping_file_digest
+            except HarnessError:
+                raise
+            except (ValidationError, ValueError) as exc:
+                # Do not print arbitrary candidate payloads or secret values.
+                raise HarnessError(
+                    f"Specification mapping rejected: {type(exc).__name__}"
+                ) from exc
+        elif args.command == "test-changes":
             from algooptionx_harness.impact import (
                 plan_changes,
                 run_changes,

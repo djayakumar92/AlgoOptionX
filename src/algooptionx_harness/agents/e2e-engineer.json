@@ -19,7 +19,8 @@
   ],
   "skills": [
     "implementation",
-    "visual-review"
+    "visual-review",
+    "playwright-testing"
   ],
   "default_next_role": "independent-validator",
   "human_approval_authority": false
