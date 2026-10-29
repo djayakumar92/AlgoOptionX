@@ -19,7 +19,8 @@
   ],
   "skills": [
     "specification",
-    "evidence-review"
+    "evidence-review",
+    "requirement-validation"
   ],
   "default_next_role": "architect",
   "human_approval_authority": false

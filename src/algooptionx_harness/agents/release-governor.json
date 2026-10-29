@@ -18,7 +18,8 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "release-governance"
+    "release-governance",
+    "release-readiness"
   ],
   "default_next_role": "product",
   "human_approval_authority": false

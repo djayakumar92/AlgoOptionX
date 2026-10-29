@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "change_id": "EXAMPLE-TRACE-001",
+  "source_format": "native",
+  "requirements": [
+    {
+      "id": "HARNESS-03",
+      "path": "docs/requirements/development-harness.md",
+      "sha256": "c420d269de01fb1b94c47d9f4b5d7965e42f2b577ea4e9bc5adf66798e2c4752"
+    },
+    {
+      "id": "HARNESS-06",
+      "path": "docs/requirements/development-harness.md",
+      "sha256": "c420d269de01fb1b94c47d9f4b5d7965e42f2b577ea4e9bc5adf66798e2c4752"
+    }
+  ]
+}

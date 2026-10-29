@@ -19,7 +19,8 @@
   ],
   "skills": [
     "implementation",
-    "visual-review"
+    "visual-review",
+    "react-development"
   ],
   "default_next_role": "e2e-engineer",
   "human_approval_authority": false

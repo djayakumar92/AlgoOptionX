@@ -19,7 +19,8 @@
   ],
   "skills": [
     "implementation",
-    "quant-research"
+    "quant-research",
+    "ml-leakage-prevention"
   ],
   "default_next_role": "independent-validator",
   "human_approval_authority": false

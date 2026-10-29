@@ -18,7 +18,8 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "risk-validation"
+    "risk-validation",
+    "risk-control-testing"
   ],
   "default_next_role": "security-engineer",
   "human_approval_authority": false

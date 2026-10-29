@@ -586,7 +586,7 @@ def test_all_role_definitions_and_candidate_hashes():
     assert validate_configuration(ROOT) == {
         "status": "verified",
         "agents": 14,
-        "skills": 9,
+        "skills": 23,
         "human_approval_authority": False,
     }
     manifest = json.loads(

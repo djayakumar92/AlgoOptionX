@@ -19,7 +19,8 @@
   ],
   "skills": [
     "implementation",
-    "risk-validation"
+    "risk-validation",
+    "evidence-verification"
   ],
   "default_next_role": "e2e-engineer",
   "human_approval_authority": false

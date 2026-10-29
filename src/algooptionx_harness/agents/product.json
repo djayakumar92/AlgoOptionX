@@ -18,7 +18,8 @@
     "Do not edit application source, tests, manifests or lockfiles."
   ],
   "skills": [
-    "specification"
+    "specification",
+    "requirement-analysis"
   ],
   "default_next_role": "requirements-validator",
   "human_approval_authority": false
