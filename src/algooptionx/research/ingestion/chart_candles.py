@@ -9,6 +9,8 @@ choice as option_ohlc.py.
 
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, provider_boundary
+
 from datetime import datetime, timedelta
 
 from algooptionx.research.ingestion.providers import MarketDataProvider
@@ -29,7 +31,8 @@ class ChartCandlesError(RuntimeError):
     pass
 
 
-def fetch_candles(
+@provider_boundary(ChartCandlesError, "CANDLE_FETCH_FAILED")
+def _fetch_candles(
     client: MarketDataProvider, security_id: str, exchange_segment: str, instrument_type: str, interval: str
 ) -> list[dict]:
     """interval: '1' | '5' | '15' (intraday minutes) or 'day'."""
@@ -59,6 +62,12 @@ def fetch_candles(
         )
 
     if resp.get("status") == "failure":
-        raise ChartCandlesError(f"candle fetch failed for {security_id} ({interval}): {resp}")
+        raise ChartCandlesError(message("CANDLE_FETCH_FAILED"))
 
     return rows_from_response(resp, interval_min=None if interval == DAILY_INTERVAL else int(interval))
+
+
+def fetch_candles(client, security_id, exchange_segment, instrument_type, interval):
+    if interval not in INTERVAL_LOOKBACK_DAYS:
+        raise ValueError("Unsupported candle interval.")
+    return _fetch_candles(client, security_id, exchange_segment, instrument_type, interval)

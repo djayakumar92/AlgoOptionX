@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, details, provider_boundary
+
 import logging
 import sys
 from datetime import datetime, timedelta
@@ -19,6 +21,7 @@ CANDLE_LOOKBACK_DAYS = 5
 INSTRUMENT_TYPE_INDEX = "INDEX"
 
 
+@provider_boundary(RuntimeError, "RESEARCH_JOB_FAILED")
 def run() -> None:
     settings = load_settings_or_exit()
     setup_logging(settings)
@@ -77,7 +80,7 @@ def run() -> None:
                             INSTRUMENT_TYPE_INDEX, intraday_interval, CANDLE_LOOKBACK_DAYS,
                         )
                     except Exception:
-                        logger.exception("Historical refresh failed; continuing with existing candles")
+                        logger.error(message("HISTORY_REFRESH_FAILED"), extra=details("HISTORY_REFRESH_FAILED"))
                     last_historical_refresh = datetime.now()
         except KeyboardInterrupt:
             print("\nStopping.")

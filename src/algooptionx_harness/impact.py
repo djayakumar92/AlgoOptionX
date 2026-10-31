@@ -23,7 +23,7 @@ from algooptionx_harness.workspace import (
 SKIP = (
     "tests.research.test_prediction.test_levels_sharing_a_price_are_merged_not_dropped"
 )
-SUITES = ("architecture", "control_plane", "paper", "research")
+SUITES = ("architecture", "control_plane", "paper", "research", "market", "intelligence")
 
 
 def resolve_commit(root: Path, ref: str) -> str:
@@ -74,6 +74,25 @@ def select_checks(
         ):
             suites.add("control_plane")
             reason = "Development harness and role contracts"
+        elif name.startswith("src/algooptionx/market/"):
+            suites.update(("market", "intelligence", "paper", "research"))
+            browser = True
+            reason = "Market contracts and all current paper/research/shadow consumers"
+        elif name.startswith("src/algooptionx/intelligence/"):
+            suites.update(("intelligence", "research"))
+            reason = "Decision contracts and research shadow consumer"
+        elif name == "src/algooptionx/research/shadow.py":
+            suites.update(("market", "intelligence", "research"))
+            reason = "Shadow adapter and causal inputs"
+        elif name.startswith("src/algooptionx/research/signals/"):
+            suites.update(("research", "intelligence"))
+            reason = "Research signals and shadow consumer"
+        elif name.startswith("tests/market/"):
+            suites.add("market")
+            reason = "Causal market-data tests"
+        elif name.startswith("tests/intelligence/"):
+            suites.add("intelligence")
+            reason = "Decision and shadow tests"
         elif name.startswith(
             ("src/algooptionx/research/", "tests/research/", "config/")
         ):
@@ -83,7 +102,6 @@ def select_checks(
             (
                 "src/algooptionx/api/",
                 "src/algooptionx/paper/",
-                "src/algooptionx/market/",
                 "tests/paper/",
             )
         ):

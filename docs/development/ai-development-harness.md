@@ -35,7 +35,12 @@ If using a system-installed Chromium, prefix the execution command with `PLAYWRI
 | Changed area | Selected checks |
 |---|---|
 | Paper engine, simulator, paper API or paper tests | Architecture and paper Python tests; fresh workspace build; functional browser journeys |
-| Research backend, research tests or research configuration | Architecture and research Python tests |
+| Market source | Architecture, market, intelligence, paper and research tests; workspace build and browser journeys |
+| Intelligence source | Architecture, intelligence and research tests |
+| Research shadow adapter | Architecture, market, intelligence and research tests |
+| Research signals | Architecture, research and intelligence tests |
+| Market/intelligence test directories | Architecture and their respective suite |
+| Other research backend, research tests or research configuration | Architecture and research Python tests |
 | Harness code/tests or native agent skills | Architecture and control-plane Python tests; role/schema configuration |
 | Any frontend file or frontend dependency | Architecture Python tests; lint; workspace and research builds; functional browser journeys including theme tests |
 | Markdown documentation | Architecture and role/schema smoke checks |
