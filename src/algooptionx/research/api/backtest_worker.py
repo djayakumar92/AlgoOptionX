@@ -19,6 +19,8 @@ previous run only pays for the new days.
 
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, details
+
 import logging
 from datetime import date, datetime, timedelta
 
@@ -115,7 +117,7 @@ def run_backtest(
         repository.insert_backtest_run(conn, result_row)
         state.finish(result_row)
     except Exception as exc:
-        logger.exception("Backtest run failed for %s..%s", start_date, end_date)
-        row = _empty_stats_row(start_date, end_date, "FAILED", str(exc))
+        logger.error(message("BACKTEST_FAILED"), extra=details("BACKTEST_FAILED"))
+        row = _empty_stats_row(start_date, end_date, "FAILED", message("BACKTEST_FAILED"))
         repository.insert_backtest_run(conn, row)
-        state.fail(str(exc))
+        state.fail(message("BACKTEST_FAILED"))

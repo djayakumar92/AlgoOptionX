@@ -22,6 +22,8 @@ would just be a partial, misleadingly narrow range compared to the full session.
 
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, provider_boundary
+
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 
@@ -77,6 +79,7 @@ def next_trading_day(d: date) -> date:
     return candidate
 
 
+@provider_boundary(OptionOhlcError, "CANDLE_FETCH_FAILED")
 def fetch_session_ohlc(
     client: MarketDataProvider,
     security_id: str,
@@ -106,7 +109,7 @@ def fetch_session_ohlc(
         interval=interval_min,
     )
     if resp.get("status") == "failure":
-        raise OptionOhlcError(f"intraday_minute_data failed for {security_id}: {resp}")
+        raise OptionOhlcError(message("CANDLE_FETCH_FAILED"))
 
     rows = rows_from_response(resp, interval_min=interval_min)
     if not rows:

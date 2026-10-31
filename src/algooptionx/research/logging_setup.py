@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 
+from algooptionx.research.diagnostics import ProviderLogFilter
+
 from algooptionx.research.config import Settings
 
 
@@ -12,3 +14,8 @@ def setup_logging(settings: Settings) -> None:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
         handlers=[logging.FileHandler(settings.log_dir / "dhan_analyzer.log")],
     )
+
+    # Handler filtering also covers propagated SDK child loggers.
+    for handler in logging.getLogger().handlers:
+        if not any(isinstance(f, ProviderLogFilter) for f in handler.filters):
+            handler.addFilter(ProviderLogFilter())

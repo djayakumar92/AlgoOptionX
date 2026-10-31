@@ -13,6 +13,8 @@ LiveState.
 
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, details
+
 import calendar
 import dataclasses
 import logging
@@ -231,7 +233,7 @@ def _compute_range_band(
         try:
             contracts = instruments.option_contracts_for_expiry(under_symbol, contract_expiry)
         except InstrumentResolutionError as exc:
-            logger.warning("No option contracts for expiry %s -- skipping this range panel: %s", contract_expiry, exc)
+            logger.warning(message("HLC_FAILED"), extra=details("HLC_FAILED"))
             return None
         by_strike_type = {(c.strike, c.option_type): c for c in contracts}
 
@@ -243,7 +245,7 @@ def _compute_range_band(
 
         return hlc_strategy.range_band(close, low_strike, low_premium, high_strike, high_premium)
     except OptionOhlcError as exc:
-        logger.warning("Range panel fetch failed for %s, skipping this cycle: %s", anchor_date, exc)
+        logger.warning(message("HLC_FAILED"), extra=details("HLC_FAILED"))
         return None
 
 
@@ -282,7 +284,7 @@ def _grade_pending_journal_entries(
     try:
         contracts = instruments.option_contracts_for_expiry(under_symbol, tracked_expiry)
     except InstrumentResolutionError as exc:
-        logger.warning("Journal grading: could not resolve contracts for %s: %s", tracked_expiry, exc)
+        logger.warning(message("HLC_FAILED"), extra=details("HLC_FAILED"))
         return
     by_strike_type = {(c.strike, c.option_type): c for c in contracts}
     trade_date_obj = date.fromisoformat(trade_date)
@@ -300,7 +302,7 @@ def _grade_pending_journal_entries(
                 client, contract.security_id, OPTION_EXCHANGE_SEGMENT, OPTION_INSTRUMENT_TYPE, "5"
             )
         except ChartCandlesError as exc:
-            logger.warning("Journal grading: candle fetch failed for entry %s: %s", entry["id"], exc)
+            logger.warning(message("HLC_FAILED"), extra=details("HLC_FAILED"))
             continue
         time.sleep(INTER_CALL_DELAY_SEC)
 
@@ -351,9 +353,9 @@ def backfill_journal(
         _log_trade_plan(conn, trade_plan, result.combined_signal)
         _grade_pending_journal_entries(conn, client, under_symbol, tracked_expiry, trade_date.isoformat())
     except (OptionOhlcError, HlcAnalysisError) as exc:
-        logger.warning("Journal backfill for %s failed: %s", session_date, exc)
+        logger.warning(message("JOURNAL_BACKFILL_FAILED"), extra=details("JOURNAL_BACKFILL_FAILED"))
     except Exception:
-        logger.exception("Journal backfill for %s crashed unexpectedly", session_date)
+        logger.error(message("JOURNAL_BACKFILL_FAILED"), extra=details("JOURNAL_BACKFILL_FAILED"))
 
 
 def run_hlc_cycle(
@@ -408,14 +410,14 @@ def run_hlc_cycle(
         _grade_pending_journal_entries(conn, client, under_symbol, tracked_expiry, result.session_date)
         _log_trade_plan(conn, trade_plan, result.combined_signal)
     except (OptionOhlcError, HlcAnalysisError) as exc:
-        logger.warning("HLC cycle failed: %s", exc)
-        hlc_state.set_error(str(exc), int(time.time()))
+        logger.warning(message("HLC_FAILED"), extra=details("HLC_FAILED"))
+        hlc_state.set_error(message("HLC_FAILED"), int(time.time()))
     except Exception:
         # A daemon thread that dies from an uncaught exception fails silently --
         # the page would show "waiting for the first cycle" forever with no
-        # indication anything went wrong. Log the full traceback and surface a
+        # indication anything went wrong. Log a safe code and surface a
         # message instead of letting the thread die here.
-        logger.exception("HLC cycle crashed unexpectedly")
+        logger.error(message("HLC_FAILED"), extra=details("HLC_FAILED"))
         hlc_state.set_error("Unexpected error -- check logs/dhan_analyzer.log", int(time.time()))
 
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, details, provider_boundary
+
 import logging
 import threading
 
@@ -17,6 +19,7 @@ class LiveFeed:
     the SDK) isolated from the analytical core, which reads SQLite snapshots.
     """
 
+    @provider_boundary(RuntimeError, "LIVE_FEED_FAILED")
     def __init__(self, context: DhanContext, instruments: list[tuple[int, str, int]]):
         self._cache: dict[str, dict] = {}
         self._lock = threading.Lock()
@@ -31,11 +34,22 @@ class LiveFeed:
             self._cache[str(data["security_id"])] = data
 
     def _on_error(self, feed: MarketFeed, error: Exception) -> None:
-        logger.warning("Live feed error: %s", error)
+        logger.warning(message("LIVE_FEED_FAILED"), extra=details("LIVE_FEED_FAILED"))
+
+    def _run(self) -> None:
+        # SDK start() uses an unguarded thread. Own the target so credentials
+        # in connection exceptions never reach threading.excepthook/stderr.
+        try:
+            self._feed.run()
+        except Exception:
+            self._on_error(self._feed, None)
 
     def start(self) -> threading.Thread:
-        return self._feed.start()
+        thread = threading.Thread(target=self._run, daemon=True)
+        thread.start()
+        return thread
 
+    @provider_boundary(RuntimeError, "LIVE_FEED_FAILED")
     def stop(self) -> None:
         self._feed.close_connection()
 

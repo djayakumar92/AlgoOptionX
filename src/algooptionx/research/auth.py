@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, provider_boundary
+
 import logging
 
 from dhanhq import DhanContext, dhanhq
@@ -13,6 +15,7 @@ class AuthError(RuntimeError):
     """Raised when the DhanHQ client can't be constructed or the token is rejected."""
 
 
+@provider_boundary(AuthError, "AUTH_PROVIDER_FAILURE")
 def build_client(settings: Settings) -> dhanhq:
     """Construct a DhanHQ REST client from validated settings.
 
@@ -24,17 +27,13 @@ def build_client(settings: Settings) -> dhanhq:
 
     profile = client.get_positions()
     if isinstance(profile, dict) and profile.get("status") == "failure":
-        raise AuthError(
-            "DhanHQ rejected the access token/client id.\n"
-            f"Server response: {profile.get('remarks', profile)}\n"
-            "Generate a fresh token at https://web.dhan.co -> profile -> Access DhanHQ APIs, "
-            "then update .env."
-        )
+        raise AuthError(message("AUTH_REJECTED"))
 
-    logger.info("DhanHQ client authenticated for client_id=%s", settings.client_id)
+    logger.info("Broker authentication succeeded")
     return client
 
 
+@provider_boundary(AuthError, "AUTH_PROVIDER_FAILURE")
 def build_context(settings: Settings) -> DhanContext:
     """Context object needed separately for the MarketFeed websocket client."""
     return DhanContext(settings.client_id, settings.access_token)

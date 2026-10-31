@@ -7,6 +7,8 @@ double-clicks the .bat; the browser opens itself once the server is ready.
 
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, details
+
 import logging
 import os
 import sys
@@ -83,7 +85,7 @@ def _retry_on_option_chain_error(fn, label: str):
             return fn()
         except OptionChainError as exc:
             last_exc = exc
-            logger.warning("%s failed (attempt %d/%d): %s", label, attempt, STARTUP_RETRY_ATTEMPTS, exc)
+            logger.warning(message("CHAIN_FETCH_FAILED"), extra=details("CHAIN_FETCH_FAILED", attempt=attempt))
             if attempt < STARTUP_RETRY_ATTEMPTS:
                 time.sleep(STARTUP_RETRY_DELAY_SEC)
     raise last_exc
@@ -97,8 +99,8 @@ async def lifespan(app: FastAPI):
     try:
         client = auth.build_client(settings)
     except AuthError as exc:
-        print(f"Could not authenticate with DhanHQ:\n{exc}", file=sys.stderr)
-        raise SystemExit(1) from exc
+        print(message("AUTH_PROVIDER_FAILURE"), file=sys.stderr)
+        raise SystemExit(1) from None
 
     conn = db.connect(settings.db_path, settings.retention_days)
 
@@ -113,8 +115,8 @@ async def lifespan(app: FastAPI):
             "Fetching expiry list",
         )
     except OptionChainError as exc:
-        print(f"Could not fetch the option expiry list from DhanHQ:\n{exc}", file=sys.stderr)
-        raise SystemExit(1) from exc
+        print(message("CHAIN_FETCH_FAILED"), file=sys.stderr)
+        raise SystemExit(1) from None
     if not expiries:
         print(f"No option expiries returned for {under_symbol}.", file=sys.stderr)
         raise SystemExit(1)
@@ -410,7 +412,7 @@ def journal_backfill(session_date: str):
     try:
         parsed_date = date.fromisoformat(session_date)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=f"session_date must be YYYY-MM-DD: {exc}") from exc
+        raise HTTPException(status_code=400, detail="session_date must be YYYY-MM-DD") from None
 
     started = app.state.hlc_coordinator.start(
         backfill_journal, app.state.settings, app.state.client, app.state.conn,
@@ -433,7 +435,7 @@ def backtest_run(start_date: str, end_date: str):
         start = date.fromisoformat(start_date)
         end = date.fromisoformat(end_date)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=f"Dates must be YYYY-MM-DD: {exc}") from exc
+        raise HTTPException(status_code=400, detail="Dates must be YYYY-MM-DD") from None
 
     if start > end:
         raise HTTPException(status_code=400, detail="start_date must not be after end_date.")
@@ -561,7 +563,7 @@ def chart_candles_endpoint(instrument: str, interval: str):
         try:
             contracts = instruments.option_contracts_for_expiry(app.state.under_symbol, app.state.tracked_expiry)
         except InstrumentResolutionError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
+            raise HTTPException(status_code=502, detail=message("RESEARCH_JOB_FAILED")) from None
         contract = next(
             (c for c in contracts if c.strike == result.atm_strike and c.option_type == option_type), None
         )
@@ -580,9 +582,9 @@ def chart_candles_endpoint(instrument: str, interval: str):
             app.state.client, security_id, exchange_segment, instrument_type, interval
         )
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+        raise HTTPException(status_code=400, detail=message("RESEARCH_JOB_FAILED")) from None
     except ChartCandlesError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise HTTPException(status_code=502, detail=message("CANDLE_FETCH_FAILED")) from None
 
     return {"candles": candles}
 

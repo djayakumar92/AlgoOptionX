@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, provider_boundary
+
 import logging
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -21,10 +23,11 @@ class OptionChainResult:
     rows: list[dict]  # matches storage.repository.insert_option_chain_snapshot row shape
 
 
+@provider_boundary(OptionChainError, "CHAIN_FETCH_FAILED")
 def fetch_expiry_list(client: MarketDataProvider, under_security_id: str, under_segment: str) -> list[date]:
     resp = client.expiry_list(under_security_id=int(under_security_id), under_exchange_segment=under_segment)
     if resp.get("status") != "success":
-        raise OptionChainError(f"expiry_list failed: {resp}")
+        raise OptionChainError(message("CHAIN_FETCH_FAILED"))
     # The SDK wraps the raw HTTP body (itself shaped {"data": [...], "status": ...})
     # inside its own {"status", "remarks", "data"} envelope, so the real list is
     # one level deeper than the DhanHQ docs example suggests: resp["data"]["data"].
@@ -32,6 +35,7 @@ def fetch_expiry_list(client: MarketDataProvider, under_security_id: str, under_
     return [datetime.strptime(d, "%Y-%m-%d").date() for d in dates]
 
 
+@provider_boundary(OptionChainError, "CHAIN_FETCH_FAILED")
 def fetch_option_chain(
     client: MarketDataProvider, under_security_id: str, under_segment: str, expiry: date
 ) -> OptionChainResult:
@@ -42,7 +46,7 @@ def fetch_option_chain(
         expiry=expiry.isoformat(),
     )
     if resp.get("status") != "success":
-        raise OptionChainError(f"option_chain failed for expiry {expiry}: {resp}")
+        raise OptionChainError(message("CHAIN_FETCH_FAILED"))
 
     # Same double-wrapping as expiry_list: resp["data"] is the raw HTTP body,
     # which itself has a "data" key holding {last_price, oc}.

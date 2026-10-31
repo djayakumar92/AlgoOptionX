@@ -61,10 +61,10 @@ def repo(tmp_path):
     [
         ("src/algooptionx/paper/engine.py", ["architecture", "paper"], True),
         ("src/algooptionx/api/app.py", ["architecture", "paper"], True),
-        ("src/algooptionx/market/simulator.py", ["architecture", "paper"], True),
+        ("src/algooptionx/market/simulator.py", ["architecture", "paper", "research", "market", "intelligence"], True),
         (
             "src/algooptionx/research/signals/risk.py",
-            ["architecture", "research"],
+            ["architecture", "research", "intelligence"],
             False,
         ),
         ("tests/research/test_risk.py", ["architecture", "research"], False),
@@ -203,7 +203,13 @@ def test_real_selected_execution_retains_and_verifies_exit_status(repo, passes):
         ).model_dump(mode="json")
     ]
     plan["needs_browser"] = False
+    # A separately reviewed task must not be narrowed by automatic testing.
+    reviewed = repo / '.harness/tasks/REVIEWED/task.json'
+    reviewed.parent.mkdir(parents=True)
+    payload = '{"checks":[{"id":"reviewed","argv":["reviewed-check"]}]}'
+    reviewed.write_text(payload)
     result = impact.run_changes(repo, plan)
+    assert reviewed.read_text() == payload
     assert result["status"] == ("passed" if passes else "failed")
     evidence = json.loads(Path(result["evidence"]).read_text())
     assert evidence["results"][0]["exit_code"] == (0 if passes else 1)
@@ -299,3 +305,27 @@ def test_explicit_full_preserves_comparison_files(repo):
     plan = impact.plan_changes(repo, base, full=True)
     assert "new.py" in plan["changed_files"]
     assert plan["base_commit"] == base
+
+
+@pytest.mark.parametrize("path,required", [
+    ("src/algooptionx/market/aggregation.py", {"paper", "research", "market", "intelligence"}),
+    ("src/algooptionx/market/contracts.py", {"paper", "research", "market", "intelligence"}),
+    ("src/algooptionx/intelligence/decision.py", {"research", "intelligence"}),
+    ("src/algooptionx/research/shadow.py", {"research", "market", "intelligence"}),
+    ("tests/market/deleted_test.py", {"market"}),
+    ("tests/intelligence/test_decisions.py", {"intelligence"}),
+])
+def test_domain_selection_executes_required_directories(path, required):
+    plan = impact.select_checks([path])
+    argv = next(c["argv"] for c in plan["checks"] if c["id"] == "python")
+    assert {"tests/architecture", *(f"tests/{s}" for s in required)} <= set(argv)
+    assert "config" in {c["id"] for c in plan["checks"]}
+
+
+def test_market_mixed_rename_sides_preserve_browser_and_full_discovery():
+    paths = ["src/algooptionx/market/old.py", "src/algooptionx/intelligence/new.py", "tests/control_plane/test_impact.py"]
+    plan = impact.select_checks(paths)
+    assert {"paper", "research", "market", "intelligence", "control_plane"} <= set(plan["python_suites"])
+    assert {"build", "browser", "config"} <= {c["id"] for c in plan["checks"]}
+    full = impact.select_checks(paths, full=True)
+    assert not any(a.startswith("tests/") for a in full["checks"][0]["argv"])

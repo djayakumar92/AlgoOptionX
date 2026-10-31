@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from algooptionx.research.diagnostics import message, provider_boundary
+
 import logging
 import time
 from datetime import date, datetime, timedelta
@@ -23,6 +25,7 @@ def rows_from_response(resp: dict, interval_min: int | None = None) -> list[dict
     return parse_candle_response(resp, interval_min=interval_min).rows
 
 
+@provider_boundary(HistoricalDataError, "CANDLE_FETCH_FAILED")
 def fetch_daily(
     conn,
     client: MarketDataProvider,
@@ -51,6 +54,7 @@ def fetch_daily(
     return len(batch.rows)
 
 
+@provider_boundary(HistoricalDataError, "CANDLE_FETCH_FAILED")
 def backfill_intraday(
     conn,
     client: MarketDataProvider,
