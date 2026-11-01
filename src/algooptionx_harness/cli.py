@@ -197,7 +197,11 @@ def main(argv=None):
             enforcement.add_argument("--role", required=True)
             enforcement.add_argument("--dependencies", type=Path)
             enforcement.add_argument("--trust-policy", type=Path)
-    sub.add_parser("schemas")
+    design_parser = sub.add_parser("design-validate", help="Read-only design contract/hash consistency; no approval or execution.")
+    design_parser.add_argument("record", type=Path)
+    design_parser.add_argument("--policy-sha256")
+    schema_parser = sub.add_parser("schemas")
+    schema_parser.add_argument("--include-design", action="store_true", help="Also export the additive design-record schema; legacy default remains eleven.")
     sub.add_parser("validate-config")
     record_cmd = sub.add_parser("record-chat")
     record_cmd.add_argument("request", type=Path)
@@ -207,7 +211,17 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
-        if args.command == "change-validate":
+        if args.command == "design-validate":
+            from algooptionx_harness.designs import validate_design, DesignError
+            try:
+                output = validate_design(root, args.record, args.policy_sha256)
+            except DesignError as error:
+                print(json.dumps({"status": "DESIGN CONTRACT INVALID", "diagnostic_code": error.code, "message": str(error), "authorization": "not_granted"}, indent=2))
+                return 2
+            except (ValidationError, ValueError, OSError, RecursionError, KeyError, TypeError):
+                print(json.dumps({"status": "DESIGN CONTRACT INVALID", "diagnostic_code": "UXD_SCHEMA", "message": "Correct strict fields and reference consistency; no approval is granted.", "authorization": "not_granted"}, indent=2))
+                return 2
+        elif args.command == "change-validate":
             from algooptionx_harness.governance import validate_change
             try:
                 output = validate_change(root, args.change, args.policy_sha256)
@@ -341,7 +355,13 @@ def main(argv=None):
                 schema = model.model_json_schema()
                 if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
                     write_json(destination, schema)
-            output = {"status": "written", "schemas": 11}
+            if args.include_design:
+                from algooptionx_harness.designs import DesignRecord
+                destination = root / "src/algooptionx_harness/schemas/design-record.schema.json"
+                schema = DesignRecord.model_json_schema()
+                if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
+                    write_json(destination, schema)
+            output = {"status": "written", "schemas": 12 if args.include_design else 11}
         elif args.command == "init":
             baseline = snapshot(root)
             template = json.loads(args.template.read_text())
