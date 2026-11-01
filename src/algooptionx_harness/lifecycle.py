@@ -553,12 +553,20 @@ def _v2_event(change,event,previous,graph,completions,initial_source):
     return _v2_children(change,event,previous,graph,completions,initial_source)
 
 
-def inspect_lifecycle(root: Path,change_path: Path,policy_sha256: str,request: Path | None=None)->dict:
+def inspect_lifecycle(root: Path,change_path: Path,policy_sha256: str,request: Path | None=None,*,bundle: Path | None=None,trust_policy: Path | None=None)->dict:
     root=root.resolve();path=change_path if change_path.is_absolute() else root/change_path
     obligations=validate_change(root,path,policy_sha256)
     if obligations.get('change_schema_version')!=2:
         return _inspect_lifecycle_v1(root,path,policy_sha256,request)
-    return _inspect_lifecycle_v2(root,path,policy_sha256,request,obligations)
+    output=_inspect_lifecycle_v2(root,path,policy_sha256,request,obligations)
+    output.update(design_aware_enforcement_available=True,acceptance_readiness='NOT VERIFIED: no execution bundle supplied')
+    if bundle is not None:
+        from algooptionx_harness.enforcement import verify_bundle
+        verified=verify_bundle(root,path,policy_sha256,bundle,trust_policy)
+        output.update(acceptance_readiness='verified_local_prerequisites',verified_bundle=verified,native_evidence_consistency_verified=True,native_integration='design-aware-enforcement')
+        if 'missing_prerequisites' in output:
+            output['missing_prerequisites']=[x for x in output['missing_prerequisites'] if x!='uiux:v2-enforcement-not-implemented']
+    return output
 
 
 def _inspect_lifecycle_v2(root,path,policy_sha256,request,obligations):

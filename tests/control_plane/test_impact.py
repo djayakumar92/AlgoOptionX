@@ -68,11 +68,11 @@ def repo(tmp_path):
             False,
         ),
         ("tests/research/test_risk.py", ["architecture", "research"], False),
-        ("src/algooptionx_harness/runner.py", ["architecture", "control_plane"], False),
+        ("src/algooptionx_harness/runner.py", ["architecture", "control_plane"], True),
         (
             ".agents/skills/evidence-review/SKILL.md",
             ["architecture", "control_plane"],
-            False,
+            True,
         ),
         ("apps/web/src/shared/theme/useWorkspaceTheme.ts", ["architecture"], True),
         ("README.md", ["architecture"], False),
@@ -329,3 +329,8 @@ def test_market_mixed_rename_sides_preserve_browser_and_full_discovery():
     assert {"build", "browser", "config"} <= {c["id"] for c in plan["checks"]}
     full = impact.select_checks(paths, full=True)
     assert not any(a.startswith("tests/") for a in full["checks"][0]["argv"])
+
+
+def test_governed_ui_selection_preserves_financial_and_native_checks():
+    from algooptionx_harness.impact import select_governed_checks,select_checks
+    assert select_governed_checks(['src/algooptionx/paper/engine.py'],{'effective_risk':'R3'})==select_checks(['src/algooptionx/paper/engine.py'],full=True)['checks']

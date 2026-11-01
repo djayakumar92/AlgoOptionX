@@ -1,5 +1,7 @@
 import { defineConfig } from "@playwright/test";
 import path from "node:path";
+import { readFileSync } from "node:fs";
+const governed = process.env.ALGOOPTIONX_UI_CONTEXT ? JSON.parse(readFileSync(process.env.ALGOOPTIONX_UI_CONTEXT, "utf8")) : null;
 
 if (
   process.argv.some((arg) => arg.startsWith("--update-snapshots")) &&
@@ -13,6 +15,7 @@ if (
 export default defineConfig({
   testDir: "./tests",
   snapshotPathTemplate: "{testDir}/visual-baselines/{arg}{ext}",
+  outputDir: process.env.ALGOOPTIONX_EVIDENCE_DIR ? path.join(process.env.ALGOOPTIONX_EVIDENCE_DIR, "artifacts") : "test-results",
   fullyParallel: false,
   workers: 1,
   retries: 0,
@@ -32,9 +35,10 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:8011",
     browserName: "chromium",
-    locale: "en-IN",
-    timezoneId: "Asia/Kolkata",
+    locale: governed?.renderer.locale || "en-IN",
+    timezoneId: governed?.renderer.timezone || "Asia/Kolkata",
     reducedMotion: "reduce",
+    deviceScaleFactor: governed?.renderer.device_scale_factor || 1,
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
       : {},

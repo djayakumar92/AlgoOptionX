@@ -20,6 +20,12 @@ jobs:
       - run: npm --prefix apps/web run build
       - run: npx playwright install --with-deps chromium
         working-directory: apps/web
+      - name: Record observed renderer profile (not an approval)
+        working-directory: apps/web
+        run: |
+          mkdir -p ../../.harness/visual
+          node -e 'console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,chromium:require("playwright").chromium.executablePath()}))' > ../../.harness/visual/runtime.json
+          uname -a > ../../.harness/visual/platform.txt
       # Missing/different renderer profiles fail. This job never updates snapshots
       # and never acts as a human design/release approval.
       - run: npm --prefix apps/web run test:visual
@@ -27,7 +33,9 @@ jobs:
         if: always()
         with:
           name: visual-comparison-for-human-review
+          include-hidden-files: true
           path: |
+            .harness/visual/
             apps/web/test-results/
             apps/web/playwright-report/
             apps/web/tests/visual-baselines/manifest.json

@@ -363,3 +363,27 @@ def _check_v2_protected(change,task,baseline,reader,candidate=None):
             raise HarnessError('Captured protected input differs from actual frozen source.')
         if candidate is not None and candidate.files.get(name)!=entry:
             raise HarnessError('Candidate modified a captured protected input.')
+
+
+def execution_context(root,path,policy_sha256):
+    """V2 execution prerequisites; structural change validation remains read-only."""
+    from algooptionx_harness.changes import ChangeSpecV2
+    from algooptionx_harness.ui_validation import load_plan
+    obligations=validate_change(root,path,policy_sha256)
+    change,reader,name=_change_definition(root,path)
+    if not isinstance(change,ChangeSpecV2):raise HarnessError('V2 execution context required.')
+    plan=spec=None;protected=set()
+    if obligations['design_required']:
+        plan,spec,protected=load_plan(root,change)
+    writers=[i for i,r in enumerate(change.execution_order) if any(c.id==r.id and isinstance(c,__import__('algooptionx_harness.changes',fromlist=['NativeImplementationV2']).NativeImplementationV2) for c in change.children)]
+    if writers:
+        for i,r in enumerate(change.execution_order):
+            c=next(c for c in change.children if c.id==r.id)
+            if c.kind=='test-evidence' and i<max(writers):raise HarnessError('Candidate tests must follow all source writers.')
+    if reader:reader.finish()
+    return change,obligations,plan,protected
+
+
+def execution_checks(scopes,obligations,plan):
+    from algooptionx_harness.impact import select_governed_checks
+    return select_governed_checks(scopes,obligations,plan)

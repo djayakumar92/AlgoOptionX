@@ -542,8 +542,11 @@ class _Reader:
             if directory is not None:
                 os.close(directory)
 
-    def raw(self, name, limit=MAX_JSON, *, reference=False, native=False):
-        if native:
+    def raw(self, name, limit=MAX_JSON, *, reference=False, native=False, ui=False):
+        if ui and (name.startswith('apps/web/tests/visual-baselines/') or name.startswith('.harness/') and name.endswith('.zip')):
+            from algooptionx_harness.ui_validation import UIReference
+            UIReference(path=name, sha256='0'*64)
+        elif native:
             # Only fixed role/skill inputs can bypass design artifact namespaces.
             relative_path(name)
             if not (name.startswith('src/algooptionx_harness/agents/') and name.endswith('.json') or name.startswith('.agents/skills/') and name.endswith('/SKILL.md')):
@@ -836,6 +839,15 @@ def _binding(reader, binding, spec):
         metadata = baseline.files.get(path)
         if not isinstance(metadata, _FileContent) or metadata.sha256 != sha or path not in task.protected_inputs:
             _fail('UXD_BINDING')
+    if isinstance(change, ChangeSpecV2) and task.id == f'{change.id}-AGGREGATE':
+        from algooptionx_harness.enforcement import aggregate_task
+        from algooptionx_harness.governance import execution_context, _check_v2_protected
+        _, obligations, execution_plan, protected = execution_context(reader.root, Path(binding.change_reference.path), binding.policy_digest)
+        if task != aggregate_task(reader.root, change, obligations, execution_plan, protected, baseline.model_dump(mode='json')):
+            _fail('UXD_BINDING')
+        _check_v2_protected(change, task, baseline, reader)
+        _approval_refs(reader, binding, task)
+        return
     plan = next((child for child in change.children if child.id == task.id), None)
     if plan is None or isinstance(change, ChangeSpecV2) and (not isinstance(plan, NativeImplementationV2) or plan.id not in {r.id for r in change.selected_children}) or set(task.requirement_ids) != set(plan.requirement_ids):
         _fail('UXD_BINDING')

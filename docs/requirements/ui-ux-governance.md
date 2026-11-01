@@ -399,3 +399,64 @@ reverse patch first; do not execute rollback without authorization. Preserve all
 Phase 1A evidence, existing v1 functionality, historical change records and
 unrelated work. No reset/clean, dependency installation, UI change, trading
 change, commit, push or deployment is part of this implementation authorization.
+
+## Phase 1C: design-aware native enforcement
+
+Phase 1C activates v2 capture, dispatch, verification and distinct acceptance/archive
+records through the existing native task, approval, evidence and handoff authority.
+The Phase 1B restrictions above describe the historical baseline. Existing v1
+contracts, signed payloads and thirteen public schemas remain unchanged. The
+additive `ui-execution.schema.json` is exported only with `--include-ui-execution`.
+
+The canonical execution input is `docs/changes/ID/rNNNN/ui-execution.json`.
+It freezes the design reference, exact renderer and environment fingerprints,
+fixture, case inventory, screenshot manifest and independently captured native
+measurement proof. Measure mode produces preparatory evidence, never visual or
+performance approval. Verify mode requires genuine historical native measurement
+reports, matching methods/profiles and current passing native browser artifacts.
+Budget methods are `raf-theme-toggle-v1` (interaction-latency/ms) and
+`workspace-js-bytes-v1` (bundle-bytes/bytes), with bounded actual samples.
+A human reviews the concrete images, thresholds, profiles and evidence packet;
+a local declaration or hash cannot establish that person's identity.
+
+Native child completions require actual captured tasks, prior approvals and source
+continuity. Test children reparse native reports against the final candidate;
+review children bind real independent handoffs. The aggregate is a separately
+captured real native task. QA binds the aggregate and all selected child artifacts;
+missing, reordered, stale or incomplete children block closure. Accept and archive
+write separate immutable records and grant no deployment authority. Signed worker
+execution requires the existing external TrustPolicy. Chat decisions are recorded
+procedural decisions, not cryptographically verified authorization.
+
+`change-status` and `change-check-transition` accept `--bundle` for actual native
+readiness verification. Without a bundle the legacy structural compatibility marker
+may still report `v2-enforcement-not-implemented`; that is not an execution result.
+Inspection never performs a transition or grants authorization. Native operations
+without a canonical UI plan fail closed. Production baseline adoption, performance
+budget acceptance and adoption of a newly reviewed governance pin remain explicit
+human decisions; the implementation does not silently replace reviewed pins.
+
+### Supported execution boundary
+
+The initial adapter supports Linux Chromium, exact browser/font/OS fingerprints,
+fixed synthetic workspace sessions, seed 1, ready/empty states, and the overview,
+order-dialog and activity scenarios. Product source scopes are restricted to their
+explicitly mapped page/component paths. Broader/shared/research scopes and other
+states or performance metrics fail closed until a separately reviewed adapter
+exists. Browser keyboard, focus, semantic and overflow checks cover the declared
+scenarios; they are not a complete WCAG audit. Manual assistive-technology review
+and additional criteria remain necessary when applicable. Windows is unverified;
+secure no-follow reading is required for v2. No trading logic changes here.
+
+Screenshots retain actual/candidate/comparison artifacts, exact zero-pixel matching
+and only existing nondeterministic-ID normalization. Native artifacts are hashed
+and reparsed; failures and skips are retained. Neither passing CI nor a coherent
+local evidence file proves protected execution provenance. An attacker controlling
+the checkout can forge mutually consistent local files; protected branch, signer,
+runner and deployment controls must enforce external authority.
+
+Governance candidate revision 3 conservatively assigns all `apps/web/src/` financial UI scopes
+R2 plus FINANCIAL, SECURITY and CAUSAL-DATA obligations. It is a candidate policy
+revision; callers must review and explicitly adopt its digest. Governed R2/R3
+selection runs the full native check set, with an additional fixed UI check when
+required. Existing risk profiles and gate catalog remain the single authority.

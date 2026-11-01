@@ -48,9 +48,17 @@ def test_v2_and_v1_contract_compatibility(tmp_path):
     assert isinstance(parse_change(no_version),ChangeSpec)
     schema=json.loads((ROOT/'src/algooptionx_harness/schemas/change-v2.schema.json').read_text())
     assert schema==ChangeSpecV2.model_json_schema()
-    for p in (ROOT/'src/algooptionx_harness/schemas').glob('*.json'):
-        if p.name!='change-v2.schema.json':
-            assert p.read_bytes()==subprocess.check_output(['git','-C',str(ROOT),'show','HEAD:'+p.relative_to(ROOT).as_posix()])
+    # Pin every schema already committed at HEAD; additive schemas are checked
+    # against their models separately, rather than assumed to exist in HEAD.
+    tracked = subprocess.check_output(
+        ['git', '-C', str(ROOT), 'ls-tree', '-r', '--name-only', 'HEAD', '--',
+         'src/algooptionx_harness/schemas'], text=True,
+    ).splitlines()
+    for name in tracked:
+        if name.endswith('.schema.json'):
+            assert (ROOT / name).read_bytes() == subprocess.check_output(
+                ['git', '-C', str(ROOT), 'show', 'HEAD:' + name]
+            )
 
 
 @pytest.mark.parametrize('issue',['version','bool-version','missing-version','extra','bool-revision','bool-required','unknown-kind','missing-child','cycle','missing-dependency','stale-dependency','order','selection','unselected-dependency','duplicate-child','unknown-requirement','unknown-acceptance','missing-review','review-subject','review-dependencies','missing-design','design-digest','design-obligations','design-type','design-review-order'])

@@ -12,7 +12,8 @@
     "test:visual": "playwright test visual.spec.ts",
     "build:research": "tsc -b && vite build --mode research --outDir research-dist",
     "visual:candidates": "node tests/capture-visual.mjs",
-    "test:all": "playwright test"
+    "test:all": "playwright test",
+    "test:governance": "playwright test design-governance.spec.ts"
   },
   "dependencies": {
     "lightweight-charts": "^5.2.1",

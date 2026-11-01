@@ -411,3 +411,36 @@ eleven. Validation commands never write or migrate schemas/records. Changing a
 frozen design, requirement, policy, selected child or baseline requires new
 revision-bound evidence and appropriate renewed human decisions. Do not copy
 old approvals to new identities or label structural completion actual acceptance.
+
+### Phase 1C native design execution
+
+See `docs/requirements/ui-ux-governance.md` for the Phase 1C execution boundary.
+Capture freezes protected design/execution/baseline inputs but grants no authority.
+Use the existing `change-capture`, `change-dispatch`, `change-verify`,
+`change-accept` and `change-archive` commands with a reviewed policy pin and v2
+contracts. Dispatch dependencies must include the execution request. Separate
+planning, architecture, UI design, implementation, QA and release decisions retain
+their existing stage boundaries. Current-session chat approval does not create a
+signed unattended-worker gate. No production release is implied by acceptance.
+
+Run `schemas --include-design --include-change-v2 --include-ui-execution` to export
+all fourteen additive schemas; default exports and existing schema bytes remain
+compatible. Use `change-status ... --bundle BUNDLE.json` to inspect actual native
+readiness instead of relying on structurally asserted history. Example paths are
+not supplied approvals or accepted baselines. Native runner captures UI reports in
+its unique `ui-governance/` directory, indexes attachments and emits UI validation
+evidence only after a successful verify-mode run. CI never regenerates baselines.
+The separate visual workflow records observed renderer context for human review.
+
+Validation uses `PLAYWRIGHT_CHROMIUM_EXECUTABLE` when supplied, otherwise the
+installed Playwright Chromium; CI installs the existing locked browser tooling and
+builds the frontend before the real synthetic native UI integration test. No new
+runtime dependency is introduced. This test measures actual synthetic behavior;
+it does not claim a production budget, design approval or real market performance.
+
+Retain original run baselines, candidate snapshots, reports and independent review
+alongside the commit mapping. A commit changes HEAD and therefore the canonical
+source digest: compare the exact candidate file inventory for source equivalence,
+while preserving original execution provenance. Roll back only the owned commit
+with a reviewed revert; never reset/clean or erase evidence. Validate a reverse
+patch read-only before applying any separately authorized rollback.
