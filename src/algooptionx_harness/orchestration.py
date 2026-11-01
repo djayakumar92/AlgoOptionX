@@ -66,11 +66,20 @@ def dispatch(root: Path, task, baseline: dict, name: str) -> dict:
 def accept_handoff(
     root: Path, task, baseline: dict, path: Path, expected_role: str
 ) -> Handoff:
+    return _accept_snapshot_handoff(root, task, baseline, path, expected_role, snapshot(root))
+
+
+def accept_historical_handoff(root: Path, task, baseline: dict, path: Path,
+                              expected_role: str, candidate: dict) -> Handoff:
+    """Historical consistency only; not fresh aggregate or external provenance."""
+    return _accept_snapshot_handoff(root, task, baseline, path, expected_role, candidate)
+
+
+def _accept_snapshot_handoff(root, task, baseline, path, expected_role, current) -> Handoff:
     if not path.resolve().is_relative_to(root.resolve() / ".harness"):
         raise HarnessError("Agent handoffs must be stored in ignored .harness output.")
     path = contained(root, str(path.absolute().relative_to(root.resolve())))
     handoff = Handoff.model_validate_json(path.read_text())
-    current = snapshot(root)
     validate_scope(task, baseline, current)
     load_role(root, expected_role)
     if (

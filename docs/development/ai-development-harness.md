@@ -181,3 +181,169 @@ An optional captured-task binding checks its baseline/current scope, exact requi
 [ADR0002](../architecture/decisions/0002-native-specification-crosswalk.md) records the OpenSpec evaluation. No OpenSpec CLI was installed or validated. An `openspec-layout` mapping label supports referencing such document locations without claiming external grammar/tool conformance; output says `external_tool_conformance: not_verified`. Actual third-party adoption still needs a pinned-tool integration evaluation. The native task/evidence/approval pipeline remains the single authority.
 
 All15 requested specializations are routed on demand: requirement-analysis/validation, architecture-review, ui-design-validation, react-development, fastapi-development, options-domain-analysis, quant-backtesting, market-data-validation, risk-control-testing, ml-leakage-prevention, security-review, playwright-testing, evidence-verification and release-readiness. They are reusable instructions, not permanently running services, proof of trader expertise or activated model/broker capabilities.
+
+## Phase 1A: additive governance contracts
+
+`changes.py` defines ChangeSpec, GovernancePolicy and discriminated ChangeRecord
+schemas without changing native v1 payloads. `governance.py` reuses native task
+and reference checks and resolves conservative gate/risk obligations. The one
+policy path is `config/engineering-governance.json`. Its explicit caller-supplied
+SHA-256 pin must come from the reviewed policy; matching bytes do not authenticate
+adoption. It cannot replace the external signer TrustPolicy.
+
+```bash
+# No capture, tests, transition, approval or deployment is performed:
+.venv/bin/python -B -m algooptionx_harness.cli change-validate \
+  docs/changes/CHANGE-ID/r0001/change.json --policy-sha256 REVIEWED_POLICY_SHA256
+```
+
+Change inputs use pinned Markdown and native task templates in that revision's
+`tasks/` directory. Templates may not supply captured source fields, must cover
+the child's exact requirement IDs and must protect the parent specification,
+policy and pinned document/template inputs. Unknown scopes/components fail.
+Broad directory scopes include all sensitive descendant rules. UI scope retains
+native browser/Python obligations and explicit UI approval requirements.
+
+The result says `verified_contracts`, `authorization: not_granted` and
+`human_approval_verified: false`. Required gates are declarations, not executed
+checks. A role name or attestation reference does not prove origin. DAG/lifecycle
+execution is Phase 1B; execution/closure integration is 1C; the pilot is 1D.
+Record schemas do not establish those capabilities. No additional registry or
+agent framework is installed. The existing schemas command adds three schemas,
+retains the original eight definitions, and skips unchanged output bytes.
+
+
+## Phase 1B: read-only lifecycle and dependency engine
+
+The accepted Phase 1A contracts remain unchanged. `lifecycle.py` checks missing
+or cyclic dependencies, deterministic topological order and transitive ordering
+of overlapping child write scopes. Scope inventories must be unique and bounded
+to 200 paths per child and 1000 total before pairwise conflict checks. Disjoint
+children can complete independently.
+It checks every mandatory child ID/revision, dependency completion, evidence/review
+references and parent completion. Failed, blocked, cancelled, superseded or
+missing children prevent parent review/acceptance/archive.
+
+```bash
+.venv/bin/python -B -m algooptionx_harness.cli change-status \
+  docs/changes/CHANGE-ID/r0001/change.json --policy-sha256 REVIEWED_POLICY_SHA256
+.venv/bin/python -B -m algooptionx_harness.cli change-check-transition \
+  docs/changes/CHANGE-ID/r0001/change.json --policy-sha256 REVIEWED_POLICY_SHA256 \
+  --request .harness/changes/CHANGE-ID/r0001/requests/REQUEST.json
+```
+
+Both commands are read-only. Missing history means not started. Operational
+history uses contiguous `events/000001.json` files within that ignored revision
+namespace (maximum 1000, each bounded by the existing 1 MiB input limit).
+An event wraps the existing TransitionRecord as `transition`, plus `actor_role`,
+`operation` (default `advance`), `children`, optional `successor` and `rollback`.
+Children contain exact `id`, `revision`, `status`, `source`, optional `evidence`
+and `review`; completed children require both references. All artifact references
+are pinned and checked as regular contained files. No writer is added. These
+internal wrapper models do not alter the existing eleven public schemas.
+
+The digest chain binds the entire parsed event wrapper, including child and role
+metadata. The first record has null from-state/previous digest and targets draft.
+Every event lists every child, even pending children. Normal edges follow the
+contract state order; actor-role declarations and owner strings are checked but
+not authenticated. Reject returns planning states to draft; rework returns failed
+or post-implementation review states to in-progress. Planning cannot fail and
+resume past its prerequisites. Started children reset only through rework; completed
+child source/evidence/review bindings cannot change while retaining completion.
+Explicit rework must invalidate completion before replacing those bindings. Cancellation/supersession/
+archive are terminal. Supersession needs a pinned higher revision of the same
+change; rollback records accepted-to-failed intent with a pinned artifact, and
+never executes a source rollback. Every other non-forward decision requires a
+native decision prerequisite. Immutable change/policy identities cannot change
+within a history. Source changes are allowed only when freezing in-progress to
+validation-pending or recording rollback. Child evidence source identities remain
+historical: this phase does not claim they verify the current aggregate candidate.
+
+`verified_structure` and `recorded_state` describe assertions, not proven workflow
+state. `history_gates_verified: false`, `authorization: not_granted`, and
+`transition_permitted: false` are explicit. A structurally valid request needing
+native gates exits 2 with missing prerequisites. No flag, writable receipt or
+plugin can bypass that block. Even recorded historical prerequisites must be
+verified by the future Phase 1C integration. Initial draft checking has no native
+gates but still never persists or authorizes a transition. Native task capture,
+approval/evidence verification, aggregate execution and archive writing remain
+Phase 1C. No execution, acceptance, deployment, pilot or authenticated independent
+approval is performed by these commands. Structural tests use synthetic histories.
+
+Rollback reverses only the two new Phase 1B lifecycle/test files and the Phase 1B
+CLI/guide hunks, retaining accepted Phase 1A and ignored evidence/history. The
+existing Phase 1A ADR/requirements status labels are historical, immutable task
+inputs; human acceptance is recorded in the conversation and acceptance evidence.
+
+## Phase 1C: native evidence bindings and local closure
+
+See `docs/requirements/change-enforcement.md` for acceptance and the sixteen-case
+threat matrix. `enforcement.py` composes existing Task/Evidence/Handoff/Approval
+contracts, impact selector, capture, dispatch and verifiers. Native current-source
+commands retain strict behavior. Historical helpers check pinned child snapshots
+and their original command/report hashes without certifying current readiness.
+
+```bash
+.venv/bin/python -B -m algooptionx_harness.cli change-capture CHANGE.json --policy-sha256 REVIEWED_SHA256 --child CHILD-ID
+.venv/bin/python -B -m algooptionx_harness.cli change-dispatch CHANGE.json --policy-sha256 REVIEWED_SHA256 --child CHILD-ID --role backend-engineer
+.venv/bin/python -B -m algooptionx_harness.cli change-verify CHANGE.json --policy-sha256 REVIEWED_SHA256 --bundle .harness/CHANGE-BUNDLE.json
+.venv/bin/python -B -m algooptionx_harness.cli change-accept CHANGE.json --policy-sha256 REVIEWED_SHA256 --bundle .harness/CHANGE-BUNDLE.json
+# Requires the exact acceptance record already produced above:
+.venv/bin/python -B -m algooptionx_harness.cli change-archive CHANGE.json --policy-sha256 REVIEWED_SHA256 --bundle .harness/CHANGE-BUNDLE.json
+```
+
+For signed mode, supply `--trust-policy /external/protected/policy.json`; the
+repository cannot enroll signing authority. No chat decision is generated by
+these commands. Use the existing native chat queue only after observing the
+actual human reply. No additional approval is demanded for normal chat-approved
+implementation. Local procedural acceptance never grants deployment.
+
+`ChangeBundle` is a strict versioned wrapper with existing RecordBase identity,
+exact `children`, aggregate `NativeRun`, and pinned rollback_reference. Each
+ChildRun adds exact child ID/revision, intent/captured references and NativeRun.
+NativeRun pins task, baseline, candidate snapshot, evidence and reviewer, plus
+ApprovalSet and gate_reviews. ApprovalSet holds ordered native chat request/
+decision pairs or external signed receipts. Gate reviews map mandatory gate IDs
+to native handoffs from the matching existing role, linked to exact run evidence.
+Unknown gates and extra/missing reviews block. Python/config/build/lint/browser
+checks come from the exact native impact selector; R2/R3 requires full selection.
+A template may not replace tests, broaden skips or inject another command.
+
+Child intent/captured records bind selected role/skill digests, source baseline,
+parent/policy/template revision and native task identity. Capture never authorizes
+execution. Dispatch prepares existing role bundles only. For dependent children supply
+`--dependencies .harness/DEPENDENCY-PROOF.json`: a RecordBase-bound wrapper listing
+completed ChildRun predecessors in sequential order, ending at current source.
+Every predecessor receives the same native evidence/review/approval checks as
+closure. Missing, out-of-order or stale proofs block dispatch. Existing native
+run/worker commands remain the executor and signed worker gate. Closure verifies
+manually sequenced child runs: each baseline is the preceding candidate, all
+required predecessors appear first, and the last candidate equals the fresh
+aggregate candidate. The aggregate task ID is CHANGE-ID-AGGREGATE, covers exact
+parent paths/requirements and protects all child specification inputs. Historical
+child evidence cannot substitute for current aggregate tests or approval.
+
+The local verifier checks environment identity, separate actor declarations,
+review artifact hashes, native human decision consistency/signatures, source and
+policy identities, commands, critical tests, outcomes and skips. Reviewer aliases,
+human origin of chat, wholesale coherent evidence fabrication and protected
+execution remain NOT VERIFIED. Signed verification proves enrolled key signatures,
+not protected execution or correct scientific judgment. No broker or deployment
+capability is added. Gate-specific reviews are declared opinions, not attestations.
+
+Only acceptance/archive/knowledge outputs are written under the ignored change
+revision's closure directory keyed by bundle digest. Existing records are not
+overwritten: exclusive creation rejects concurrent writers. Failed operations may
+leave incomplete outputs for investigation; they are never promoted to success. Missing/stale acceptance blocks archive. Source and pinned operational
+inputs are rechecked. Rollback removes only additive code/requirements and restores
+Phase 1C CLI/guide/native-helper hunks, preserving accepted Phase 1A/B and all
+historical evidence. After a commit, canonical source identity changes because HEAD
+is included; retained pre-commit evidence is historical, with file-map equivalence
+recorded separately. No Phase 1D pilot has run.
+
+Signed historical child verification conservatively applies current TrustPolicy
+receipt expiry and evidence-age limits. Old artifacts remain traceable, but expired
+signed children can block closure and require revalidation or a newly approved
+revision; historical local consistency does not imply indefinite authorization.
+Explicit child skills beyond role defaults are included in the dispatch bundle
+with their checked digests; no new skill registry or adapter is introduced.

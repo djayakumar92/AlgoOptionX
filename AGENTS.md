@@ -21,3 +21,16 @@ Optional unattended writing workers require a signed implementation gate; normal
 ## User approval preference
 
 The user is the sole human approver and approves in this conversation. Present concrete review summaries here and wait for an actual decision only when required; do not ask for a second GitHub reviewer or signing keys for normal development. Record actual explicit replies through the chat review queue, never fabricated messages or signatures. Independent AI QA must use a distinct reviewer context and cannot approve its own implementation. Chat metadata does not prove technical human identity or authorize production deployment; externally enforced release controls remain optional, separate work.
+
+## Phase 1A change contracts
+
+The canonical gate/risk catalog is `config/engineering-governance.json`; the
+requirements are `docs/requirements/engineering-control-plane.md`. Use
+`change-validate CHANGE.json --policy-sha256 REVIEWED_SHA256` only for read-only
+contract checking. A caller pin identifies bytes, not policy adoption or human
+identity. Never replace a stale reviewed pin with candidate bytes and call it
+approved. External signer authority remains the existing TrustPolicy.
+
+Phase 1A does not activate lifecycle transitions, DAG execution, new adapters or
+archive/acceptance automation. Existing tasks, signatures and approval boundaries
+remain authoritative. Broad role/skill governance and product work are excluded.
