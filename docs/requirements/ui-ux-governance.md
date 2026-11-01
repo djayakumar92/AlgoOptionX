@@ -204,3 +204,198 @@ visual baselines. Independent AI review is additional scrutiny, not protected
 human identity or external attestation. Rollback reverses only these six owned
 source paths/hunks after a reverse-apply check, preserving prior governance and
 all evidence. Human acceptance and later implementation/release remain separate.
+
+## UI/UX Phase 1B — additive v2 linkage and structural lifecycle
+
+Status: implemented contract/lifecycle inspection; human acceptance is separate.
+This section extends the historical Phase 1A foundation above. Existing general
+engineering-control-plane v1 execution remains available. **UI/UX v2 execution
+integration is NOT IMPLEMENTED** and is reserved for separately authorized Phase
+1C. Structural acceptance declarations never grant actual acceptance or release.
+
+### ChangeSpecV2 and compatibility
+
+`changes.ChangeSpecV2` uses mandatory exact integer `schema_version: 2` and
+`kind: change-spec`. `change-v2.schema.json` is additive. The twelve pre-existing
+public schemas, native task models, approval verifier and signature payloads are
+unchanged. Legacy `ChangeSpec` still represents v1, including its existing
+missing-version default. Unknown/boolean/string versions never fall back to v1.
+There is no automatic migration or rewriting of historical records.
+
+V2 retains parent ID/revision, owner/purpose, proposal/architecture narratives,
+requirements/acceptance, source scope/components, risk/policy references,
+approval declarations and rollback/archive obligations. It adds an exact frozen
+`design_link`, `design_obligations`, typed child plans, immutable selected-child
+inventory, exact serial `execution_order`, mandatory final-review child and an
+optional hashed predecessor reference. A UI declaration or resolved `WEB` scope
+requires design linkage; a false UI flag cannot hide frontend scope. This is
+conservative and may include nonvisual frontend configuration work.
+
+A frozen link identifies DesignSpec ID/revision, raw JSON SHA-256 and canonical
+model digest. The parent must match its ID/revision and complete requirement
+ID/path/hash mapping. Obligations identify exact case IDs, all four validation
+areas, design-validation children, design-review child and candidate-evidence
+children. Case execution remains a declaration; no renderer or test adapter is
+added. The required areas must occur in the frozen package's declared cases;
+this does not force all four checks on every state/viewport combination.
+
+### Identity direction and immutable inputs
+
+Freeze requirements/artifacts → DesignSpec → ChangeSpecV2 → captured native task
+and baseline → DesignBinding → actual candidate evidence. The DesignSpec does
+not hash its parent; later bindings/completions live outside their own snapshots.
+This avoids parent/design/task hash cycles. V2 validation reuses bounded Phase
+1A no-follow reads, duplicate-key/depth/node checks, artifact pins and canonical
+source identity. Role/skill reads are restricted to native registry namespaces,
+share the reference budgets and never execute document content.
+
+A native template belongs to its canonical parent revision. Its ID/requirements
+and write scope must match the selected child and parent. It protects parent,
+policy, proposal, architecture, requirements, frozen design, wireframes/mockups,
+fixture, token inputs and its own template. Templates cannot supply captured
+commit/baseline fields. Native task/source identities retain existing semantics.
+The unchanged design-record schema can bind a v2 parent through its pinned
+reference/digest; a native DesignBinding must target a selected implementation
+child. Non-native children cannot obtain fabricated native task bindings.
+
+### Typed children and completion evidence
+
+All child plans have a unique ID/positive revision, strict `required` Boolean,
+revision-specific dependencies, requirement/acceptance mappings and existing
+roles/skills. The selected inventory includes every mandatory child, is
+transitively dependency-closed, and covers all requirements/acceptance criteria.
+Optional selection is frozen into the parent digest. Selecting/removing a child
+requires a new parent revision; an unselected optional child supplies no evidence.
+
+| Kind | Required completion declaration | Source semantics |
+|---|---|---|
+| native-implementation | Captured native task/baseline, candidate snapshot and passing native evidence references | Scope-checked before→after snapshots |
+| design-validation | Exact frozen package and pinned design-validate result | Read-only before=after; validates design, not final UI |
+| test-evidence | Actual native task/captured-baseline/run references; designated UI children also need UIValidationEvidence | Read-only; run targets exact candidate |
+| independent-review | Native ReviewRecord, explicit design/candidate subject and declared contexts | Read-only; no protected identity claim |
+
+Private strict version-2 completion/event wrappers live in `lifecycle.py`; they
+do not replace public v1 records or add serialized signature fields. Completion
+records bind parent/digest/policy, child kind/ID/revision, before/after source and
+frozen design digest. A `completed` outcome requires a matching typed completion;
+other outcomes cannot smuggle one in. Arbitrary JSON, writable approval flags,
+wrong child kinds, stale digests and self-review declarations are rejected.
+
+Native implementation declarations must match their frozen template and hashed
+baseline/candidate, obey native scope validation and list exactly the changed
+paths. Every protected baseline/candidate entry must match the actual frozen
+source metadata, rather than merely agree with another supplied snapshot. Test
+evidence must cover its child requirements and protect current parent/design
+inputs, even when reusing an independently named applicable native run. Native
+success declarations must agree with task/check/source identities,
+ordered commands, exits and artifacts. UI completion requires all expected cases
+passed; a valid nonpassing UI record remains data and cannot complete that child.
+A review must be completed, bind its subject/source and account for every declared
+native implementer context. These checks do not authenticate execution or people.
+
+A design validator report is checked against the current frozen package's actual
+contract result, preserving its declared historical observed source. This can
+support an unchanged frozen design across later source writing; it is never
+substituted for candidate-bound testing or visual approval. Artifact-only work
+has no native Task or fabricated pytest run. A test-evidence child can reference
+an already executed applicable native run rather than run an irrelevant suite.
+
+### Graph, serial source chain and lifecycle
+
+All child definitions, including unselected optional ones, reject missing/stale
+dependencies and cycles. Selected `execution_order` is an exact topological
+permutation. Overlapping native writers need explicit ancestor ordering, even
+though execution is serial. Non-native children have no write scope. No parallel
+worker scheduling is introduced. Limits remain 100 children, 200 scopes per
+writer and 1,000 selected scope entries; reader budgets can reject large combined
+inputs earlier.
+
+History is inspected in `.harness/changes/ID/rNNNN/v2/events/000001.json` onward;
+requests use the sibling `v2/requests/` directory. Histories are hash-linked,
+contiguously numbered, bounded to 1,000 entries and inspected read-only. They
+must not mix v1 event wrappers into v2. Existing nonempty legacy `events` or
+`closure` namespaces at the same ID/revision block v2; use a new parent revision
+instead of hiding history. Supersession checks the successor model, canonical
+location and increasing revision; it does not certify the successor package
+or activate it. The successor needs its own full validation. Predecessor
+references descend strictly with a maximum four links.
+No history or approval record is generated by inspection.
+
+The original state vocabulary remains. Design validation and design review
+complete before `design-reviewed`; they may run read-only during planning.
+Implementation/test children stay pending through scoped approval. Native writer
+results occur during implementation; candidate tests require candidate freeze;
+candidate review follows validation. The final candidate review depends on all
+other selected children. Each completed child follows the exact serial prefix:
+writers advance source; read-only children preserve it. Candidate freeze requires
+all writers complete, and completed test evidence must target the final writer's
+source. Failed/blocked/cancelled/superseded selected children block readiness.
+
+Completed pointers cannot be rewritten in place. Rework explicitly invalidates
+completion and dependent serial suffixes; it cannot instantly invent recovered
+success. Cancellation/supersession are terminal declarations. Rollback is a
+separate declared accepted→failed edge with a reference, never an executed
+reversal. After rollback, use a new revision rather than resuming the old chain.
+Planning/design/implementation approval, final acceptance and release remain
+separate human decisions.
+
+### Revision invalidation
+
+| Modified input | Consequence |
+|---|---|
+| Design revision, mockup/token/fixture bytes or requirement reference | Old hash/link fails; review a new design/parent revision and recapture affected tasks |
+| Parent revision, selected children or child replacement/revision | New parent digest/history; dependent completions and approvals cannot transfer |
+| Task baseline | New task/binding identity; old run/approval cannot satisfy the replacement |
+| Policy ID/revision/hash | Re-resolve obligations and review the new pin; no automatic pin substitution |
+| Candidate source | Candidate tests/review become stale; unchanged frozen-design checks remain design-only |
+| Parent supersession | Old revision cannot resume; successor needs its own validation and decisions |
+
+These are structural invalidation checks and review obligations. They neither
+revoke records in external systems nor automatically obtain replacement human
+approval. Coherently forged local reports remain possible without protected
+provenance. The existing external TrustPolicy remains the only signer authority.
+
+### Commands and truthful results
+
+```bash
+algooptionx-harness --root /workspace/AlgoOptionX change-validate docs/changes/ID/r0001/change.json --policy-sha256 REVIEWED_SHA256
+algooptionx-harness --root /workspace/AlgoOptionX change-status docs/changes/ID/r0001/change.json --policy-sha256 REVIEWED_SHA256
+algooptionx-harness --root /workspace/AlgoOptionX change-check-transition docs/changes/ID/r0001/change.json --policy-sha256 REVIEWED_SHA256 --request .harness/changes/ID/r0001/v2/requests/example.json
+# Explicit writing export; validation commands never export schemas:
+algooptionx-harness schemas --include-design --include-change-v2
+```
+
+Paths are examples, not supplied records. `change-validate` reports
+`verified_contracts`; history inspection reports `verified_structure`. A requested
+v2 transition reports `blocked`, exit 2, with missing native/design prerequisites.
+A structurally valid history may contain an `accepted` assertion while
+`history_gates_verified`, `execution_verified` and `transition_permitted` remain
+false and `authorization` remains `not_granted`. Such a result is not acceptance.
+
+`change-capture`, `change-dispatch`, `change-verify`, `change-accept` and
+`change-archive` reject v2 with `UXL_V2_ENFORCEMENT_UNSUPPORTED`, exit 2. Direct
+legacy enforcement also rejects v2 before writes. Phase 1C must explicitly
+integrate typed children, existing native approval/evidence verification and
+closure; Phase 1B does not alter `enforcement.py` or activate those paths.
+`schemas` still exports eleven, `--include-design` twelve, `--include-change-v2`
+twelve, and both options thirteen. Existing schema bytes are preserved.
+
+### Validation, compatibility and recovery
+
+Run new v2 tests with existing design/change/lifecycle/enforcement/workflow tests,
+configuration checks and the native R3 full regression selection. Retain failures,
+skips, warnings, exact commands and source hashes in unique ignored run folders.
+Use a distinct read-only reviewer for final source/evidence/scope verification;
+AI review is not human acceptance or protected execution attestation. Windows
+remains unverified. New v2/design validation requires secure no-follow reads
+and fails closed on unsupported platforms. Version dispatch uses secure
+no-follow/nonblocking reads when supported; only an unsupported-platform result
+permits the bounded legacy probe for v1 compatibility. Unsafe paths/types/limits
+never trigger fallback. Existing v1 command behavior remains available without
+the new POSIX prerequisites; native Windows execution remains unverified.
+
+Rollback reverses only the nine owned Phase 1B source paths/hunks. Check a narrow
+reverse patch first; do not execute rollback without authorization. Preserve all
+Phase 1A evidence, existing v1 functionality, historical change records and
+unrelated work. No reset/clean, dependency installation, UI change, trading
+change, commit, push or deployment is part of this implementation authorization.

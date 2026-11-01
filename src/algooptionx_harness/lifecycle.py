@@ -239,7 +239,7 @@ def _references(event: LifecycleEvent):
             yield ref
 
 
-def inspect_lifecycle(root: Path, change_path: Path, policy_sha256: str,
+def _inspect_lifecycle_v1(root: Path, change_path: Path, policy_sha256: str,
                       request: Path | None = None) -> dict:
     """No mutation, no verifier plugin/Boolean override, no gate authorization."""
     root = root.resolve()
@@ -334,4 +334,293 @@ def inspect_lifecycle(root: Path, change_path: Path, policy_sha256: str,
         raise HarnessError('Operational inputs changed during lifecycle inspection.')
     if snapshot(root) != initial:
         raise HarnessError('Source changed during lifecycle inspection.')
+    return output
+
+
+# Private operational v2 wrappers; the public v1 schemas/payloads remain intact.
+from typing import Annotated
+import json
+from pydantic import model_validator, RootModel
+from algooptionx_harness.changes import (
+    VersionedV2, Sha256, NativeImplementationV2, IndependentReviewV2,
+    DesignValidationV2, TestEvidenceV2, ChangeSpecV2, ReviewRecord, parse_change,
+)
+
+
+class CompletionV2(VersionedV2):
+    change_id: Identity
+    change_revision: Revision
+    change_digest: Sha256
+    policy_digest: Sha256
+    child_id: Identity
+    child_revision: Revision
+    before: SourceIdentity
+    after: SourceIdentity
+    design_record_digest: Sha256 | None = None
+
+
+class NativeCompletionV2(CompletionV2):
+    kind: Literal['native-implementation']
+    task: StoredReference
+    baseline: StoredReference
+    candidate: StoredReference
+    evidence: StoredReference
+
+
+class DesignCompletionV2(CompletionV2):
+    kind: Literal['design-validation']
+    report: StoredReference
+
+
+class TestCompletionV2(CompletionV2):
+    kind: Literal['test-evidence']
+    baseline: StoredReference
+    task: StoredReference
+    evidence: StoredReference
+    ui_evidence: StoredReference | None = None
+
+
+class ReviewCompletionV2(CompletionV2):
+    kind: Literal['independent-review']
+    subject: Literal['design', 'candidate']
+    review: StoredReference
+
+
+TypedCompletionV2 = Annotated[
+    NativeCompletionV2 | DesignCompletionV2 | TestCompletionV2 | ReviewCompletionV2,
+    Field(discriminator='kind'),
+]
+
+
+class CompletionRecordV2(RootModel[TypedCompletionV2]):
+    pass
+
+
+class ChildOutcomeV2(ChangeContract):
+    id: Identity
+    revision: Revision
+    status: Literal['pending','in-progress','completed','failed','blocked','cancelled','superseded']
+    completion: StoredReference | None = None
+
+    @model_validator(mode='after')
+    def completion_required(self):
+        if (self.status=='completed') != (self.completion is not None):
+            raise ValueError('Only completed children carry a typed completion reference.')
+        return self
+
+
+class LifecycleEventV2(VersionedV2):
+    kind: Literal['lifecycle-event']
+    transition: TransitionRecord
+    actor_role: Role | Literal['human-owner']
+    operation: Literal['advance','reject','rework','cancel','supersede','fail','rollback']='advance'
+    children: list[ChildOutcomeV2] = Field(max_length=100)
+    successor: StoredReference | None = None
+    rollback: StoredReference | None = None
+
+
+def _v2_completion(reader,change,plan,ref,implementers):
+    from algooptionx_harness.designs import (
+        _decode, _Baseline, DesignReference, _native_evidence_claims, validate_design,
+    )
+    from algooptionx_harness.models import Task, Evidence
+    from algooptionx_harness.workspace import validate_scope
+    value=_decode(reader.pin(DesignReference(path=ref.path,sha256=ref.sha256),json_file=True))
+    record=CompletionRecordV2.model_validate_json(json.dumps(value)).root
+    if (record.change_id,record.change_revision,record.change_digest,record.policy_digest,record.child_id,record.child_revision,record.kind)!=(change.id,change.revision,digest(change),change.policy.sha256,plan.id,plan.revision,plan.kind):
+        raise HarnessError('Typed completion belongs to another parent, child or policy.')
+    if record.design_record_digest!=(change.design_link.record_digest if change.design_link else None):
+        raise HarnessError('Completion design revision is stale.')
+    def model(ref,cls):
+        return reader.model(DesignReference(path=ref.path,sha256=ref.sha256),cls)
+    if not isinstance(record,NativeCompletionV2) and record.before!=record.after:
+        raise HarnessError('Read-only child changed source.')
+    if isinstance(record,(NativeCompletionV2,TestCompletionV2)):
+        task=model(record.task,Task)
+        baseline=model(record.baseline,_Baseline)
+        from algooptionx_harness.governance import _check_v2_protected
+        _check_v2_protected(change,task,baseline,reader)
+        if not set(plan.requirement_ids)<=set(task.requirement_ids):
+            raise HarnessError('Native evidence does not cover child requirements.')
+        evidence=model(record.evidence,Evidence)
+        if (evidence.task_id,evidence.task_digest,evidence.source_commit,evidence.source_digest,evidence.final_source_digest)!=(task.id,digest(task),record.after.commit,record.after.source_digest,record.after.source_digest) or task.source_commit!=record.after.commit:
+            raise HarnessError('Native evidence source or task identity differs.')
+        if evidence.status!='passed':raise HarnessError('Nonpassing native declarations cannot complete a child.')
+        _native_evidence_claims(task,evidence,record.evidence.path,reader.root)
+        for result in evidence.results:
+            for artifact in result.artifacts:
+                reader.pin(DesignReference(path=str(Path(record.evidence.path).parent/artifact.path),sha256=artifact.sha256))
+        if isinstance(record,NativeCompletionV2):
+            candidate=model(record.candidate,_Baseline)
+            _check_v2_protected(change,task,baseline,reader,candidate)
+            if (baseline.commit,digest(baseline),candidate.commit,digest(candidate))!=(record.before.commit,record.before.source_digest,record.after.commit,record.after.source_digest):
+                raise HarnessError('Native completion snapshots differ.')
+            template=_decode(reader.pin(DesignReference(path=plan.task_template.path,sha256=plan.task_template.sha256),json_file=True))
+            expected=Task.model_validate({**template,'source_commit':baseline.commit,'baseline_digest':digest(baseline)})
+            if task!=expected:raise HarnessError('Captured native task differs from frozen template.')
+            changed=validate_scope(task,baseline.model_dump(mode='json'),candidate.model_dump(mode='json'))
+            if changed!=evidence.changed_paths:raise HarnessError('Native changed-path declaration differs.')
+        else:
+            designated=change.design_obligations and plan.id in change.design_obligations.candidate_evidence_children
+            if designated and record.ui_evidence is None:raise HarnessError('Design validation obligations require UI evidence.')
+            if record.ui_evidence:
+                raw=reader.pin(DesignReference(path=record.ui_evidence.path,sha256=record.ui_evidence.sha256),json_file=True)
+                from algooptionx_harness.designs import UIValidationEvidence
+                ui=UIValidationEvidence.model_validate_json(raw)
+                if (ui.change_id,ui.change_revision,ui.change_digest,ui.policy_digest,ui.source)!=(change.id,change.revision,digest(change),change.policy.sha256,record.after) or ui.native_task_digest!=digest(task) or ui.native_evidence_reference.path!=record.evidence.path or ui.native_evidence_reference.sha256!=record.evidence.sha256:
+                    raise HarnessError('UI evidence targets another candidate or native run.')
+                result=validate_design(reader.root,Path(record.ui_evidence.path),change.policy.sha256)
+                if result['case_declarations']['passed']!=len(ui.expected_cases):raise HarnessError('Missing or nonpassing UI cases block completion.')
+    elif isinstance(record,DesignCompletionV2):
+        if change.design_link is None:raise HarnessError('Design completion requires a frozen design.')
+        value=_decode(reader.pin(DesignReference(path=record.report.path,sha256=record.report.sha256),json_file=True))
+        expected=validate_design(reader.root,Path(change.design_link.reference.path),change.policy.sha256)
+        observed={'source_commit':record.before.commit,'source_digest':record.before.source_digest}
+        expected.update(observed)
+        if value!=expected:raise HarnessError('Design validator declaration differs from the frozen package.')
+    else:
+        if record.subject!=plan.subject:raise HarnessError('Review subject differs.')
+        review=model(record.review,ReviewRecord)
+        if (review.change_id,review.change_revision,review.change_digest,review.policy_digest,review.source)!=(change.id,change.revision,digest(change),change.policy.sha256,record.after) or review.status!='completed':
+            raise HarnessError('Review is stale or incomplete.')
+        if review.actor in implementers or not implementers<=set(review.implementer_contexts):
+            raise HarnessError('Review omits implementation contexts or reviews itself.')
+    return record
+
+
+def _v2_children(change,event,previous,graph,completions,initial_source):
+    plans={c.id:c for c in change.children};outcomes={c.id:c for c in event.children}
+    order=graph['order']
+    if len(outcomes)!=len(event.children) or set(outcomes)!=set(order):raise HarnessError('Selected child inventory must be exact.')
+    cursor=initial_source
+    complete=set()
+    for name in order:
+        child=outcomes[name];plan=plans[name]
+        if child.revision!=plan.revision:raise HarnessError('Stale child revision.')
+        if child.status in {'in-progress','completed'} and set(order[:order.index(name)])-complete:
+            raise HarnessError('Sequential children cannot bypass preceding children.')
+        if child.status=='completed':
+            record=completions[name]
+            if record.before!=cursor:raise HarnessError('Child snapshot chain is discontinuous.')
+            cursor=record.after;complete.add(name)
+        planning=event.transition.to_state in PROGRESSION[:6]
+        readonly_design=isinstance(plan,DesignValidationV2) or isinstance(plan,IndependentReviewV2) and plan.subject=='design'
+        if planning and not readonly_design and child.status!='pending':raise HarnessError('Implementation/test children cannot execute during planning.')
+        if isinstance(plan,TestEvidenceV2) and child.status=='completed' and event.transition.to_state in PROGRESSION[:7]:
+            raise HarnessError('Candidate tests require candidate freeze.')
+        if isinstance(plan,IndependentReviewV2) and plan.subject=='candidate' and child.status=='completed' and event.transition.to_state in PROGRESSION[:8]:
+            raise HarnessError('Candidate review requires validation completion.')
+    if previous:
+        old={c.id:c for c in previous.children}
+        for name,child in outcomes.items():
+            prior=old[name]
+            if event.operation!='advance' and prior.status!='completed' and child.status=='completed':raise HarnessError('Decision operations cannot invent completion.')
+            if prior.status=='completed' and child.status=='completed' and child!=prior:raise HarnessError('Completed bindings cannot be rewritten.')
+            if prior.status=='completed' and child.status!='completed' and event.operation not in {'rework','rollback'}:raise HarnessError('Completion regression requires explicit invalidation.')
+            if prior.status in {'failed','blocked','cancelled','superseded'} and child!=prior and event.operation!='rework':raise HarnessError('Recovery requires rework.')
+            if prior.status=='in-progress' and child.status=='pending' and event.operation!='rework':raise HarnessError('Started child reset requires rework.')
+            if event.operation=='rework' and prior.status!='completed' and child.status=='completed':raise HarnessError('Rework cannot invent recovered completion.')
+    target=event.transition.to_state
+    if target in {'design-reviewed',*PROGRESSION[3:]} and change.design_obligations:
+        design_ids=set(change.design_obligations.validation_children)|{change.design_obligations.design_review_child}
+        if not design_ids<=complete:raise HarnessError('Design validation/review declarations are incomplete.')
+    if target in PROGRESSION[8:] and complete!=set(order):raise HarnessError('Incomplete selected children block parent readiness.')
+    if target in PROGRESSION[7:] and any(isinstance(plans[n],TestEvidenceV2) and n in complete and completions[n].after!=cursor for n in order):
+        raise HarnessError('Candidate test evidence predates the final writer.')
+    if target in PROGRESSION[7:] and (any(isinstance(plans[n],NativeImplementationV2) and n not in complete for n in order) or event.transition.source!=cursor):
+        raise HarnessError('Candidate source does not match the sequential writer chain.')
+    return {'all_completed':complete==set(order),'not_completed':sorted(set(order)-complete),'structural_completion_only':True,'evidence_execution_verified':False,'chain_source':cursor.model_dump(mode='json')}
+
+
+def _v2_event(change,event,previous,graph,completions,initial_source):
+    record=event.transition;before=previous.transition if previous else None
+    if (record.change_id,record.change_revision,record.change_digest,record.policy_digest)!=(change.id,change.revision,digest(change),change.policy.sha256):raise HarnessError('V2 history identity differs.')
+    if record.previous_record_digest!=(digest(previous) if previous else None) or record.from_state!=(before.to_state if before else None):raise HarnessError('V2 history digest/state chain differs.')
+    if before and (record.recorded_at<=before.recorded_at or before.to_state in TERMINAL):raise HarnessError('History time or terminal state differs.')
+    if before and record.source!=before.source and not (event.operation=='advance' and record.from_state=='in-progress' and record.to_state=='validation-pending' or event.operation=='rollback'):
+        raise HarnessError('Source changed outside candidate freeze or rollback.')
+    _actor(change,event)
+    start,end=record.from_state,record.to_state
+    if event.operation=='advance':legal=end=='draft' if start is None else start in PROGRESSION[:-1] and end==PROGRESSION[PROGRESSION.index(start)+1]
+    elif event.operation=='reject':legal=start in PROGRESSION[1:6] and end=='draft'
+    elif event.operation=='rework':legal=start in {'validation-pending','independently-reviewed','awaiting-human-acceptance','failed'} and end=='in-progress' and (not previous or previous.operation!='rollback')
+    elif event.operation=='cancel':legal=start is not None and start not in {'accepted',*TERMINAL} and end=='cancelled'
+    elif event.operation=='supersede':legal=start is not None and start not in TERMINAL and end=='superseded' and event.successor is not None
+    elif event.operation=='rollback':legal=start=='accepted' and end=='failed' and event.rollback is not None
+    else:legal=start in {'in-progress','validation-pending','independently-reviewed','awaiting-human-acceptance'} and end=='failed'
+    if not legal or (event.operation=='supersede')!=(event.successor is not None) or (event.operation=='rollback')!=(event.rollback is not None):raise HarnessError('Illegal v2 lifecycle edge or decision reference.')
+    if end=='archived' and not record.evidence:raise HarnessError('Archive declaration requires a manifest reference.')
+    return _v2_children(change,event,previous,graph,completions,initial_source)
+
+
+def inspect_lifecycle(root: Path,change_path: Path,policy_sha256: str,request: Path | None=None)->dict:
+    root=root.resolve();path=change_path if change_path.is_absolute() else root/change_path
+    obligations=validate_change(root,path,policy_sha256)
+    if obligations.get('change_schema_version')!=2:
+        return _inspect_lifecycle_v1(root,path,policy_sha256,request)
+    return _inspect_lifecycle_v2(root,path,policy_sha256,request,obligations)
+
+
+def _inspect_lifecycle_v2(root,path,policy_sha256,request,obligations):
+    from algooptionx_harness.designs import _Reader,_decode,_bounded_snapshot,DesignReference
+    reader=_Reader(root,path.relative_to(root).as_posix());before=_bounded_snapshot(root)
+    change=parse_change(_decode(reader.raw(path.relative_to(root).as_posix())))
+    if not isinstance(change,ChangeSpecV2) or digest(change)!=obligations['change_digest'] or digest(before)!=obligations['source_digest']:raise HarnessError('V2 lifecycle context changed.')
+    from algooptionx_harness.governance import _reject_legacy_v2_history
+    _reject_legacy_v2_history(root,change)
+    graph=obligations['dependency_graph'];plans={c.id:c for c in change.children}
+    implementers=set()
+    for c in change.children:
+        if isinstance(c,NativeImplementationV2):
+            template=_decode(reader.pin(DesignReference(path=c.task_template.path,sha256=c.task_template.sha256),json_file=True));implementers.add(template['implementer'])
+    namespace=f'.harness/changes/{change.id}/r{change.revision:04d}/v2'
+    folder=contained(root,namespace+'/events')
+    def listing():
+        contained(root,namespace+'/events')
+        if not folder.exists():return []
+        if not folder.is_dir():raise HarnessError('History must be a directory.')
+        # Bound enumeration before sorting/allocation, unlike untrusted glob loading.
+        names=[]
+        for item in folder.iterdir():
+            names.append(item.name)
+            if len(names)>1000:raise HarnessError('History event budget exceeded.')
+        names.sort()
+        if names!=[f'{i:06d}.json' for i in range(1,len(names)+1)]:raise HarnessError('V2 history must be contiguous numbered JSON.')
+        return names
+    def load(name):
+        raw=reader.raw(name);_decode(raw)
+        event=LifecycleEventV2.model_validate_json(raw)
+        comps={}
+        for child in event.children:
+            if child.id not in plans:raise HarnessError('Unknown child outcome.')
+            if child.completion:comps[child.id]=_v2_completion(reader,change,plans[child.id],child.completion,implementers)
+        for ref in [*event.transition.evidence,*([event.rollback] if event.rollback else [])]:
+            reader.pin(DesignReference(path=ref.path,sha256=ref.sha256))
+        if event.successor:
+            successor=parse_change(_decode(reader.pin(DesignReference(path=event.successor.path,sha256=event.successor.sha256),json_file=True)))
+            if not isinstance(successor,ChangeSpecV2) or successor.id!=change.id or successor.revision<=change.revision or event.successor.path!=f'docs/changes/{successor.id}/r{successor.revision:04d}/change.json':raise HarnessError('Successor must be a newer canonical v2 revision.')
+        return event,comps
+    names=listing();events=[];ids=set();summary=None;initial_source=None
+    for filename in names:
+        event,comps=load(namespace+'/events/'+filename)
+        if event.transition.event_id in ids:raise HarnessError('Duplicate v2 event identity.')
+        ids.add(event.transition.event_id)
+        initial_source=initial_source or event.transition.source
+        summary=_v2_event(change,event,events[-1] if events else None,graph,comps,initial_source)
+        events.append(event)
+    last=events[-1] if events else None
+    output={**obligations,'status':'verified_structure','recorded_state':last.transition.to_state if last else None,'record_count':len(events),'history_structure_verified':True,'history_gates_verified':False,'lifecycle_transitions_verified':False,'history_current_source':last.transition.source==SourceIdentity(commit=before['commit'],source_digest=digest(before)) if last else None,'children':summary,'transition_permitted':False,'authorization':'not_granted','execution_verified':False,'native_integration':'v2-requires-uiux-phase1c'}
+    if request is not None:
+        name=request.relative_to(root).as_posix() if request.is_absolute() else request.as_posix()
+        if not name.startswith(namespace+'/requests/') or not name.endswith('.json'):raise HarnessError('V2 request must be in its canonical requests namespace.')
+        event,comps=load(name)
+        if event.transition.event_id in ids:raise HarnessError('Duplicate requested event identity.')
+        if event.transition.source!=SourceIdentity(commit=before['commit'],source_digest=digest(before)):raise HarnessError('Requested source is stale.')
+        summary=_v2_event(change,event,last,graph,comps,initial_source or event.transition.source)
+        required=transition_requirements(event,obligations)+['uiux:v2-enforcement-not-implemented']
+        if change.design_link:required+=['design:exact-frozen-revision','design:typed-validation-and-review','approval:ui']
+        output.update(status='blocked',requested_state=event.transition.to_state,children=summary,missing_prerequisites=sorted(set(required)))
+    reader.finish()
+    _reject_legacy_v2_history(root,change)
+    if listing()!=names or _bounded_snapshot(root)!=before:raise HarnessError('V2 history or source changed during inspection.')
     return output

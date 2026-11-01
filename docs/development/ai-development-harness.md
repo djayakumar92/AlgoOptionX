@@ -382,3 +382,32 @@ revision when protected requirements, design, fixture, renderer, tokens or budge
 change. UI/UX Phase 1B design-aware lifecycle gates and Phase 1C automatic visual/
 execution/closure integration are **NOT IMPLEMENTED**. There are no React edits,
 new screenshot baselines, dependency changes or automatic approval transitions.
+
+## UI/UX Phase 1B: v2 design linkage and lifecycle declarations
+
+The [Phase 1B contract](../requirements/ui-ux-governance.md#uiux-phase-1b--additive-v2-linkage-and-structural-lifecycle)
+adds `ChangeSpecV2` with an exact frozen-design link, typed children, immutable
+selection and serial ordering. Existing v1 contracts, twelve checked-in schemas,
+signatures and execution paths remain unchanged. Non-native design/test/review
+children use typed completion declarations instead of fabricated native tasks.
+
+`change-validate`, `change-status` and `change-check-transition` dispatch by exact
+version. V2 history/request wrappers use `.harness/changes/ID/rNNNN/v2/`.
+Inspection checks artifact pins, parent/design/task/source identities, graph
+closure, serial snapshots and revision invalidation. `verified_structure` is
+neither authenticated execution nor a permitted transition; authorization remains
+`not_granted`. V2 transition requests remain blocked pending native integration.
+
+V2 `change-capture`, `change-dispatch`, `change-verify`, `change-accept` and
+`change-archive` return `UXL_V2_ENFORCEMENT_UNSUPPORTED` before writes. UI/UX
+Phase 1C execution/approval/closure integration is **NOT IMPLEMENTED**; the
+already-existing general control-plane v1 enforcement is unaffected. Human
+design approval, implementation approval, final acceptance and release remain
+separate decisions. Local report/context labels cannot authenticate people.
+
+Schema export is opt-in: `schemas --include-change-v2` exports twelve;
+`schemas --include-design --include-change-v2` exports thirteen; default stays
+eleven. Validation commands never write or migrate schemas/records. Changing a
+frozen design, requirement, policy, selected child or baseline requires new
+revision-bound evidence and appropriate renewed human decisions. Do not copy
+old approvals to new identities or label structural completion actual acceptance.
