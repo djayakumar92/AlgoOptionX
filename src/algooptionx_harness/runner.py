@@ -325,11 +325,23 @@ def run_task(root: Path, task, baseline: dict, output_root: Path) -> Path:
 
 
 def verify_evidence(root: Path, task, baseline: dict, path: Path) -> Evidence:
+    return _verify_snapshot_evidence(root, task, baseline, path, snapshot(root))
+
+
+def verify_historical_evidence(root: Path, task, baseline: dict, path: Path, candidate: dict) -> Evidence:
+    """Verify local artifacts against a caller-pinned historical snapshot.
+
+    This never establishes current-source readiness or authenticated execution.
+    Current callers must continue to use verify_evidence without a snapshot override.
+    """
+    return _verify_snapshot_evidence(root, task, baseline, path, candidate)
+
+
+def _verify_snapshot_evidence(root: Path, task, baseline: dict, path: Path, current: dict) -> Evidence:
     path = path.absolute()
     if path.is_symlink():
         raise HarnessError("Evidence manifest cannot be a symlink.")
     evidence = Evidence.model_validate_json(path.read_text())
-    current = snapshot(root)
     changed = validate_scope(task, baseline, current)
     if evidence.task_id != task.id or evidence.task_digest != digest(task):
         raise HarnessError("Evidence belongs to another task revision.")

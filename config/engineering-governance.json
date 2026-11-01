@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "id": "ALGOOPTIONX-GOVERNANCE",
+  "revision": 1,
+  "authority": "repository-governance",
+  "signer_authority": "external-trust-policy",
+  "unknown_scope": "block",
+  "profiles": {
+    "R0": {
+      "gates": [
+        "PYTHON",
+        "CONFIG",
+        "REFERENCES",
+        "INDEPENDENT-REVIEW",
+        "EVIDENCE"
+      ],
+      "approval_stages": [
+        "plan",
+        "implementation",
+        "qa"
+      ],
+      "independent_review_required": true
+    },
+    "R1": {
+      "gates": [
+        "PYTHON",
+        "CONFIG",
+        "REFERENCES",
+        "INDEPENDENT-REVIEW",
+        "EVIDENCE",
+        "ARCHITECTURE",
+        "ROLLBACK"
+      ],
+      "approval_stages": [
+        "plan",
+        "architecture",
+        "implementation",
+        "qa"
+      ],
+      "independent_review_required": true
+    },
+    "R2": {
+      "gates": [
+        "PYTHON",
+        "CONFIG",
+        "REFERENCES",
+        "INDEPENDENT-REVIEW",
+        "EVIDENCE",
+        "ARCHITECTURE",
+        "ROLLBACK",
+        "SECURITY"
+      ],
+      "approval_stages": [
+        "plan",
+        "architecture",
+        "implementation",
+        "qa"
+      ],
+      "independent_review_required": true
+    },
+    "R3": {
+      "gates": [
+        "PYTHON",
+        "CONFIG",
+        "REFERENCES",
+        "INDEPENDENT-REVIEW",
+        "EVIDENCE",
+        "ARCHITECTURE",
+        "ROLLBACK",
+        "SECURITY",
+        "GOVERNANCE"
+      ],
+      "approval_stages": [
+        "plan",
+        "architecture",
+        "implementation",
+        "qa"
+      ],
+      "independent_review_required": true
+    }
+  },
+  "gates": [
+    {
+      "id": "PYTHON",
+      "evidence_kind": "test-report",
+      "description": "Failure-sensitive Python test execution"
+    },
+    {
+      "id": "CONFIG",
+      "evidence_kind": "command-log",
+      "description": "Existing role and native skill configuration checking"
+    },
+    {
+      "id": "REFERENCES",
+      "evidence_kind": "reference-check",
+      "description": "Pinned requirement and specification reference checks"
+    },
+    {
+      "id": "INDEPENDENT-REVIEW",
+      "evidence_kind": "review",
+      "description": "Separate context candidate review with truthful provenance"
+    },
+    {
+      "id": "EVIDENCE",
+      "evidence_kind": "reference-check",
+      "description": "Current task/source/report consistency verification"
+    },
+    {
+      "id": "ARCHITECTURE",
+      "evidence_kind": "review",
+      "description": "Architecture, ownership and failure-boundary review"
+    },
+    {
+      "id": "SECURITY",
+      "evidence_kind": "test-report",
+      "description": "Applicable negative security and access-control cases"
+    },
+    {
+      "id": "GOVERNANCE",
+      "evidence_kind": "test-report",
+      "description": "Authority, policy downgrade and legacy compatibility checks"
+    },
+    {
+      "id": "FINANCIAL",
+      "evidence_kind": "test-report",
+      "description": "Deterministic financial invariants and regression checks"
+    },
+    {
+      "id": "CAUSAL-DATA",
+      "evidence_kind": "test-report",
+      "description": "Market freshness, causal timing and data-integrity checks"
+    },
+    {
+      "id": "TYPE-BUILD",
+      "evidence_kind": "command-log",
+      "description": "Applicable existing frontend type and build checks"
+    },
+    {
+      "id": "LINT",
+      "evidence_kind": "command-log",
+      "description": "Existing frontend lint checks"
+    },
+    {
+      "id": "BROWSER",
+      "evidence_kind": "test-report",
+      "description": "Functional browser journeys on isolated synthetic fixtures"
+    },
+    {
+      "id": "ROLLBACK",
+      "evidence_kind": "review",
+      "description": "History-preserving recovery and rollback obligations"
+    }
+  ],
+  "path_rules": [
+    {
+      "prefix": "docs/",
+      "component": "DOCUMENTATION",
+      "minimum_risk": "R0",
+      "gates": []
+    },
+    {
+      "prefix": "docs/requirements/engineering-control-plane.md",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "docs/architecture/decisions/0003-native-change-lifecycle.md",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "AGENTS.md",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "README.md",
+      "component": "DOCUMENTATION",
+      "minimum_risk": "R0",
+      "gates": []
+    },
+    {
+      "prefix": "src/algooptionx_harness/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "tests/control_plane/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": ".agents/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": ".claude/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": ".github/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "config/",
+      "component": "GOVERNANCE",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "pyproject.toml",
+      "component": "DEPENDENCIES",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "uv.lock",
+      "component": "DEPENDENCIES",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "src/algooptionx/",
+      "component": "APPLICATION",
+      "minimum_risk": "R2",
+      "gates": [
+        "SECURITY"
+      ]
+    },
+    {
+      "prefix": "src/algooptionx/paper/",
+      "component": "FINANCE",
+      "minimum_risk": "R2",
+      "gates": [
+        "FINANCIAL"
+      ]
+    },
+    {
+      "prefix": "src/algooptionx/market/",
+      "component": "MARKET",
+      "minimum_risk": "R2",
+      "gates": [
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "src/algooptionx/research/",
+      "component": "RESEARCH",
+      "minimum_risk": "R2",
+      "gates": [
+        "FINANCIAL",
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "src/algooptionx/intelligence/",
+      "component": "INTELLIGENCE",
+      "minimum_risk": "R2",
+      "gates": [
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "tests/paper/",
+      "component": "FINANCE",
+      "minimum_risk": "R2",
+      "gates": [
+        "FINANCIAL"
+      ]
+    },
+    {
+      "prefix": "tests/market/",
+      "component": "MARKET",
+      "minimum_risk": "R2",
+      "gates": [
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "tests/research/",
+      "component": "RESEARCH",
+      "minimum_risk": "R2",
+      "gates": [
+        "FINANCIAL",
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "tests/intelligence/",
+      "component": "INTELLIGENCE",
+      "minimum_risk": "R2",
+      "gates": [
+        "CAUSAL-DATA"
+      ]
+    },
+    {
+      "prefix": "tests/architecture/",
+      "component": "ARCHITECTURE",
+      "minimum_risk": "R1",
+      "gates": [
+        "ARCHITECTURE"
+      ]
+    },
+    {
+      "prefix": "apps/web/",
+      "component": "WEB",
+      "minimum_risk": "R1",
+      "gates": [
+        "TYPE-BUILD",
+        "LINT",
+        "BROWSER"
+      ]
+    },
+    {
+      "prefix": "apps/web/package.json",
+      "component": "DEPENDENCIES",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "apps/web/package-lock.json",
+      "component": "DEPENDENCIES",
+      "minimum_risk": "R3",
+      "gates": [
+        "GOVERNANCE"
+      ]
+    }
+  ]
+}

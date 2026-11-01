@@ -38,6 +38,7 @@ from algooptionx_harness.workspace import (
     validate_scope,
     write_json,
     file_digest,
+    canonical,
 )
 
 
@@ -174,6 +175,28 @@ def main(argv=None):
     )
     spec.add_argument("mapping", type=Path)
     spec.add_argument("--task", type=Path)
+    change_parser = sub.add_parser("change-validate", help="Read-only change contract/pinned-policy checks; no authorization.")
+    change_parser.add_argument("change", type=Path)
+    change_parser.add_argument("--policy-sha256", required=True)
+    for name in ("change-status", "change-check-transition"):
+        lifecycle = sub.add_parser(name, help="Read-only lifecycle structure; native gate integration pending.")
+        lifecycle.add_argument("change", type=Path)
+        lifecycle.add_argument("--policy-sha256", required=True)
+        if name == "change-check-transition":
+            lifecycle.add_argument("--request", type=Path, required=True)
+    for name in ("change-capture", "change-dispatch", "change-verify", "change-accept", "change-archive"):
+        enforcement = sub.add_parser(name, help="Native change bindings and local evidence/closure checks.")
+        enforcement.add_argument("change", type=Path)
+        enforcement.add_argument("--policy-sha256", required=True)
+        if name in ("change-capture", "change-dispatch"):
+            enforcement.add_argument("--child", required=True)
+        else:
+            enforcement.add_argument("--bundle", type=Path, required=True)
+            enforcement.add_argument("--trust-policy", type=Path)
+        if name == "change-dispatch":
+            enforcement.add_argument("--role", required=True)
+            enforcement.add_argument("--dependencies", type=Path)
+            enforcement.add_argument("--trust-policy", type=Path)
     sub.add_parser("schemas")
     sub.add_parser("validate-config")
     record_cmd = sub.add_parser("record-chat")
@@ -184,7 +207,38 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
-        if args.command == "validate-spec-map":
+        if args.command == "change-validate":
+            from algooptionx_harness.governance import validate_change
+            try:
+                output = validate_change(root, args.change, args.policy_sha256)
+            except HarnessError:
+                raise HarnessError("Change validation blocked; inspect pinned contracts and required inputs.") from None
+            except (ValidationError, ValueError, OSError, RecursionError) as exc:
+                raise HarnessError(f"Change contract rejected: {type(exc).__name__}") from None
+        elif args.command in ("change-status", "change-check-transition"):
+            from algooptionx_harness.lifecycle import inspect_lifecycle
+            try:
+                output = inspect_lifecycle(root, args.change, args.policy_sha256, getattr(args, "request", None))
+            except (HarnessError, ValidationError, ValueError, OSError, RecursionError):
+                raise HarnessError("Lifecycle inspection blocked; check pinned inputs, identities and prerequisites.") from None
+            if output["status"] == "blocked":
+                print(json.dumps(output, indent=2))
+                return 2
+        elif args.command in ("change-capture", "change-dispatch", "change-verify", "change-accept", "change-archive"):
+            from algooptionx_harness.enforcement import capture_child, dispatch_child, verify_bundle, close_change
+            try:
+                if args.command == "change-capture":
+                    output = capture_child(root, args.change, args.policy_sha256, args.child)
+                elif args.command == "change-dispatch":
+                    output = dispatch_child(root, args.change, args.policy_sha256, args.child, args.role, args.dependencies, args.trust_policy)
+                elif args.command == "change-verify":
+                    output = verify_bundle(root, args.change, args.policy_sha256, args.bundle, args.trust_policy)
+                else:
+                    output = close_change(root, args.change, args.policy_sha256, args.bundle,
+                                          archive=args.command == "change-archive", trust_policy=args.trust_policy)
+            except (HarnessError, ValidationError, ValueError, OSError, RecursionError, KeyError, TypeError):
+                raise HarnessError("Change enforcement blocked; inspect pinned task, evidence, approval and dependency bindings.") from None
+        elif args.command == "validate-spec-map":
             from algooptionx_harness.specifications import (
                 SpecificationMap,
                 check_specifications,
@@ -269,6 +323,7 @@ def main(argv=None):
                 "grants_deployment": False,
             }
         elif args.command == "schemas":
+            from algooptionx_harness.changes import ChangeSpec, GovernancePolicy, ChangeRecord
             for name, model in [
                 ("task", Task),
                 ("handoff", Handoff),
@@ -278,12 +333,15 @@ def main(argv=None):
                 ("agent", AgentRole),
                 ("chat-request", ChatRequest),
                 ("chat-decision", ChatDecision),
+                ("change", ChangeSpec),
+                ("governance-policy", GovernancePolicy),
+                ("change-record", ChangeRecord),
             ]:
-                write_json(
-                    root / f"src/algooptionx_harness/schemas/{name}.schema.json",
-                    model.model_json_schema(),
-                )
-            output = {"status": "written", "schemas": 8}
+                destination = root / f"src/algooptionx_harness/schemas/{name}.schema.json"
+                schema = model.model_json_schema()
+                if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
+                    write_json(destination, schema)
+            output = {"status": "written", "schemas": 11}
         elif args.command == "init":
             baseline = snapshot(root)
             template = json.loads(args.template.read_text())
