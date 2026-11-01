@@ -347,3 +347,38 @@ signed children can block closure and require revalidation or a newly approved
 revision; historical local consistency does not imply indefinite authorization.
 Explicit child skills beyond role defaults are included in the dispatch bundle
 with their checked digests; no new skill registry or adapter is introduced.
+
+## UI/UX governance Phase 1A: design contracts only
+
+The additive [UI/UX governance contract](../requirements/ui-ux-governance.md)
+defines `DesignSpec`, `DesignBinding` and `UIValidationEvidence` in one new public
+`design-record.schema.json`. This is a separate UI/UX foundation, not a restart
+of the earlier engineering-control-plane phases described above.
+
+```bash
+algooptionx-harness --root /workspace/AlgoOptionX design-validate docs/designs/example.json
+algooptionx-harness --root /workspace/AlgoOptionX design-validate .harness/design/binding.json --policy-sha256 REVIEWED_SHA256
+# Explicit writing export; default `schemas` remains the eleven legacy schemas:
+algooptionx-harness schemas --include-design
+```
+
+Example records are not automatically created. The validator uses bounded,
+local, no-follow regular-file reads, checks artifact byte pins, strict coverage
+and native declaration bindings, and returns `DESIGN CONTRACT VALID` (exit 0) or
+sanitized `UXD_*` diagnostics (exit 2). Binding/evidence require an explicitly
+reviewed fixed policy pin. Native Windows secure reads are not verified and fail
+closed if required POSIX primitives are unavailable.
+
+Success grants no human design approval, implementation or release authority,
+visual verification, accessibility certification, performance acceptance or
+trusted execution provenance. Native approval/signature verification and existing
+lifecycle semantics remain unchanged. Nonpassing UI result declarations remain
+visible data; they cannot be promoted into readiness by a successful contract
+check. Use the native evidence verifier on the exact candidate for acceptance.
+
+Prepare/freeze design and wireframes before task capture, then record native
+approval references in a later binding to avoid circular hashes. Review a new
+revision when protected requirements, design, fixture, renderer, tokens or budgets
+change. UI/UX Phase 1B design-aware lifecycle gates and Phase 1C automatic visual/
+execution/closure integration are **NOT IMPLEMENTED**. There are no React edits,
+new screenshot baselines, dependency changes or automatic approval transitions.
