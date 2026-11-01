@@ -9,10 +9,10 @@ import hashlib
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
-from pydantic import Field
+from pydantic import Field, model_serializer
 
 from algooptionx_harness import chat
-from algooptionx_harness.approvals import load_policy, verify_gate
+from algooptionx_harness.approvals import load_policy, verify_gate, verify_receipt
 from algooptionx_harness.changes import (
     AcceptanceRecord, ArchiveRecord, CapturedBinding, ChangeSpec, IntentBinding,
     KnowledgeRecord, RecordBase, Revision, Identity, SourceIdentity, StoredReference,
@@ -59,6 +59,16 @@ class NativeRun(Versioned):
     review: StoredReference
     approvals: ApprovalSet
     gate_reviews: dict[str, StoredReference] = Field(default_factory=dict, max_length=100)
+    design_binding: StoredReference | None = None
+    ui_evidence: StoredReference | None = None
+
+    @model_serializer(mode='wrap')
+    def preserve_legacy_payload(self, handler):
+        value = handler(self)
+        for name in ('design_binding', 'ui_evidence'):
+            if value.get(name) is None:
+                value.pop(name, None)
+        return value
 
 
 class ChildRun(RecordBase):
@@ -86,6 +96,7 @@ class Inputs:
         self.source = snapshot(self.root)
         self.pins = {}
         self.artifacts = {}
+        self.design_checks = []
 
     def raw(self, ref):
         raw = _pinned(self.root, ref)
@@ -104,9 +115,14 @@ class Inputs:
     def value(self, ref):
         return _json(self.raw(ref))
 
+    def _artifact_digest(self, name):
+        from algooptionx_harness.designs import _Reader
+        raw = _Reader(self.root, '.harness/artifact-inspection.json').raw(name, 20 * 1024 * 1024)
+        return hashlib.sha256(raw).hexdigest()
+
     def artifact(self, name, sha256):
         path = contained(self.root, name)
-        if not path.is_file() or path.stat().st_size > 20 * 1024 * 1024 or file_digest(path) != sha256:
+        if self._artifact_digest(name) != sha256:
             raise HarnessError('Native artifact changed during verification.')
         if name in self.artifacts and self.artifacts[name] != sha256:
             raise HarnessError('Conflicting native artifact pin.')
@@ -115,9 +131,15 @@ class Inputs:
             raise HarnessError('Native artifact count budget exceeded.')
 
     def finish(self):
+        # Recheck nested design artifacts (including ignored screenshots/reports)
+        # at the same final race boundary as native evidence.
+        from algooptionx_harness.designs import validate_design
+        for path, policy_sha256, record_digest in self.design_checks:
+            if validate_design(self.root, Path(path), policy_sha256)['record_digest'] != record_digest:
+                raise HarnessError('Design record changed during verification.')
         for name, sha256 in self.artifacts.items():
             path = contained(self.root, name)
-            if not path.is_file() or path.stat().st_size > 20 * 1024 * 1024 or file_digest(path) != sha256:
+            if self._artifact_digest(name) != sha256:
                 raise HarnessError('Native artifact changed during verification.')
         if any(_read(self.root, name) != raw for name, raw in self.pins.items()):
             raise HarnessError('Evidence inputs changed during verification.')
@@ -198,13 +220,14 @@ def _approvals(inputs, change, task, native, candidate, evidence, review, *, fin
     if final and 'release' in change.approvals.stages:
         needed.append('release')
     pairs = [(inputs.model(pair.request, ChatRequest), inputs.model(pair.decision, ChatDecision)) for pair in native.approvals.chat]
-    if [request.stage for request, _ in pairs] != needed:
+    if len({request.request_id for request, _ in pairs}) != len(pairs) or [request.stage for request, _ in pairs] != needed:
         raise HarnessError('Missing, duplicated or unordered native chat approval stages.')
     last = None
+    previous_pair = None
     for request, decision in pairs:
         if decision.recorded_at > datetime.now(timezone.utc) + timedelta(seconds=30):
             raise HarnessError('Approval decision is future-dated.')
-        if last and request.requested_at < last:
+        if last and request.requested_at < last and not (previous_pair and chat.same_review_group(*previous_pair, request, decision)):
             raise HarnessError('Approval stages are not chronologically ordered.')
         if request.stage in {'qa', 'release'}:
             if request.evidence_path != str((inputs.root / native.evidence.path).absolute()) or request.review_path != str((inputs.root / native.review.path).absolute()):
@@ -215,8 +238,89 @@ def _approvals(inputs, change, task, native, candidate, evidence, review, *, fin
         if result['status'] != 'recorded':
             raise HarnessError('Human rejected a mandatory stage.')
         last = decision.recorded_at
+        previous_pair = (request, decision)
     return {'status': 'recorded', 'verification': 'operator-recorded-chat',
             'human_origin_cryptographically_verified': False, 'grants_deployment': False}
+
+
+def _ui_design(inputs, change, obligations, task, task_ref, baseline_ref,
+               binding_ref, *, native=None, candidate=None, trust_policy=None):
+    """Compose design consistency with native approval/evidence verification.
+
+    A passing contract is never treated as approval, rendering or execution proof.
+    The caller still runs the native verifier and final input/source race check.
+    """
+    from algooptionx_harness.designs import DesignBinding, UIValidationEvidence, validate_design
+
+    if not task.ui_changes:
+        if 'ui' in change.approvals.stages:
+            raise HarnessError('Declared UI approval requires a UI native task.')
+        if binding_ref is not None or native is not None and native.ui_evidence is not None:
+            raise HarnessError('Unexpected design records on a non-UI task.')
+        return
+    if binding_ref is None:
+        raise HarnessError('UI task requires a frozen design binding before dispatch or closure.')
+    binding = inputs.model(binding_ref, DesignBinding)
+    checked = validate_design(inputs.root, Path(binding_ref.path), obligations['policy_sha256'])
+    inputs.design_checks.append((binding_ref.path, obligations['policy_sha256'], checked['record_digest']))
+    _identity(binding, change, obligations)
+    if (binding.native_task_reference.model_dump() != task_ref.model_dump()
+        or binding.baseline_reference.model_dump() != baseline_ref.model_dump()
+        or binding.native_task_digest != digest(task)
+        or binding.baseline_digest != task.baseline_digest
+        or binding.source.source_digest != task.baseline_digest):
+        raise HarnessError('UI binding does not match the exact native task and baseline.')
+    if len(binding.approvals) != 1:
+        raise HarnessError('UI binding requires exactly one native UI approval reference.')
+    approval = binding.approvals[0]
+    if change.approvals.mode == 'operator-recorded-chat':
+        if approval.mode != 'operator-recorded-chat':
+            raise HarnessError('UI approval mode differs from the change.')
+        request = inputs.model(approval.request, ChatRequest)
+        decision = inputs.model(approval.decision, ChatDecision)
+        now = datetime.now(timezone.utc) + timedelta(seconds=30)
+        if request.requested_at > now or decision.recorded_at > now:
+            raise HarnessError('UI approval is future-dated.')
+        if chat.verify_record(task, request, decision, task.baseline_digest)['status'] != 'recorded':
+            raise HarnessError('Human rejected the bound UI design.')
+        if native is not None and not any(
+            pair.request.model_dump() == approval.request.model_dump()
+            and pair.decision.model_dump() == approval.decision.model_dump()
+            for pair in native.approvals.chat
+        ):
+            raise HarnessError('UI binding approval differs from the native approval chain.')
+    else:
+        if approval.mode != 'signed-external' or trust_policy is None:
+            raise HarnessError('Signed UI approval needs the external TrustPolicy.')
+        receipt = inputs.model(approval.receipt, Approval)
+        verify_receipt(receipt, task, load_policy(trust_policy, inputs.root),
+                       task.baseline_digest, None, datetime.now(timezone.utc))
+        if native is not None and approval.receipt.model_dump() not in [ref.model_dump() for ref in native.approvals.signed]:
+            raise HarnessError('UI binding receipt differs from the native approval chain.')
+    if native is None:
+        return
+    if native.ui_evidence is None:
+        raise HarnessError('UI closure requires complete candidate-bound UI evidence.')
+    record = inputs.model(native.ui_evidence, UIValidationEvidence)
+    result = validate_design(inputs.root, Path(native.ui_evidence.path), obligations['policy_sha256'])
+    inputs.design_checks.append((native.ui_evidence.path, obligations['policy_sha256'], result['record_digest']))
+    _identity(record, change, obligations,
+              SourceIdentity(commit=candidate['commit'], source_digest=digest(candidate)))
+    if (record.design != binding.design
+        or record.native_task_reference.model_dump() != task_ref.model_dump()
+        or record.native_task_digest != digest(task)
+        or record.native_evidence_reference.model_dump() != native.evidence.model_dump()):
+        raise HarnessError('UI evidence differs from the bound design, task or native run.')
+    cases = result['case_declarations']
+    if cases is None or cases['passed'] != len(record.expected_cases) or any(
+        cases[status] for status in ('failed', 'skipped', 'missing', 'unverified')
+    ):
+        raise HarnessError('UI case matrix is incomplete or nonpassing.')
+    from algooptionx_harness.ui_execution import browser_cases
+    from algooptionx_harness.designs import CaseResult
+    derived = [CaseResult.model_validate(case) for case in browser_cases(inputs, task, native.evidence, binding.design)]
+    if record.executed_cases != derived:
+        raise HarnessError('UI evidence does not match executed native browser cases.')
 
 
 def _verify_run(inputs, change, obligations, native, *, current, trust_policy=None):
@@ -262,6 +366,8 @@ def _verify_run(inputs, change, obligations, native, *, current, trust_policy=No
             raise HarnessError('Gate review does not reference this exact native evidence.')
         if handoff.status != 'completed' or handoff.actor == task.implementer or any(f.severity in {'high', 'critical'} for f in handoff.findings):
             raise HarnessError('Required gate review is incomplete or self-authored.')
+    _ui_design(inputs, change, obligations, task, native.task, native.baseline,
+               native.design_binding, native=native, candidate=candidate, trust_policy=trust_policy)
     approval = _approvals(inputs, change, task, native, candidate, evidence, review, final=True, trust_policy=trust_policy)
     return task, baseline, candidate, evidence, approval
 
@@ -319,6 +425,19 @@ def _verify_bundle(inputs, change_path, policy_sha256, bundle_path, trust_policy
         completed.add(plan.id)
     if previous != aggregate_candidate:
         raise HarnessError('Aggregate source does not match completed child snapshot chain.')
+    # One parent design covers all declared parent requirements. Aggregate and
+    # child runs cannot substitute different otherwise-valid design revisions.
+    ui_runs = [child.native for child in bundle.children
+               if inputs.model(child.native.task, Task).ui_changes]
+    if ui_runs:
+        if not aggregate_task.ui_changes or bundle.aggregate.design_binding is None:
+            raise HarnessError('UI children require a UI aggregate design binding.')
+        from algooptionx_harness.designs import DesignBinding
+        aggregate_design = inputs.model(bundle.aggregate.design_binding, DesignBinding).design
+        for run in ui_runs:
+            if run.design_binding is None or inputs.model(run.design_binding, DesignBinding).design != aggregate_design:
+                raise HarnessError('Child and aggregate design revisions differ.')
+
     # Aggregate must protect every specification/role/skill input protected by children.
     protected = {name for child in bundle.children for name in inputs.model(child.native.task, Task).protected_inputs}
     if not protected <= set(aggregate_task.protected_inputs):
@@ -366,7 +485,7 @@ def capture_child(root: Path, change_path: Path, policy_sha256: str, child_id: s
             'execution':'use existing native approval/dispatch/worker gates; capture does not satisfy dependencies'}
 
 
-def dispatch_child(root: Path, change_path: Path, policy_sha256: str, child_id: str, role: str, dependencies: Path | None = None, trust_policy: Path | None = None) -> dict:
+def dispatch_child(root: Path, change_path: Path, policy_sha256: str, child_id: str, role: str, dependencies: Path | None = None, trust_policy: Path | None = None, design_binding: Path | None = None) -> dict:
     """Prepare the existing native role bundle, never launch an adapter."""
     inputs=Inputs(root);change,obligations,graph=_context(inputs,change_path,policy_sha256)
     plan=next((c for c in change.children if c.id==child_id),None)
@@ -406,6 +525,13 @@ def dispatch_child(root: Path, change_path: Path, policy_sha256: str, child_id: 
         if not set(graph['ancestors'][plan.id])<=completed or previous!=inputs.source:
             raise HarnessError('Missing or stale predecessor source evidence.')
 
+    binding_ref = _reference(inputs.root, design_binding if design_binding.is_absolute() else inputs.root/design_binding) if design_binding is not None else None
+    role_contract = _json(_read(inputs.root, f'src/algooptionx_harness/agents/{role}.json'))
+    # Read-only design/review work must remain possible before human approval.
+    # Every writer and every supplied binding still receives strict UI checks.
+    if role_contract['sandbox'] != 'read-only' or binding_ref is not None:
+        _ui_design(inputs, change, obligations, task, _reference(inputs.root,directory/'task.json'),
+                   _reference(inputs.root,directory/'baseline.json'), binding_ref, trust_policy=trust_policy)
     result=dispatch(inputs.root,task,baseline,role)
     selected={skill['id'] for skill in result['skills']}
     for skill in plan.skills:

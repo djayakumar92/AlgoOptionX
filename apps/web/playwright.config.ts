@@ -12,6 +12,9 @@ if (
 
 export default defineConfig({
   testDir: "./tests",
+  outputDir: process.env.ALGOOPTIONX_EVIDENCE_DIR
+    ? path.join(process.env.ALGOOPTIONX_EVIDENCE_DIR, "results")
+    : "test-results",
   snapshotPathTemplate: "{testDir}/visual-baselines/{arg}{ext}",
   fullyParallel: false,
   workers: 1,

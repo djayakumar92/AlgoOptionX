@@ -213,3 +213,36 @@ def queue(root, task, baseline, current_digest):
         "technical_human_identity_enforcement": "NOT VERIFIED",
         "deployment_performed": False,
     }
+
+
+PRE_IMPLEMENTATION = {'plan', 'architecture', 'ui', 'implementation'}
+
+
+def request_group(task):
+    """One reviewable source-bound proposal; retain every existing native stage."""
+    stages = ['plan', 'architecture', *(['ui'] if task.ui_changes else []), 'implementation']
+    when = datetime.now(timezone.utc)
+    return [request(task, stage, task.baseline_digest).model_copy(update={'requested_at': when}) for stage in stages]
+
+
+def record_group(reviews, message, recorded_by):
+    """Call only after observing one actual reply to the complete presented group."""
+    expected = ['plan', 'architecture', *(['ui'] if any(r.stage == 'ui' for r in reviews) else []), 'implementation']
+    if len({r.request_id for r in reviews}) != len(reviews) or [r.stage for r in reviews] != expected or len({(r.task_id, r.task_digest, r.source_digest, r.requested_at, r.summary) for r in reviews}) != 1:
+        raise HarnessError('Review group must contain exact ordered preimplementation stages for one source.')
+    when = datetime.now(timezone.utc)
+    return [record(review, message, recorded_by).model_copy(update={'recorded_at': when}) for review in reviews]
+
+
+def same_review_group(previous_request, previous_decision, current_request, current_decision):
+    """A repeated timestamp is a grouping declaration, never identity proof."""
+    return (
+        previous_request.stage in PRE_IMPLEMENTATION and current_request.stage in PRE_IMPLEMENTATION
+        and previous_request.request_id != current_request.request_id
+        and (previous_request.task_id, previous_request.task_digest, previous_request.source_digest,
+             previous_request.requested_at, previous_request.summary)
+        == (current_request.task_id, current_request.task_digest, current_request.source_digest,
+            current_request.requested_at, current_request.summary)
+        and (previous_decision.user_message, previous_decision.recorded_by, previous_decision.recorded_at)
+        == (current_decision.user_message, current_decision.recorded_by, current_decision.recorded_at)
+    )

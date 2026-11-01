@@ -196,10 +196,16 @@ def main(argv=None):
         if name == "change-dispatch":
             enforcement.add_argument("--role", required=True)
             enforcement.add_argument("--dependencies", type=Path)
+            enforcement.add_argument("--design-binding", type=Path)
             enforcement.add_argument("--trust-policy", type=Path)
     design_parser = sub.add_parser("design-validate", help="Read-only design contract/hash consistency; no approval or execution.")
     design_parser.add_argument("record", type=Path)
     design_parser.add_argument("--policy-sha256")
+    ui_collect = sub.add_parser("ui-collect", help="Collect frozen UI cases from verified native browser execution.")
+    ui_collect.add_argument("binding", type=Path)
+    ui_collect.add_argument("evidence", type=Path)
+    ui_collect.add_argument("--policy-sha256", required=True)
+    ui_collect.add_argument("--output", type=Path, required=True)
     schema_parser = sub.add_parser("schemas")
     schema_parser.add_argument("--include-design", action="store_true", help="Also export the additive design-record schema; legacy default remains eleven.")
     sub.add_parser("validate-config")
@@ -211,7 +217,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
-        if args.command == "design-validate":
+        if args.command == "ui-collect":
+            from algooptionx_harness.ui_execution import collect_ui_evidence
+            output = collect_ui_evidence(root, args.binding, args.evidence, args.policy_sha256, args.output)
+        elif args.command == "design-validate":
             from algooptionx_harness.designs import validate_design, DesignError
             try:
                 output = validate_design(root, args.record, args.policy_sha256)
@@ -244,7 +253,7 @@ def main(argv=None):
                 if args.command == "change-capture":
                     output = capture_child(root, args.change, args.policy_sha256, args.child)
                 elif args.command == "change-dispatch":
-                    output = dispatch_child(root, args.change, args.policy_sha256, args.child, args.role, args.dependencies, args.trust_policy)
+                    output = dispatch_child(root, args.change, args.policy_sha256, args.child, args.role, args.dependencies, args.trust_policy, args.design_binding)
                 elif args.command == "change-verify":
                     output = verify_bundle(root, args.change, args.policy_sha256, args.bundle, args.trust_policy)
                 else:

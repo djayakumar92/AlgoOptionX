@@ -15,15 +15,21 @@ from algooptionx.api.contracts import Command, Replay
 
 from algooptionx.paths import PROJECT_ROOT
 from algooptionx.paper.engine import Engine, PaperError
+from algooptionx.demo.engine import DemoEngine, DemoError
+from algooptionx.demo.api import router as demo_router
 
 
-def create_app(db_path: str | Path | None = None, background: bool = True):
+def create_app(db_path: str | Path | None = None, background: bool = True, demo_db_path: str | Path | None = None):
     @asynccontextmanager
     async def lifespan(app):
         app.state.engine = Engine(
             db_path
             or os.environ.get("ALGOOPTIONX_DB", str(PROJECT_ROOT / "data" / "paper.db"))
         )
+        paper_path = Path(app.state.engine.path)
+        default_demo = PROJECT_ROOT / 'data' / 'demo.db' if paper_path.resolve() == (PROJECT_ROOT / 'data' / 'paper.db').resolve() else paper_path.with_name('demo-' + paper_path.name)
+        app.state.demo = DemoEngine(demo_db_path or os.environ.get('ALGOOPTIONX_DEMO_DB') or default_demo,
+            forbidden_paths=[paper_path, PROJECT_ROOT / 'data' / 'paper.db', PROJECT_ROOT / 'data' / 'dhan_analyzer.db'])
         stop = threading.Event()
 
         def worker():
@@ -46,6 +52,12 @@ def create_app(db_path: str | Path | None = None, background: bool = True):
             thread.join(timeout=20)
 
     app = FastAPI(title="AlgoOptionX", version="0.2.0", lifespan=lifespan)
+
+    app.include_router(demo_router)
+
+    @app.exception_handler(DemoError)
+    async def demo_error(request, exc):
+        return JSONResponse({"detail": str(exc)}, status_code=409)
 
     @app.middleware("http")
     async def local_commands(request: Request, call_next):
