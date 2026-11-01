@@ -382,3 +382,65 @@ revision when protected requirements, design, fixture, renderer, tokens or budge
 change. UI/UX Phase 1B design-aware lifecycle gates and Phase 1C automatic visual/
 execution/closure integration are **NOT IMPLEMENTED**. There are no React edits,
 new screenshot baselines, dependency changes or automatic approval transitions.
+
+## UI/UX Phase 1B: v2 design linkage and lifecycle declarations
+
+The [Phase 1B contract](../requirements/ui-ux-governance.md#uiux-phase-1b--additive-v2-linkage-and-structural-lifecycle)
+adds `ChangeSpecV2` with an exact frozen-design link, typed children, immutable
+selection and serial ordering. Existing v1 contracts, twelve checked-in schemas,
+signatures and execution paths remain unchanged. Non-native design/test/review
+children use typed completion declarations instead of fabricated native tasks.
+
+`change-validate`, `change-status` and `change-check-transition` dispatch by exact
+version. V2 history/request wrappers use `.harness/changes/ID/rNNNN/v2/`.
+Inspection checks artifact pins, parent/design/task/source identities, graph
+closure, serial snapshots and revision invalidation. `verified_structure` is
+neither authenticated execution nor a permitted transition; authorization remains
+`not_granted`. V2 transition requests remain blocked pending native integration.
+
+V2 `change-capture`, `change-dispatch`, `change-verify`, `change-accept` and
+`change-archive` return `UXL_V2_ENFORCEMENT_UNSUPPORTED` before writes. UI/UX
+Phase 1C execution/approval/closure integration is **NOT IMPLEMENTED**; the
+already-existing general control-plane v1 enforcement is unaffected. Human
+design approval, implementation approval, final acceptance and release remain
+separate decisions. Local report/context labels cannot authenticate people.
+
+Schema export is opt-in: `schemas --include-change-v2` exports twelve;
+`schemas --include-design --include-change-v2` exports thirteen; default stays
+eleven. Validation commands never write or migrate schemas/records. Changing a
+frozen design, requirement, policy, selected child or baseline requires new
+revision-bound evidence and appropriate renewed human decisions. Do not copy
+old approvals to new identities or label structural completion actual acceptance.
+
+### Phase 1C native design execution
+
+See `docs/requirements/ui-ux-governance.md` for the Phase 1C execution boundary.
+Capture freezes protected design/execution/baseline inputs but grants no authority.
+Use the existing `change-capture`, `change-dispatch`, `change-verify`,
+`change-accept` and `change-archive` commands with a reviewed policy pin and v2
+contracts. Dispatch dependencies must include the execution request. Separate
+planning, architecture, UI design, implementation, QA and release decisions retain
+their existing stage boundaries. Current-session chat approval does not create a
+signed unattended-worker gate. No production release is implied by acceptance.
+
+Run `schemas --include-design --include-change-v2 --include-ui-execution` to export
+all fourteen additive schemas; default exports and existing schema bytes remain
+compatible. Use `change-status ... --bundle BUNDLE.json` to inspect actual native
+readiness instead of relying on structurally asserted history. Example paths are
+not supplied approvals or accepted baselines. Native runner captures UI reports in
+its unique `ui-governance/` directory, indexes attachments and emits UI validation
+evidence only after a successful verify-mode run. CI never regenerates baselines.
+The separate visual workflow records observed renderer context for human review.
+
+Validation uses `PLAYWRIGHT_CHROMIUM_EXECUTABLE` when supplied, otherwise the
+installed Playwright Chromium; CI installs the existing locked browser tooling and
+builds the frontend before the real synthetic native UI integration test. No new
+runtime dependency is introduced. This test measures actual synthetic behavior;
+it does not claim a production budget, design approval or real market performance.
+
+Retain original run baselines, candidate snapshots, reports and independent review
+alongside the commit mapping. A commit changes HEAD and therefore the canonical
+source digest: compare the exact candidate file inventory for source equivalence,
+while preserving original execution provenance. Roll back only the owned commit
+with a reviewed revert; never reset/clean or erase evidence. Validate a reverse
+patch read-only before applying any separately authorized rollback.

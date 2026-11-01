@@ -182,6 +182,8 @@ def main(argv=None):
         lifecycle = sub.add_parser(name, help="Read-only lifecycle structure; native gate integration pending.")
         lifecycle.add_argument("change", type=Path)
         lifecycle.add_argument("--policy-sha256", required=True)
+        lifecycle.add_argument("--bundle", type=Path)
+        lifecycle.add_argument("--trust-policy", type=Path)
         if name == "change-check-transition":
             lifecycle.add_argument("--request", type=Path, required=True)
     for name in ("change-capture", "change-dispatch", "change-verify", "change-accept", "change-archive"):
@@ -202,6 +204,8 @@ def main(argv=None):
     design_parser.add_argument("--policy-sha256")
     schema_parser = sub.add_parser("schemas")
     schema_parser.add_argument("--include-design", action="store_true", help="Also export the additive design-record schema; legacy default remains eleven.")
+    schema_parser.add_argument("--include-change-v2", action="store_true", help="Also export the additive change-v2 schema; no migration or enforcement.")
+    schema_parser.add_argument("--include-ui-execution", action="store_true", help="Export the additive frozen UI execution plan schema.")
     sub.add_parser("validate-config")
     record_cmd = sub.add_parser("record-chat")
     record_cmd.add_argument("request", type=Path)
@@ -232,13 +236,22 @@ def main(argv=None):
         elif args.command in ("change-status", "change-check-transition"):
             from algooptionx_harness.lifecycle import inspect_lifecycle
             try:
-                output = inspect_lifecycle(root, args.change, args.policy_sha256, getattr(args, "request", None))
+                output = inspect_lifecycle(root, args.change, args.policy_sha256, getattr(args, "request", None), bundle=args.bundle, trust_policy=args.trust_policy)
             except (HarnessError, ValidationError, ValueError, OSError, RecursionError):
                 raise HarnessError("Lifecycle inspection blocked; check pinned inputs, identities and prerequisites.") from None
             if output["status"] == "blocked":
                 print(json.dumps(output, indent=2))
                 return 2
         elif args.command in ("change-capture", "change-dispatch", "change-verify", "change-accept", "change-archive"):
+            from algooptionx_harness.changes import ChangeSpecV2
+            from algooptionx_harness.governance import _change_definition
+            try:
+                definition, _, _ = _change_definition(root, args.change)
+            except (HarnessError, ValidationError, ValueError, OSError, RecursionError, KeyError, TypeError):
+                raise HarnessError("Change version inspection blocked; check strict contracts and safe local inputs.") from None
+            if isinstance(definition, ChangeSpecV2) and not (args.command in {"change-capture", "change-dispatch", "change-verify", "change-accept", "change-archive"} and (not definition.design_link or (root / f"docs/changes/{definition.id}/r{definition.revision:04d}/ui-execution.json").is_file())):
+                print(json.dumps({"status": "blocked", "diagnostic_code": "UXL_V2_ENFORCEMENT_UNSUPPORTED", "message": "V2 capture, dispatch, verification and closure require separately authorized UI/UX Phase 1C integration.", "authorization": "not_granted", "execution_verified": False, "transition_permitted": False}, indent=2))
+                return 2
             from algooptionx_harness.enforcement import capture_child, dispatch_child, verify_bundle, close_change
             try:
                 if args.command == "change-capture":
@@ -361,7 +374,19 @@ def main(argv=None):
                 schema = DesignRecord.model_json_schema()
                 if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
                     write_json(destination, schema)
-            output = {"status": "written", "schemas": 12 if args.include_design else 11}
+            if args.include_change_v2:
+                from algooptionx_harness.changes import ChangeSpecV2
+                destination = root / "src/algooptionx_harness/schemas/change-v2.schema.json"
+                schema = ChangeSpecV2.model_json_schema()
+                if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
+                    write_json(destination, schema)
+            if args.include_ui_execution:
+                from algooptionx_harness.ui_validation import UIExecutionPlan
+                destination = root / "src/algooptionx_harness/schemas/ui-execution.schema.json"
+                schema = UIExecutionPlan.model_json_schema()
+                if not destination.exists() or destination.read_bytes() != canonical(schema) + b"\n":
+                    write_json(destination, schema)
+            output = {"status": "written", "schemas": 11 + int(args.include_design) + int(args.include_change_v2) + int(args.include_ui_execution)}
         elif args.command == "init":
             baseline = snapshot(root)
             template = json.loads(args.template.read_text())
@@ -445,6 +470,16 @@ def main(argv=None):
                             "independent_review": file_digest(args.review),
                         }
                     )
+                ui_summary = None
+                if args.stage == "ui":
+                    plans = [name for name in task.protected_inputs if name.endswith('/ui-execution.json')]
+                    if plans:
+                        from algooptionx_harness.ui_validation import read_plan, review_summary
+                        if len(plans) != 1:
+                            raise HarnessError("Exactly one frozen UI execution plan is required.")
+                        plan, plan_reader = read_plan(root, Path(plans[0]), baseline['files'][plans[0]]['sha256'])
+                        plan_reader.finish()
+                        ui_summary = review_summary(task, plan, root)
                 review = chat.request(
                     task,
                     args.stage,
@@ -454,6 +489,7 @@ def main(argv=None):
                     binding,
                     str(args.evidence.resolve()) if args.evidence else None,
                     str(args.review.resolve()) if args.review else None,
+                    review_summary=ui_summary,
                 )
                 target = args.output.resolve()
                 if (

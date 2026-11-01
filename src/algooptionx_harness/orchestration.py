@@ -140,6 +140,19 @@ def codex_worker(
             "manifest": verified.model_dump(mode="json"),
         }
     writes = role["sandbox"] == "workspace-write"
+    if writes and any(name.endswith('/ui-execution.json') for name in task.protected_inputs):
+        from algooptionx_harness.enforcement import authorize_v2
+        if not authorization or not authorization.get('governed_request') or not authorization.get('governed_change'):
+            raise HarnessError('Governed UI writers require native approval and predecessor verification.')
+        checked = authorize_v2(root, Path(authorization['governed_change']),
+            authorization['governed_policy_sha256'], task.id,
+            Path(authorization['governed_request']),
+            trust_policy=Path(authorization['governed_trust_policy']) if authorization.get('governed_trust_policy') else None)
+        if checked.get('task_digest')!=digest(task) or checked.get('baseline_digest')!=digest(baseline):
+            raise HarnessError('Governed worker task/baseline differs from authorized capture.')
+        if checked['status'] != 'verified':
+            raise HarnessError('Unattended UI writers require signed external approval; chat is local-only.')
+        authorization = checked
     if writes and (
         not authorization
         or authorization.get("stage") != "implementation"

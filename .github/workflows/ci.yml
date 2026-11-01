@@ -54,6 +54,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
         if: steps.impact.outputs.needs_browser == 'true'
         working-directory: apps/web
+      - run: npm --prefix apps/web run build
+        if: steps.impact.outputs.needs_node == 'true'
       - name: Run selected checks and verify evidence
         env:
           FORCE_FULL: ${{ steps.impact.outputs.force_full }}
@@ -88,6 +90,13 @@ jobs:
         with:
           version: '0.12.23'
       - run: uv sync --frozen --extra dev --python 3.12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm --prefix apps/web ci
+      - run: npm --prefix apps/web run build
+      - run: npx playwright install --with-deps chromium
+        working-directory: apps/web
       # Always test the selector/runner itself, even when the selected app suite is small.
       - run: uv run algooptionx-harness validate-config
       - run: uv run pytest tests/control_plane -q -rs --junitxml=harness-results.xml

@@ -389,3 +389,218 @@ Record = Annotated[
 
 class ChangeRecord(RootModel[Record]):
     model_config = ConfigDict(strict=True)
+
+
+# UI/UX v2 is additive. Never change Versioned/ChangeSpec/ChangeRecord v1.
+class VersionedV2(ChangeContract):
+    schema_version: Literal[2]
+
+    @field_validator('schema_version', mode='before')
+    @classmethod
+    def exact_v2(cls, value):
+        if type(value) is not int or value != 2:
+            raise ValueError('Use exact integer schema version 2.')
+        return value
+
+
+class ChildIdentityV2(ChangeContract):
+    id: Identity
+    revision: Revision
+
+
+class ChildPlanV2(ChangeContract):
+    id: Identity
+    revision: Revision
+    required: bool
+    depends_on: list[ChildIdentityV2] = Field(default_factory=list, max_length=100)
+    requirement_ids: list[Identity] = Field(min_length=1, max_length=100)
+    acceptance_ids: list[Identity] = Field(min_length=1, max_length=100)
+    roles: list[Role] = Field(min_length=1, max_length=14)
+    skills: list[Annotated[str, Field(pattern=r'^[a-z][a-z0-9-]{1,63}$')]] = Field(min_length=1, max_length=64)
+
+    @model_validator(mode='after')
+    def unique_mappings(self):
+        for field in ('requirement_ids', 'acceptance_ids', 'roles', 'skills'):
+            unique(getattr(self, field), field)
+        unique([ref.id for ref in self.depends_on], 'dependency identities')
+        if self.id in {ref.id for ref in self.depends_on}:
+            raise ValueError('Self dependency rejected.')
+        return self
+
+
+class NativeImplementationV2(ChildPlanV2):
+    kind: Literal['native-implementation']
+    task_template: TemplateReference
+
+
+class DesignValidationV2(ChildPlanV2):
+    kind: Literal['design-validation']
+
+
+class TestEvidenceV2(ChildPlanV2):
+    kind: Literal['test-evidence']
+
+
+class IndependentReviewV2(ChildPlanV2):
+    kind: Literal['independent-review']
+    subject: Literal['design', 'candidate']
+
+
+TypedChildV2 = Annotated[
+    NativeImplementationV2 | DesignValidationV2 | TestEvidenceV2 | IndependentReviewV2,
+    Field(discriminator='kind'),
+]
+
+
+class FrozenDesignV2(ChangeContract):
+    id: Identity
+    revision: Revision
+    reference: StoredReference
+    record_digest: Sha256
+
+    @field_validator('reference')
+    @classmethod
+    def frozen_json(cls, value):
+        if not value.path.startswith('docs/') or not value.path.endswith('.json'):
+            raise ValueError('Frozen design is JSON under docs/.')
+        return value
+
+
+class DesignObligationsV2(ChangeContract):
+    case_ids: list[Identity] = Field(min_length=1, max_length=256)
+    required_areas: list[Literal['accessibility', 'responsive', 'visual', 'performance']] = Field(min_length=4, max_length=4)
+    validation_children: list[Identity] = Field(min_length=1, max_length=100)
+    design_review_child: Identity
+    candidate_evidence_children: list[Identity] = Field(min_length=1, max_length=100)
+
+    @model_validator(mode='after')
+    def inventories(self):
+        for field in ('case_ids', 'required_areas', 'validation_children', 'candidate_evidence_children'):
+            unique(getattr(self, field), field)
+        return self
+
+
+class ChangeSpecV2(VersionedV2):
+    kind: Literal['change-spec']
+    id: Identity
+    revision: Revision
+    title: str = Field(min_length=8, max_length=300)
+    owner: str = Field(min_length=3, max_length=200)
+    purpose: Purpose
+    proposal: DocumentReference
+    design: DocumentReference
+    requirements: list[RequirementReference] = Field(min_length=1, max_length=100)
+    acceptance: list[AcceptanceCriterion] = Field(min_length=1, max_length=100)
+    requested_risk: Risk
+    allowed_paths: list[str] = Field(min_length=1, max_length=200)
+    affected_components: list[Identity] = Field(min_length=1, max_length=100)
+    children: list[TypedChildV2] = Field(min_length=1, max_length=100)
+    selected_children: list[ChildIdentityV2] = Field(min_length=1, max_length=100)
+    execution_order: list[ChildIdentityV2] = Field(min_length=1, max_length=100)
+    candidate_review_child: Identity
+    design_link: FrozenDesignV2 | None = None
+    design_obligations: DesignObligationsV2 | None = None
+    policy: PolicyReference
+    approvals: ApprovalRequirements
+    independent_review_required: Literal[True]
+    rollback: RollbackObligation
+    archive_required: Literal[True]
+    supersedes: StoredReference | None = None
+
+    @model_validator(mode='after')
+    def v2_invariants(self):
+        for field in ('allowed_paths', 'affected_components'):
+            unique(getattr(self, field), field)
+        for path in self.allowed_paths:
+            safe_path(path, directory=True)
+        for ref in self.requirements:
+            safe_path(ref.path)
+        reqs = {r.id for r in self.requirements}
+        unique([r.id for r in self.requirements], 'requirements')
+        unique([a.id for a in self.acceptance], 'acceptance')
+        acceptance = {a.id: a for a in self.acceptance}
+        if {a.requirement_id for a in self.acceptance} != reqs:
+            raise ValueError('Acceptance must cover exact requirements.')
+        unique([c.id for c in self.children], 'children')
+        nodes = {c.id: c for c in self.children}
+        selected = {c.id for c in self.selected_children}
+        unique([c.id for c in self.selected_children], 'selected children')
+        unique([c.id for c in self.execution_order], 'execution order')
+        if {c.id for c in self.execution_order} != selected or not {c.id for c in self.children if c.required} <= selected:
+            raise ValueError('Selection/order must include every mandatory child exactly once.')
+        for ref in [*self.selected_children, *self.execution_order, *(r for c in self.children for r in c.depends_on)]:
+            if ref.id not in nodes or ref.revision != nodes[ref.id].revision:
+                raise ValueError('Missing or stale child reference.')
+        for c in self.children:
+            if not set(c.requirement_ids) <= reqs or not set(c.acceptance_ids) <= acceptance.keys():
+                raise ValueError('Unknown child coverage.')
+            if any(acceptance[aid].requirement_id not in c.requirement_ids for aid in c.acceptance_ids):
+                raise ValueError('Acceptance and child requirement coverage differ.')
+        if {q for cid in selected for q in nodes[cid].requirement_ids} != reqs or {a for cid in selected for a in nodes[cid].acceptance_ids} != acceptance.keys():
+            raise ValueError('Selected children must cover every requirement and acceptance condition.')
+        # Validate all nodes, even unselected optional definitions, without execution.
+        remaining, visited = set(nodes), set()
+        while remaining:
+            ready = {name for name in remaining if {r.id for r in nodes[name].depends_on} <= visited}
+            if not ready:
+                raise ValueError('Dependency cycle rejected.')
+            remaining -= ready
+            visited |= ready
+        seen = set()
+        for ref in self.execution_order:
+            if not {r.id for r in nodes[ref.id].depends_on} <= seen:
+                raise ValueError('Selected order must be dependency-closed and topological.')
+            seen.add(ref.id)
+        review = nodes.get(self.candidate_review_child)
+        if not isinstance(review, IndependentReviewV2) or review.subject != 'candidate' or review.id not in selected or not review.required:
+            raise ValueError('Mandatory selected candidate review required.')
+        ancestors = set()
+        def collect(name):
+            for ref in nodes[name].depends_on:
+                if ref.id not in ancestors:
+                    ancestors.add(ref.id); collect(ref.id)
+        collect(review.id)
+        if not selected - {review.id} <= ancestors:
+            raise ValueError('Candidate review must depend on all other selected children.')
+        if (self.design_link is None) != (self.design_obligations is None):
+            raise ValueError('Design linkage and obligations must appear together.')
+        if self.design_obligations:
+            o = self.design_obligations
+            expected = [(cid, DesignValidationV2) for cid in o.validation_children]
+            expected += [(cid, TestEvidenceV2) for cid in o.candidate_evidence_children]
+            expected += [(o.design_review_child, IndependentReviewV2)]
+            for cid, cls in expected:
+                if cid not in selected or not isinstance(nodes.get(cid), cls) or not nodes[cid].required:
+                    raise ValueError('Design obligations require mandatory selected children of the correct kind.')
+            dr = nodes[o.design_review_child]
+            if dr.subject != 'design' or not set(o.validation_children) <= {r.id for r in dr.depends_on}:
+                raise ValueError('Design review must depend on design validation.')
+            for c in self.children:
+                if isinstance(c, NativeImplementationV2) and c.id in selected and o.design_review_child not in _v2_ancestors(nodes, c.id):
+                    raise ValueError('Implementation must depend on design review.')
+        elif any(isinstance(c, DesignValidationV2) or isinstance(c, IndependentReviewV2) and c.subject == 'design' for c in self.children):
+            raise ValueError('Design children require a frozen design link.')
+        if self.purpose != 'local-development' and self.approvals.mode != 'signed-external':
+            raise ValueError('Privileged purposes require existing signed approval mode.')
+        return self
+
+
+def _v2_ancestors(nodes, name):
+    found, pending = set(), [r.id for r in nodes[name].depends_on]
+    while pending:
+        parent = pending.pop()
+        if parent not in found:
+            found.add(parent); pending.extend(r.id for r in nodes[parent].depends_on)
+    return found
+
+
+def parse_change(value) -> ChangeSpec | ChangeSpecV2:
+    """Strict version dispatch; preserve legacy missing-version behavior only for v1."""
+    if not isinstance(value, dict) or type(value.get('schema_version', 1)) is not int:
+        raise ValueError('Change version must be an exact integer.')
+    version = value.get('schema_version', 1)
+    if version == 1:
+        return ChangeSpec.model_validate(value)
+    if version == 2:
+        return ChangeSpecV2.model_validate(value)
+    raise ValueError('Unsupported change schema version.')
