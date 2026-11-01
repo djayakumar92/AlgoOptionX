@@ -32,11 +32,13 @@ export function ActivityPanel({
       }
     >
       {full && (
-        <div className="ax-filters">
+        <div className="ax-filters" role="group" aria-label="Activity filters">
           {["ALL", "BUY", "SELL", "REJECTED", "DECISION", "CONTROL"].map(
             (f) => (
               <button
                 key={f}
+                type="button"
+                aria-pressed={filter === f}
                 className={filter === f ? "active" : ""}
                 onClick={() => setFilter(f)}
               >
