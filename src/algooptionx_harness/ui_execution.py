@@ -105,6 +105,13 @@ def browser_cases(inputs, task: Task, evidence_ref, design):
                 for area in case.checks:
                     report_name = f'ui-{area}'
                     body = value(report_name)
+                    if 'areas' in body:
+                        packed = body['areas']
+                        if body.get('case_id') != case_id or not isinstance(packed, dict) or set(packed) != set(case.checks):
+                            raise HarnessError('Packed UI areas differ from frozen case requirements.')
+                        body = packed[area]
+                        if not isinstance(body, dict):
+                            raise HarnessError('Packed UI area must be an object.')
                     required_attachments.add(report_name)
                     if body.get('status') != 'passed' or body.get('case_id') != case_id or body.get('area') != area:
                         raise HarnessError('Executed UI area did not pass for this case.')

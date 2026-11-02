@@ -1,10 +1,8 @@
 """Single deterministic observed timeline shared by every demo screen."""
 from __future__ import annotations
 
-from dataclasses import asdict
 from datetime import datetime, timedelta
 import hashlib
-import json
 import math
 
 from algooptionx.market.contracts import Candle, Session
@@ -50,12 +48,41 @@ def source_candles(scenario: str, tick: int) -> tuple[Session,list[Candle]]:
     return session,candles
 
 
+def ema(values: list[float], period: int = 9) -> list[float]:
+    """First-close initialized EMA; early values are explicitly warm-up values."""
+    if type(period) is not int or period < 1 or any(not math.isfinite(v) or v <= 0 for v in values):
+        raise ValueError('EMA requires a positive period and finite positive observations.')
+    result=[]
+    alpha=2/(period+1)
+    for value in values:
+        result.append(value if not result else alpha*value+(1-alpha)*result[-1])
+    return result
+
+
+def session_vwap(source: list[Candle]) -> dict[datetime, float | None]:
+    """Observed minute typical-price VWAP in index points, never traded VWAP."""
+    numerator=volume=0
+    result={}
+    previous=None
+    for bar in source:
+        if not isinstance(bar,Candle) or previous is not None and bar.close_at <= previous:
+            raise ValueError('VWAP requires ordered, unique, validated minute candles.')
+        if bar.interval_minutes != 1:raise ValueError('Session VWAP requires one-minute observations.')
+        previous=bar.close_at
+        numerator+=(bar.high_paise+bar.low_paise+bar.close_paise)*bar.volume
+        volume+=bar.volume
+        result[bar.close_at]=numerator/(300*volume) if volume else None
+    return result
+
+
 def candles(scenario: str, tick: int, timeframe: int) -> list[dict]:
     session,source=source_candles(scenario,tick)
     if timeframe not in (1,5,30): raise ValueError('Timeframe must be 1, 5 or 30 minutes.')
     bars = source if timeframe==1 else aggregate_completed(source,session,as_of=START+timedelta(minutes=tick),minutes=timeframe).bars
+    values=ema([bar.close_paise/100 for bar in bars]);vwap=session_vwap(source)
     return [{'time':c.close_at.isoformat(),'open':c.open_paise/100,'high':c.high_paise/100,
-             'low':c.low_paise/100,'close':c.close_paise/100,'volume':c.volume,'minutes':timeframe} for c in bars]
+             'low':c.low_paise/100,'close':c.close_paise/100,'volume':c.volume,'minutes':timeframe,
+             'ema9':values[i],'ema_warmup':min(i+1,9),'vwap':vwap[c.close_at]} for i,c in enumerate(bars)]
 
 
 def chain(scenario: str, tick: int) -> list[dict]:

@@ -6,7 +6,9 @@ import Workspace from "./app/WorkspaceApp.tsx";
 const App =
   import.meta.env.VITE_WORKSPACE === "research"
     ? lazy(() => import("./features/research/ResearchApp.tsx"))
-    : Workspace;
+    : window.location.pathname === '/demo' || window.location.pathname.startsWith('/demo/')
+      ? lazy(() => import('./features/demo/DemoWorkspace.tsx'))
+      : Workspace;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -135,6 +135,12 @@ class DemoEngine:
         if accounting['open_count']>=limits['max_positions']:errors.append('Maximum three open strategies.')
         if accounting['reserve']+result['reserve']>min(limits['aggregate_reserve_limit'],max(0,accounting['liquidation_equity'])):errors.append('Aggregate reserves exceed the capital/liquidation-equity limit.')
         if accounting['daily_loss']>=limits['daily_loss_limit']:errors.append('Daily loss limit reached; new entries locked.')
+        by_id={quote['id']:quote for quote in quotes}
+        closing_flow=sum(leg['side']*fill(by_id[leg['instrument']],-leg['side'])*leg['quantity'] for leg in result['legs'])-result['exit_fees']
+        projected_loss=max(0,CAPITAL-accounting['liquidation_equity']-result['entry_net_credit']-closing_flow)
+        if projected_loss>=limits['daily_loss_limit']:
+            errors.append('Projected liquidation loss including this entry and exit costs reaches the daily limit.')
+        result['projected_daily_loss']=projected_loss
         result.update(errors=errors,valid=not errors,limits=limits,session_id=a['id'],tick=a['tick'],quote_tick=a['quote_tick'])
         return result
 
@@ -220,19 +226,31 @@ class DemoEngine:
         c.execute('INSERT INTO demo_commands VALUES(?,?,?,?)',(body['session_id'],body['key'],encoded(body),encoded(response)))
 
     def _kill(self,body):
+        # Latch and its audit commit before any economic flatten transaction.
+        audit_error=None
         with self.tx() as c:
             a=self._account(c);saved=self._duplicate(c,body)
             if saved is not None:return saved
             if body['session_id']!=a['id']:raise DemoError('Active session changed; reload before emergency stop.')
             c.execute('UPDATE demo_accounts SET killed=1,kill_error=? WHERE id=?',('Emergency flatten pending.',a['id']))
-
+            c.execute('SAVEPOINT latch_audit')
+            try:
+                self._event(c,a,'KILL_LATCH',{'command_key':body['key'],'message':'Emergency stop durably latched before flattening.'})
+            except Exception as error:
+                # Keep the SQLite writer lock until the fail-closed latch commits.
+                c.execute('ROLLBACK TO latch_audit')
+                c.execute('UPDATE demo_accounts SET kill_error=? WHERE id=?',
+                    ('Emergency audit failed; entries locked. Preserve history and diagnose before retrying.',a['id']))
+                audit_error=error
+            finally:
+                c.execute('RELEASE latch_audit')
+        if audit_error is not None:raise audit_error
         try:
             with self.tx() as c:
                 a=self._account(c)
                 saved=self._duplicate(c,body)
                 if saved is not None:return saved
                 if a['id']!=body['session_id']:raise DemoError('Session changed after emergency latch; prior session remains locked.')
-                self._event(c,a,'KILL_LATCH',{'message':'Emergency stop was durably latched before flattening.'})
                 quotes=market.chain(a['scenario'],a['quote_tick'])
                 for p in self._positions(c,a):self._exit(c,a,p,quotes,'Simulation emergency stop.')
                 c.execute("UPDATE demo_accounts SET kill_error='' WHERE id=?",(a['id'],))
@@ -241,7 +259,12 @@ class DemoEngine:
                 return response
         except Exception:
             with self.tx() as c:
-                c.execute('UPDATE demo_accounts SET kill_error=? WHERE id=?',('Emergency flatten failed; entries remain locked. Retry emergency close after diagnosis.',body['session_id']))
+                row=c.execute('SELECT * FROM demo_accounts WHERE id=?',(body['session_id'],)).fetchone()
+                if row is not None:
+                    a=dict(row)
+                    c.execute('UPDATE demo_accounts SET kill_error=? WHERE id=?',
+                        ('Emergency flatten failed; entries remain locked. Retry emergency close after diagnosis.',a['id']))
+                    self._event(c,a,'KILL_FAILED',{'command_key':body['key'],'message':'Atomic flatten failed; no partial economic effects were committed. Emergency latch remains active.'})
             raise
 
     def state(self):

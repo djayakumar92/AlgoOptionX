@@ -173,3 +173,39 @@ def test_grouped_review_verifies_through_actual_ui_change_bundle(tmp_path, corru
         with pytest.raises(HarnessError):verify_bundle(root,path,f['policy_pin'],bundle_path)
     else:
         assert verify_bundle(root,path,f['policy_pin'],bundle_path)['status']=='verified_local_acceptance'
+
+
+@pytest.mark.parametrize('mutation', [None, 'wrong-case', 'missing', 'extra', 'failed', 'wrong-area', 'malformed'])
+def test_packed_browser_areas_preserve_case_and_area_validation(tmp_path, mutation):
+    f = fixture(tmp_path)
+    root = f['root']
+    report_path = root/'.harness/run/browser.json'
+    report = json.loads(report_path.read_text())
+    result = report['suites'][-1]['specs'][0]['tests'][0]['results'][0]
+    expected = f['spec']['validation_cases'][0]
+    area_attachments = [a for a in result['attachments'] if a['name'][3:] in expected['checks']]
+    areas = {a['name'][3:]: json.loads(Path(a['path']).read_text()) for a in area_attachments}
+    bundle = {'case_id': expected['id'], 'areas': areas}
+    first = expected['checks'][0]
+    if mutation == 'wrong-case': bundle['case_id'] = 'CASE-OTHER'
+    elif mutation == 'missing': areas.pop(first)
+    elif mutation == 'extra': areas['unknown'] = dict(areas[first])
+    elif mutation == 'failed': areas[first]['status'] = 'failed'
+    elif mutation == 'wrong-area': areas[first]['area'] = 'unknown'
+    elif mutation == 'malformed': areas[first] = []
+    path = report_path.parent/'ui'/'packed.json'
+    write_json(path, bundle)
+    for attachment in area_attachments:
+        attachment['path'] = str(path)
+    write_json(report_path, report)
+    evidence = Evidence.model_validate_json((root/f['native']['evidence']['path']).read_text())
+    browser = next(r for r in evidence.results if r.check_id == 'browser')
+    browser.artifacts = [a.model_copy(update={'sha256':file_digest(report_path)}) if a.path == 'browser.json' else a for a in browser.artifacts]
+    f['native']['evidence'] = f['put']('.harness/run/evidence.json', evidence)
+    if mutation is None:
+        cases = derive(f)
+        assert {a['area'] for a in cases[0]['results']} == set(expected['checks'])
+        references = [a['artifacts'][0]['reference'] for a in cases[0]['results']]
+        assert all(ref == references[0] for ref in references)
+    else:
+        with pytest.raises(HarnessError): derive(f)

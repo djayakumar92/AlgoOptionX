@@ -83,10 +83,20 @@ def strategy_value(strategy: str, strikes: list[int], lots: int, quotes: list[di
     points = sorted(set([min(strikes)-200,*strikes,max(strikes)+200,*range(min(strikes)-200,max(strikes)+201,10)]))
     max_profit = max(payoff(x) for x in points)
     max_loss = max(0,-min(payoff(x) for x in points))
-    credit_unit = net_credit/(quantity*100)
-    breakevens = [strikes[0]-credit_unit] if strategy=='bull-put' else [strikes[0]+credit_unit] if strategy=='bear-call' else [strikes[0]-credit_unit,strikes[2]+credit_unit]
+    # Solve the piecewise expiry payoff, rather than invent roots for a
+    # fee-dominated trade whose payoff never reaches zero.
+    roots = set()
+    nodes = sorted(set(strikes))
+    if max_profit > 0:
+        for left, right in zip(nodes, nodes[1:]):
+            first, last = payoff(left), payoff(right)
+            if first == 0: roots.add(float(left))
+            if last == 0: roots.add(float(right))
+            if first * last < 0:
+                roots.add(left - first * (right-left)/(last-first))
+    breakevens = sorted(roots)
     return {'strategy':strategy,'strikes':strikes,'lots':lots,'quantity':quantity,'expiry':expiry,'legs':legs,
             'premium':premium,'entry_fees':entry_fees,'entry_net_credit':entry_net,'exit_fees':exit_fees,
             'exit_friction':exit_friction,'net_credit':net_credit,'max_profit':max_profit,'max_loss':max_loss,
-            'reserve':reserve,'breakevens':breakevens,'payoff':[{'spot':x,'pnl':payoff(x)} for x in points],
+            'reserve':reserve,'expiry_max_loss_before_exit_costs':max(0,width-entry_net),'breakevens':breakevens,'payoff':[{'spot':x,'pnl':payoff(x)} for x in points],
             'pricing_version':VERSION,'warning':'Illustrative expiry payoff after assumed round-trip costs; simulation reserve is not broker margin.'}

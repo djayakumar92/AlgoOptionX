@@ -13,13 +13,19 @@ def evaluate(scenario='bullish',strategy='bull-put',lots=1,split=.6):
             strikes={'bull-put':[atm-50,atm-100],'bear-call':[atm+50,atm+100],'iron-condor':[atm-50,atm-100,atm+50,atm+100]}[strategy]
             entry=strategy_value(strategy,strikes,lots,chain(scenario,tick),EXPIRIES[0])
             entry_cash=equity+entry['entry_net_credit']
+            entry_mark=entry_cash+sum(leg['side']*leg['mark']*leg['quantity'] for leg in entry['legs'])
+            peak=max(peak,entry_mark);drawdown=max(drawdown,peak-entry_mark)
+            curve.append({'tick':tick,'equity':entry_mark})
             for step in range(tick+1,tick+11):
                 quotes={q['id']:q for q in chain(scenario,step)}
                 mark=entry_cash+sum(leg['side']*quotes[leg['instrument']]['mark']*leg['quantity'] for leg in entry['legs'])
                 if step==tick+10:
                     cashflow=sum(leg['side']*fill(quotes[leg['instrument']],-leg['side'])*leg['quantity'] for leg in entry['legs'])-entry['exit_fees']
                     pnl=entry['entry_net_credit']+cashflow;equity+=pnl;mark=equity
-                    values.append(pnl);costs+=entry['entry_fees']+entry['exit_fees']+2*len(entry['legs'])*45*entry['quantity']
+                    values.append(pnl)
+                    entry_friction=sum(abs(leg['entry']-leg['mark'])*leg['quantity'] for leg in entry['legs'])
+                    exit_friction=sum(abs(fill(quotes[leg['instrument']],-leg['side'])-quotes[leg['instrument']]['mark'])*leg['quantity'] for leg in entry['legs'])
+                    costs+=entry['entry_fees']+entry['exit_fees']+entry_friction+exit_friction
                 peak=max(peak,mark);drawdown=max(drawdown,peak-mark);curve.append({'tick':step,'equity':mark})
         return {'start_tick':start,'end_tick':end,'samples':len(values),'pnl':sum(values),'costs':costs,'max_drawdown':drawdown,'curve':curve,'returns':values}
     boundary=30+int(150*split)//10*10
