@@ -73,6 +73,7 @@ def select_checks(
             ("src/algooptionx_harness/", "tests/control_plane/", ".agents/")
         ):
             suites.add("control_plane")
+            web = browser = True  # Native UI integration is part of the harness suite.
             reason = "Development harness and role contracts"
         elif name.startswith("src/algooptionx/market/"):
             suites.update(("market", "intelligence", "paper", "research"))
@@ -340,3 +341,10 @@ def watch_changes(
             except (HarnessError, OSError, subprocess.CalledProcessError) as exc:
                 print(json.dumps({"status": "blocked", "reason": str(exc)}), flush=True)
         time.sleep(interval)
+
+
+def select_governed_checks(paths,obligations,plan=None):
+    """Compose fixed native UI checks without narrowing the existing selector."""
+    from algooptionx_harness.ui_validation import ui_check
+    selected=select_checks([*paths,*(['apps/web/'] if plan else [])],full=obligations['effective_risk'] in {'R2','R3'})['checks']
+    return [*selected,*([ui_check(plan).model_dump(mode='json')] if plan else [])]

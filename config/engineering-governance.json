@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "ALGOOPTIONX-GOVERNANCE",
-  "revision": 1,
+  "revision": 3,
   "authority": "repository-governance",
   "signer_authority": "external-trust-policy",
   "unknown_scope": "block",
@@ -358,6 +358,16 @@
       "minimum_risk": "R3",
       "gates": [
         "GOVERNANCE"
+      ]
+    },
+    {
+      "prefix": "apps/web/src/",
+      "component": "WEB",
+      "minimum_risk": "R2",
+      "gates": [
+        "FINANCIAL",
+        "SECURITY",
+        "CAUSAL-DATA"
       ]
     }
   ]

@@ -19,6 +19,7 @@ def request(
     evidence_digest=None,
     evidence_path=None,
     review_path=None,
+    *, review_summary=None,
 ):
     if stage == "ui" and not task.ui_changes:
         raise HarnessError("No UI approval is required for this task.")
@@ -34,7 +35,7 @@ def request(
         stage=stage,
         source_digest=source_digest,
         evidence_digest=evidence_digest,
-        summary=task.title,
+        summary=review_summary if review_summary is not None else task.title,
         requested_at=datetime.now(timezone.utc),
         evidence_path=evidence_path,
         review_path=review_path,

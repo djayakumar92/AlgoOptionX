@@ -126,7 +126,7 @@ def test_native_dispatch_blocks_ui_writer_but_allows_readonly_design_review(tmp_
     template['allowed_paths'] = ['apps/web/src/fixture.tsx']
     change['allowed_paths'] = template['allowed_paths']
     change['affected_components'] = ['WEB']
-    template['checks'] = select_checks(template['allowed_paths'])['checks']
+    template['checks'] = select_checks(template['allowed_paths'], full=True)['checks']
     change['approvals']['stages'].insert(2, 'ui')
     change['children'][0]['roles'].append('ui-designer')
     path = save_change(root, change, template)
@@ -153,7 +153,7 @@ def ui_bundle(tmp_path):
     template['allowed_paths'] = ['apps/web/src/fixture.tsx']
     raw['allowed_paths'] = template['allowed_paths']
     raw['affected_components'] = ['WEB']
-    template['checks'] = select_checks(template['allowed_paths'])['checks']
+    template['checks'] = select_checks(template['allowed_paths'], full=True)['checks']
     path = save_change(root, raw, template)
     baseline = snapshot(root)
     task = Task.model_validate({**template, 'source_commit': baseline['commit'], 'baseline_digest': digest(baseline)})
@@ -252,3 +252,34 @@ def test_nested_ui_artifact_change_is_detected_at_final_boundary(tmp_path):
     (f['root']/'.harness/run/ui/CASE-001/screenshot.png').write_bytes(b'tampered after first verification')
     with pytest.raises((DesignError, HarnessError)):
         inputs.finish()
+
+
+def test_public_dispatch_preserves_v1_design_binding(tmp_path):
+    import json
+    from algooptionx_harness.enforcement import dispatch_child
+    from algooptionx_harness.workspace import write_json
+    f, path, bundle, _ = ui_bundle(tmp_path)
+    root = f['root']
+    child = bundle['children'][0]
+    native = child['native']
+    directory = root/'.harness/tasks/CHANGE-001-r0001-CHILD-001-r0001'
+    directory.mkdir(parents=True)
+    for name, ref in [('task',native['task']),('baseline',native['baseline']),
+                      ('intent',child['intent']),('captured',child['captured'])]:
+        (directory/(name+'.json')).write_bytes((root/ref['path']).read_bytes())
+    binding = json.loads((root/native['design_binding']['path']).read_text())
+    binding['native_task_reference'] = f['put'](str((directory/'task.json').relative_to(root)),json.loads((directory/'task.json').read_text()))
+    binding['baseline_reference'] = f['put'](str((directory/'baseline.json').relative_to(root)),json.loads((directory/'baseline.json').read_text()))
+    binding_path = directory/'design-binding.json'
+    write_json(binding_path,binding)
+    result = dispatch_child(root,path,f['policy_pin'],'CHILD-001','backend-engineer',design_binding=binding_path)
+    assert result['change_binding']['authorization']=='not_granted'
+
+
+def test_v2_dispatch_cannot_substitute_legacy_design_binding(tmp_path):
+    from tests.control_plane.test_design_enforcement import execution_fixture
+    from algooptionx_harness.enforcement import dispatch_child
+    f = execution_fixture(tmp_path)
+    with pytest.raises(HarnessError,match='frozen execution request'):
+        dispatch_child(f['root'],Path('docs/changes/CHANGE-001/r0001/change.json'),f['policy_pin'],
+                       'CHILD-001','backend-engineer',design_binding=Path('.harness/legacy-binding.json'))

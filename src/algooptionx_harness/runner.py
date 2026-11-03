@@ -223,14 +223,17 @@ def run_task(root: Path, task, baseline: dict, output_root: Path) -> Path:
         code, timed_out, output, problem = None, False, b"", ""
         outcomes, artifacts = [], []
         try:
-            code, timed_out, output, problem = execute(
-                argv,
-                cwd,
-                clean_environment(root, run_dir / check.id),
-                check.timeout_seconds,
-            )
+            environment = clean_environment(root, run_dir / check.id)
+            ui_context = None
+            if check.id == 'ui-governance':
+                from algooptionx_harness.ui_validation import runtime_context
+                ui_context = runtime_context(root, task, baseline)
+                context_path = run_dir / check.id / 'ui-context.json'
+                write_json(context_path, ui_context)
+                environment['ALGOOPTIONX_UI_CONTEXT'] = str(context_path)
+            code, timed_out, output, problem = execute(argv, cwd, environment, check.timeout_seconds)
         except (OSError, ValueError) as exc:
-            problem = f"Runner could not execute command: {type(exc).__name__}"
+            problem = "UI_PREFLIGHT_BLOCKED: inspect frozen profile, protected inputs and measured baseline; no UI execution accepted." if check.id == "ui-governance" else f"Runner could not execute command: {type(exc).__name__}"
         log = run_dir / f"{check.id}.log"
         try:
             contained(run_dir, log.name)
@@ -264,6 +267,11 @@ def run_task(root: Path, task, baseline: dict, output_root: Path) -> Path:
                         sha256=file_digest(report),
                     )
                 )
+                if check.id == 'ui-governance':
+                    from algooptionx_harness.ui_validation import collect_ui_artifacts
+                    if ui_context is None:
+                        raise HarnessError('UI runtime context was not prepared.')
+                    artifacts.extend(collect_ui_artifacts(root, task, baseline, ui_context, run_dir, report,successful=all(o.status=='passed' for o in outcomes)))
                 enforce_outcomes(check, outcomes)
             except (OSError, ValueError, ET.ParseError) as exc:
                 problem = (
@@ -321,6 +329,9 @@ def run_task(root: Path, task, baseline: dict, output_root: Path) -> Path:
         run_dir / "checkpoint.json",
         {"task_id": task.id, "status": evidence.status, "evidence": "evidence.json"},
     )
+    if evidence.status == "passed" and any(c.id == "ui-governance" for c in task.checks):
+        from algooptionx_harness.ui_validation import emit_ui_evidence
+        emit_ui_evidence(root, task, baseline, run_dir / "evidence.json")
     return run_dir / "evidence.json"
 
 

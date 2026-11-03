@@ -542,8 +542,17 @@ class _Reader:
             if directory is not None:
                 os.close(directory)
 
-    def raw(self, name, limit=MAX_JSON, *, reference=False):
-        name = _name(self.root, name)
+    def raw(self, name, limit=MAX_JSON, *, reference=False, native=False, ui=False):
+        if ui and (name.startswith('apps/web/tests/visual-baselines/') or name.startswith('.harness/') and name.endswith('.zip')):
+            from algooptionx_harness.ui_validation import UIReference
+            UIReference(path=name, sha256='0'*64)
+        elif native:
+            # Only fixed role/skill inputs can bypass design artifact namespaces.
+            relative_path(name)
+            if not (name.startswith('src/algooptionx_harness/agents/') and name.endswith('.json') or name.startswith('.agents/skills/') and name.endswith('/SKILL.md')):
+                _fail('UXD_PATH')
+        else:
+            name = _name(self.root, name)
         if reference and name == self.input_name:
             _fail('UXD_CYCLE')
         self.reads += 1
@@ -802,7 +811,11 @@ def _approval_refs(reader, binding, task):
 
 
 def _binding(reader, binding, spec):
-    change = reader.model(binding.change_reference, ChangeSpec)
+    from algooptionx_harness.changes import parse_change, ChangeSpecV2, NativeImplementationV2
+    change = parse_change(_decode(reader.pin(binding.change_reference, json_file=True)))
+    if isinstance(change, ChangeSpecV2):
+        if change.design_link is None or (change.design_link.id, change.design_link.revision, change.design_link.reference.path, change.design_link.reference.sha256, change.design_link.record_digest) != (spec.id, spec.revision, binding.design.reference.path, binding.design.reference.sha256, digest(spec)):
+            _fail('UXD_BINDING')
     if (change.id, change.revision, digest(change)) != (binding.change_id, binding.change_revision, binding.change_digest):
         _fail('UXD_BINDING')
     if (spec.parent_change_id, spec.parent_change_revision) != (change.id, change.revision):
@@ -826,12 +839,21 @@ def _binding(reader, binding, spec):
         metadata = baseline.files.get(path)
         if not isinstance(metadata, _FileContent) or metadata.sha256 != sha or path not in task.protected_inputs:
             _fail('UXD_BINDING')
+    if isinstance(change, ChangeSpecV2) and task.id == f'{change.id}-AGGREGATE':
+        from algooptionx_harness.enforcement import aggregate_task
+        from algooptionx_harness.governance import execution_context, _check_v2_protected
+        _, obligations, execution_plan, protected = execution_context(reader.root, Path(binding.change_reference.path), binding.policy_digest)
+        if task != aggregate_task(reader.root, change, obligations, execution_plan, protected, baseline.model_dump(mode='json')):
+            _fail('UXD_BINDING')
+        _check_v2_protected(change, task, baseline, reader)
+        _approval_refs(reader, binding, task)
+        return
     plan = next((child for child in change.children if child.id == task.id), None)
     aggregate = task.id == f'{change.id}-AGGREGATE'
     if aggregate:
         if task.allowed_paths != change.allowed_paths or set(task.requirement_ids) != {r.id for r in change.requirements}:
             _fail('UXD_BINDING')
-    elif plan is None or set(task.requirement_ids) != set(plan.requirement_ids):
+    elif plan is None or isinstance(change, ChangeSpecV2) and (not isinstance(plan, NativeImplementationV2) or plan.id not in {r.id for r in change.selected_children}) or set(task.requirement_ids) != set(plan.requirement_ids):
         _fail('UXD_BINDING')
     try:
         for scope in task.allowed_paths:
@@ -844,6 +866,9 @@ def _binding(reader, binding, spec):
                 _fail('UXD_BINDING')
     except ValueError:
         _fail('UXD_BINDING')
+    if isinstance(change, ChangeSpecV2):
+        from algooptionx_harness.governance import _check_v2_protected
+        _check_v2_protected(change, task, baseline, reader)
     if not aggregate:
         template = _decode(reader.pin(DesignReference(path=plan.task_template.path, sha256=plan.task_template.sha256), json_file=True))
         try:
@@ -902,7 +927,8 @@ def _ui_evidence(reader, record, spec):
     if not isinstance(metadata, _FileContent):
         _fail('UXD_BINDING')
     change_ref = DesignReference(path=change_name, sha256=metadata.sha256)
-    change = reader.model(change_ref, ChangeSpec)
+    from algooptionx_harness.changes import parse_change
+    change = parse_change(_decode(reader.pin(change_ref, json_file=True)))
     derived = DesignBinding(
         kind='design-binding', change_id=record.change_id,
         change_revision=record.change_revision, change_digest=record.change_digest,
