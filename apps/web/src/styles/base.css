@@ -1,3 +1,4 @@
+@import "./tokens.css";
 :root {
   --bg: #f3f4f7;
   --panel-bg: #ffffff;

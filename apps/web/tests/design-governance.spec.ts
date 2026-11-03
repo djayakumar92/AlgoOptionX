@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 const ctx = process.env.ALGOOPTIONX_UI_CONTEXT ? JSON.parse(readFileSync(process.env.ALGOOPTIONX_UI_CONTEXT, "utf8")) : null;
 const sha = (data: Buffer) => createHash("sha256").update(data).digest("hex");
-const routes: Record<string, string> = { "workspace-overview": "/", "workspace-order-dialog": "/market", "workspace-activity": "/journal" };
+const routes: Record<string, string> = { "workspace-overview": "/app/overview", "workspace-order-dialog": "/market", "workspace-activity": "/journal" };
 if (ctx) for (const item of ctx.cases) {
   test(`@design ${item.id}`, async ({ page, request, browser }, info) => {
     const results: any[] = [];

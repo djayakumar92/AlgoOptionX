@@ -55,3 +55,20 @@ The files in this table collectively cover all **15** deliverables from source Â
 6. **Implemented: OBS-01/OBS-02.** Versioned records, source/availability/uncertainty checks and read-only reuse of existing structure/regime/chain analytics now produce deterministic JSON reports. Full validation, independent review and integration status are tracked in the batch PR. GOV-01 is subsequently implemented as the native specification crosswalk and specialized skill contracts; pattern source verification still requires the missing book/independent references, while risk-policy and economic integration retain their explicit scope.
 
 7. **Implemented: GOV-01.** [ADR0002](../architecture/decisions/0002-native-specification-crosswalk.md) evaluates OpenSpec and retains native authority; the read-only `validate-spec-map` crosswalk pins requirement/source/task references. All15 requested specializations are covered by23 native packages across14 unchanged role privilege contracts. Actual OpenSpec CLI installation/conformance is not claimed. Pattern verification still depends on missing/source references; later risk/economic/model activation retains its own scope.
+
+## M1 local product experience â€” 3 November 2026
+
+User approved the complete planning proposal and bounded first implementation
+package in chat. See [scope and acceptance](m1-local-experience.md).
+
+- [x] Public home and truthful walkthrough
+- [x] Guided local start; presentation preferences only
+- [x] Responsive top navigation and /app route compatibility
+- [x] Theme token refresh; existing financial panels retained
+- [x] Unified Windows launcher and separate diagnostics
+- [x] Focused entry/navigation/account-preservation tests added
+- [ ] Final validation and browser review accepted by user
+- [ ] Windows startup verified on Windows
+
+Implementation does not enable authentication, billing, brokers, new fill/risk
+models, deployment or real-money execution. No release approval is recorded.

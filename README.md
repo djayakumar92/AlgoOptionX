@@ -2,6 +2,30 @@
 
 A local NIFTY options research and paper-trading workspace. The default application uses a deterministic **synthetic market**, not live exchange prices. It starts with **₹5,00,000 virtual capital** and never submits broker orders.
 
+## Product entry and local startup
+
+The default `/` route is a public product introduction. `/walkthrough` explains
+current simulation behavior and limitations. `/app/start` selects a guided overview
+or the market terminal without creating an account, resetting capital, or changing
+risk. The eight existing pages live under `/app`; legacy paths such as `/market`
+and `/paper` redirect to the corresponding workspace page. This remains local-only
+software: customer authentication, billing, licensed live feeds and broker
+connections are planned, not active.
+
+On Windows, after the one-time setup below, double-click `Start-AlgoOptionX.bat`.
+The launcher checks the existing Python environment, frontend build freshness and
+port 8000, starts the built single-process app, verifies PAPER/SYNTHETIC health and
+opens the public entry. It does not reinstall dependencies, rebuild or run tests.
+Press Enter in its window to stop its owned process. Process termination is not a
+guarantee of graceful shutdown; SQLite transaction recovery preserves committed
+history. Do not terminate during backups or copy a running database.
+
+`Diagnose-AlgoOptionX.bat` checks prerequisites without starting a server. For a
+custom port run `powershell -File scripts/windows/launch-algooptionx.ps1 -Port 8001`.
+Port conflicts never cause an existing process to be killed. Startup logs are
+stored under ignored `logs/`. Windows execution still requires verification on an
+actual Windows machine; Linux build/browser results do not establish it.
+
 ## Start
 
 Requires Python 3.12+, Node 22.12+ (Node 24 recommended), npm and [uv](https://docs.astral.sh/uv/).

@@ -2,11 +2,11 @@ import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/base.css";
-import Workspace from "./app/WorkspaceApp.tsx";
+import ProductRouter from "./app/ProductRouter.tsx";
 const App =
   import.meta.env.VITE_WORKSPACE === "research"
     ? lazy(() => import("./features/research/ResearchApp.tsx"))
-    : Workspace;
+    : ProductRouter;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
