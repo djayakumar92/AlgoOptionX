@@ -849,7 +849,11 @@ def _binding(reader, binding, spec):
         _approval_refs(reader, binding, task)
         return
     plan = next((child for child in change.children if child.id == task.id), None)
-    if plan is None or isinstance(change, ChangeSpecV2) and (not isinstance(plan, NativeImplementationV2) or plan.id not in {r.id for r in change.selected_children}) or set(task.requirement_ids) != set(plan.requirement_ids):
+    aggregate = task.id == f'{change.id}-AGGREGATE'
+    if aggregate:
+        if task.allowed_paths != change.allowed_paths or set(task.requirement_ids) != {r.id for r in change.requirements}:
+            _fail('UXD_BINDING')
+    elif plan is None or isinstance(change, ChangeSpecV2) and (not isinstance(plan, NativeImplementationV2) or plan.id not in {r.id for r in change.selected_children}) or set(task.requirement_ids) != set(plan.requirement_ids):
         _fail('UXD_BINDING')
     try:
         for scope in task.allowed_paths:
@@ -865,13 +869,14 @@ def _binding(reader, binding, spec):
     if isinstance(change, ChangeSpecV2):
         from algooptionx_harness.governance import _check_v2_protected
         _check_v2_protected(change, task, baseline, reader)
-    template = _decode(reader.pin(DesignReference(path=plan.task_template.path, sha256=plan.task_template.sha256), json_file=True))
-    try:
-        expected = Task.model_validate({**template, 'source_commit': baseline.commit, 'baseline_digest': digest(baseline)})
-    except (ValueError, TypeError):
-        _fail('UXD_BINDING')
-    if task != expected:
-        _fail('UXD_BINDING')
+    if not aggregate:
+        template = _decode(reader.pin(DesignReference(path=plan.task_template.path, sha256=plan.task_template.sha256), json_file=True))
+        try:
+            expected = Task.model_validate({**template, 'source_commit': baseline.commit, 'baseline_digest': digest(baseline)})
+        except (ValueError, TypeError):
+            _fail('UXD_BINDING')
+        if task != expected:
+            _fail('UXD_BINDING')
     _approval_refs(reader, binding, task)
 
 
