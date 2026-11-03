@@ -1,5 +1,6 @@
+import {apiFetch} from "../../shared/lib/http";
 export async function demoApi<T>(path:string,body?:unknown):Promise<T> {
- const response=await fetch(`/api/demo/${path}`,body===undefined?undefined:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ const response=await apiFetch(`/api/demo/${path}`,body===undefined?undefined:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
  let data:unknown;
  try { data=await response.json(); } catch {throw new Error('The demo returned an unreadable response. Retry after checking the local server.');}
  if(!response.ok) {

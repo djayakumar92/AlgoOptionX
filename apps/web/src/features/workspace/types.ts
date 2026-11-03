@@ -39,6 +39,7 @@ export type AuditEvent = {
   };
 };
 export type Workspace = {
+  tenant_id?: string | null;
   market: {
     tick: number;
     spot: number;

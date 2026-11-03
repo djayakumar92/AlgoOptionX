@@ -103,7 +103,7 @@ export default function WorkspaceApp() {
     setBusy(true);
     setError("");
     try {
-      await command(action, fields);
+      await command(action, { ...fields, expected_tenant_id: state?.tenant_id, expected_account_id: state?.account.id });
       await refresh();
       setNotice(
         action === "buy"
@@ -122,7 +122,7 @@ export default function WorkspaceApp() {
     setBusy(true);
     setError("");
     try {
-      await api("sessions", {});
+      await api("sessions", { expected_tenant_id: state?.tenant_id, expected_account_id: state?.account.id });
       await refresh();
       setNotice("New paper session created. Previous history is preserved.");
     } catch (e) {

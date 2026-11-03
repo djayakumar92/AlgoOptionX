@@ -3,13 +3,14 @@ import {CandlestickSeries,HistogramSeries,LineSeries,ColorType,LineStyle,createC
 import type {IChartApi,ISeriesApi,IPriceLine,MouseEventParams,Time,UTCTimestamp} from 'lightweight-charts';
 import type {Candle,ChartAnnotation} from './types';
 import {number} from './api';
+import type {ChartVisibility} from './useChartWorkspace';
 
-type Props={bars:Candle[];timeframe:string;sessionId:string;annotations:ChartAnnotation[];onAnnotationsChange:(value:ChartAnnotation[])=>void};
+type Props={bars:Candle[];timeframe:string;sessionId:string;annotations:ChartAnnotation[];onAnnotationsChange:(value:ChartAnnotation[])=>void;visibility:ChartVisibility;onVisibilityChange:(value:ChartVisibility)=>void};
 type Point={time:string;price:number};
 const utc=(time:string)=>Math.floor(new Date(time).getTime()/1000) as UTCTimestamp;
 const timeLabel=(time:string)=>new Date(time).toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false});
 
-export function InteractiveChart({bars,timeframe,sessionId,annotations,onAnnotationsChange}:Props){
+export function InteractiveChart({bars,timeframe,sessionId,annotations,onAnnotationsChange,visibility,onVisibilityChange}:Props){
  const host=useRef<HTMLDivElement>(null),surface=useRef<HTMLDivElement>(null),chart=useRef<IChartApi|null>(null),candles=useRef<ISeriesApi<'Candlestick'>|null>(null),volume=useRef<ISeriesApi<'Histogram'>|null>(null),ema=useRef<ISeriesApi<'Line'>|null>(null),vwap=useRef<ISeriesApi<'Line'>|null>(null);
  const pointerStart=useRef<{x:number;y:number}|null>(null);
  const drawingClick=useRef<(x:number,y:number)=>void>(()=>{});
@@ -19,7 +20,7 @@ export function InteractiveChart({bars,timeframe,sessionId,annotations,onAnnotat
  useEffect(()=>{annotationsRef.current=annotations;},[annotations]);
  useEffect(()=>{changeRef.current=onAnnotationsChange;},[onAnnotationsChange]);
  const [keyboardReadout,setKeyboardReadout]=useState('');
- const [showVolume,setShowVolume]=useState(true),[showEma,setShowEma]=useState(true),[showVwap,setShowVwap]=useState(true);
+ const {volume:showVolume,ema:showEma,vwap:showVwap}=visibility;
  const [hover,setHover]=useState<Candle|null>(null),hoverIndex=useRef(-1);
  const [mode,setMode]=useState<'inspect'|'horizontal'|'trend'>('inspect'),modeRef=useRef(mode),[pending,setPending]=useState<Point|null>(null),pendingRef=useRef<Point|null>(null);
  const [status,setStatus]=useState('Inspect completed synthetic candles. Drawings cannot authorize trades.'),[range,setRange]=useState<{from:number;to:number}|null>(null);
@@ -66,7 +67,7 @@ export function InteractiveChart({bars,timeframe,sessionId,annotations,onAnnotat
  function cursor(direction:number){const data=barsRef.current;if(!data.length)return;const next=Math.max(0,Math.min(data.length-1,(hoverIndex.current<0?data.length-1:hoverIndex.current)+direction));hoverIndex.current=next;setHover(data[next]);setKeyboardReadout(`Synthetic candle ${timeLabel(data[next].time)} IST. Open ${number(data[next].open)}, high ${number(data[next].high)}, low ${number(data[next].low)}, close ${number(data[next].close)}, volume ${number(data[next].volume,0)}. EMA9 ${number(data[next].ema9)}; VWAP ${data[next].vwap===null?'unavailable':number(data[next].vwap!)}.`);chart.current?.setCrosshairPosition(data[next].close,utc(data[next].time),candles.current!);}
  const current=hover||bars.at(-1),noData=!bars.length;
  return <section className="demo-interactive-chart" aria-label="Synthetic chart tools">
-  <div className="demo-chart-toolbar"><div role="group" aria-label="Chart navigation">{[['Zoom in',()=>zoom(.7)],['Zoom out',()=>zoom(1.4)],['Pan left',()=>pan(-1)],['Pan right',()=>pan(1)],['Fit data',()=>chart.current?.timeScale().fitContent()]].map(([label,run])=><button key={label as string} disabled={noData} onClick={run as ()=>void}>{label as string}</button>)}</div><div role="group" aria-label="Chart indicators">{[['Volume',showVolume,setShowVolume],['EMA9',showEma,setShowEma],['Session VWAP',showVwap,setShowVwap]].map(([label,checked,set])=><button key={label as string} aria-pressed={checked as boolean} disabled={noData} onClick={()=> (set as (v:boolean)=>void)(!checked)}>{label as string}</button>)}</div></div>
+  <div className="demo-chart-toolbar"><div role="group" aria-label="Chart navigation">{[['Zoom in',()=>zoom(.7)],['Zoom out',()=>zoom(1.4)],['Pan left',()=>pan(-1)],['Pan right',()=>pan(1)],['Fit data',()=>chart.current?.timeScale().fitContent()]].map(([label,run])=><button key={label as string} disabled={noData} onClick={run as ()=>void}>{label as string}</button>)}</div><div role="group" aria-label="Chart indicators">{[['Volume',showVolume,(value:boolean)=>onVisibilityChange({...visibility,volume:value})],['EMA9',showEma,(value:boolean)=>onVisibilityChange({...visibility,ema:value})],['Session VWAP',showVwap,(value:boolean)=>onVisibilityChange({...visibility,vwap:value})]].map(([label,checked,set])=><button key={label as string} aria-pressed={checked as boolean} disabled={noData} onClick={()=> (set as (v:boolean)=>void)(!checked)}>{label as string}</button>)}</div></div>
   <p className="demo-chart-readout" data-testid="chart-readout">{current?<>{timeLabel(current.time)} IST · O {number(current.open)} H {number(current.high)} L {number(current.low)} C {number(current.close)} · Volume {number(current.volume,0)} · EMA9 {number(current.ema9)}{current.ema_warmup<9?` (warm-up ${current.ema_warmup}/9)`:''} · VWAP {current.vwap===null?'Unavailable':number(current.vwap)}</>:'No completed candles are available for this timeframe.'}</p>
   <div ref={surface} className="demo-chart-surface" role="group" aria-label={`Interactive NIFTY ${timeframe}-minute chart`} aria-describedby="demo-chart-keys demo-crosshair-announcement" tabIndex={0} data-range-from={range?.from??''} data-range-to={range?.to??''} data-crosshair-time={hover?.time||''} onPointerDown={e=>{pointerStart.current={x:e.clientX,y:e.clientY};surface.current?.focus({preventScroll:true});}} onClick={e=>{const start=pointerStart.current;pointerStart.current=null;if(!start||Math.hypot(e.clientX-start.x,e.clientY-start.y)>5||!host.current)return;const rect=host.current.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;const api=chart.current;if(api&&x>=0&&x<api.paneSize().width&&y>=0&&y<api.paneSize().height)drawingClick.current(x,y);}} onKeyDown={e=>{if(e.key==='Escape'){setTool('inspect');return;}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();if(e.shiftKey)pan(e.key==='ArrowLeft'?-1:1);else cursor(e.key==='ArrowLeft'?-1:1);}if(e.key==='+'||e.key==='='){e.preventDefault();zoom(.7);}if(e.key==='-'){e.preventDefault();zoom(1.4);}}}><div ref={host} className="demo-chart-host"/></div>
   <p id="demo-crosshair-announcement" data-testid="keyboard-crosshair-announcement" className="demo-sr-only" role="status" aria-live="polite" aria-atomic="true">{keyboardReadout}</p>

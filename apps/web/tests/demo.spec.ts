@@ -99,6 +99,72 @@ workflowTest.describe('Demo workflows',()=>{
   await page.getByRole('button',{name:'Remove drawing 1',exact:true}).click();await expect(list.locator('li')).toHaveCount(3);await page.getByRole('button',{name:'Clear drawings',exact:true}).click();await expect(list).toHaveCount(0);expect((await state(request)).account).toEqual(before.account);
   await page.getByRole('button',{name:'Horizontal line',exact:true}).click();await page.getByLabel('Horizontal price',{exact:true}).fill('24450');await page.getByRole('button',{name:'Add horizontal line',exact:true}).click();await expect(list.locator('li')).toHaveCount(1);await page.getByLabel('Demo scenario').selectOption('bearish');await expect(list).toHaveCount(0);
  });
+ workflowTest('chart workspace survives reload and navigation without economic effects',async({page,request})=>{
+  const before=await state(request);await page.goto('/demo');
+  await page.getByRole('button',{name:'Horizontal line',exact:true}).click();await page.getByLabel('Horizontal price',{exact:true}).fill('24450');await page.getByRole('button',{name:'Add horizontal line',exact:true}).click();
+  await page.getByRole('button',{name:'Trendline',exact:true}).click();await page.getByRole('button',{name:'Add trendline',exact:true}).click();
+  for(const name of ['Volume','EMA9','Session VWAP'])await page.getByRole('button',{name,exact:true}).click();
+  await page.getByRole('button',{name:'30 min',exact:true}).click();await page.reload();
+  const list=page.getByRole('list',{name:'Session chart annotations'});await expect(list.locator('li')).toHaveCount(2);
+  await expect(page.getByRole('group',{name:'Interactive NIFTY 30-minute chart',exact:true})).toBeVisible();
+  for(const name of ['Volume','EMA9','Session VWAP'])await expect(page.getByRole('button',{name,exact:true})).toHaveAttribute('aria-pressed','false');
+  await nav(page,'Market Intelligence');await expect(list.locator('li')).toHaveCount(2);
+  for(const name of ['Volume','EMA9','Session VWAP'])await expect(page.getByRole('button',{name,exact:true})).toHaveAttribute('aria-pressed','false');
+  await page.getByRole('button',{name:'Clear drawings',exact:true}).click();await page.reload();await expect(list).toHaveCount(0);
+  const after=await state(request);expect(after.account).toEqual(before.account);expect(after.positions).toEqual(before.positions);expect(after.events).toEqual(before.events);
+ });
+ workflowTest('chart workspace stays isolated when the demo session changes',async({page,request})=>{
+  const before=await state(request);await page.goto('/demo');
+  await page.getByRole('button',{name:'Horizontal line',exact:true}).click();await page.getByLabel('Horizontal price',{exact:true}).fill('24450');await page.getByRole('button',{name:'Add horizontal line',exact:true}).click();
+  await page.getByRole('button',{name:'Volume',exact:true}).click();await page.getByRole('button',{name:'30 min',exact:true}).click();
+  await page.getByLabel('Demo scenario').selectOption('bearish');
+  await expect.poll(async()=>(await state(request)).session.id).not.toBe(before.session.id);
+  await expect(page.getByRole('list',{name:'Session chart annotations'})).toHaveCount(0);
+  await expect(page.getByRole('group',{name:'Interactive NIFTY 5-minute chart',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Volume',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.reload();await expect(page.getByRole('list',{name:'Session chart annotations'})).toHaveCount(0);
+  await expect(page.getByRole('group',{name:'Interactive NIFTY 5-minute chart',exact:true})).toBeVisible();
+ });
+ workflowTest('chart workspace tolerates invalid saved data and unavailable storage',async({page,request})=>{
+  const before=await state(request),errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('/demo');
+  await page.evaluate(sessionId=>{
+   localStorage.setItem('algooptionx.demo.chart.v1:'+sessionId,JSON.stringify({version:1,sessionId,settings:{timeframe:'30',visibility:{volume:false,ema:false,vwap:false},annotations:[{id:'duplicate-time',kind:'trend',startTime:'2026-11-02T09:15:00+05:30',endTime:'2026-11-02T03:45:00Z',startPrice:24400,endPrice:24450}]}}));
+  },before.session.id);
+  await page.reload();await expect(page.getByRole('group',{name:'Interactive NIFTY 5-minute chart',exact:true})).toBeVisible();await expect(page.getByRole('list',{name:'Session chart annotations'})).toHaveCount(0);
+  await page.evaluate(sessionId=>localStorage.setItem('algooptionx.demo.chart.v1:'+sessionId,'{broken'),before.session.id);await page.reload();await expect(page.getByRole('button',{name:'Volume',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage unavailable');}});});
+  await page.reload();await expect(page.getByText('Chart settings are temporary because browser storage is unavailable.',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Horizontal line',exact:true}).click();await page.getByLabel('Horizontal price',{exact:true}).fill('24450');await page.getByRole('button',{name:'Add horizontal line',exact:true}).click();await expect(page.getByRole('list',{name:'Session chart annotations'}).locator('li')).toHaveCount(1);
+  await page.reload();await expect(page.getByRole('group',{name:'Interactive NIFTY 5-minute chart',exact:true})).toBeVisible();await expect(page.getByRole('list',{name:'Session chart annotations'})).toHaveCount(0);
+  expect(errors).toEqual([]);expect((await state(request)).account).toEqual(before.account);
+ });
+ workflowTest('strategy draft restores authoring inputs but never restores confirmation',async({page,request})=>{
+  const before=await state(request),commands:string[]=[];let previews=0;
+  page.on('request',r=>{if(new URL(r.url()).pathname==='/api/demo/commands')commands.push(r.method());if(new URL(r.url()).pathname==='/api/demo/preview')previews++;});
+  await page.goto('/demo/strategy');await expect(page.getByRole('button',{name:'Review simulated order',exact:true})).toBeEnabled();
+  await page.getByLabel('Strategy',{exact:true}).selectOption('bear-call');await page.getByLabel('Fixture lots',{exact:true}).selectOption('2');await page.getByLabel('Strategy expiry',{exact:true}).selectOption(before.expiries[1]);
+  const review=page.getByRole('button',{name:/Review (simulated order|rejected attempt)/});await expect(review).toBeEnabled();
+  const leg=page.getByLabel('Leg 1 strike',{exact:true});const selected=await leg.inputValue();
+  await leg.selectOption(selected);await expect(review).toBeEnabled();await review.click();await expect(page.getByRole('dialog')).toBeVisible();
+  const count=previews;await page.reload();await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bear-call');await expect(page.getByLabel('Fixture lots',{exact:true})).toHaveValue('2');await expect(page.getByLabel('Strategy expiry',{exact:true})).toHaveValue(before.expiries[1]);
+  await expect(page.getByRole('dialog')).not.toBeVisible();await expect(review).toBeEnabled();await expect(page.getByLabel('Leg 1 strike',{exact:true})).toHaveValue(selected);expect(previews).toBeGreaterThan(count);
+  await nav(page,'Options Intelligence');await page.getByLabel('Option expiry',{exact:true}).selectOption(before.expiries[1]);await page.reload();await expect(page.getByLabel('Option expiry',{exact:true})).toHaveValue(before.expiries[1]);
+  await nav(page,'Strategy Builder');await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bear-call');await page.getByRole('button',{name:'Reset draft',exact:true}).click();await page.reload();await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bull-put');await expect(page.getByLabel('Fixture lots',{exact:true})).toHaveValue('1');
+  const after=await state(request);expect(commands).toEqual([]);expect(after.account).toEqual(before.account);expect(after.positions).toEqual(before.positions);expect(after.events).toEqual(before.events);
+ });
+ workflowTest('strategy draft is isolated when the session changes',async({page,request})=>{
+  const before=await state(request);await page.goto('/demo/strategy');await expect(page.getByRole('button',{name:'Reset draft',exact:true})).toBeEnabled();await page.getByLabel('Strategy',{exact:true}).selectOption('bear-call');await page.getByLabel('Fixture lots',{exact:true}).selectOption('2');
+  await page.getByLabel('Demo scenario').selectOption('bearish');await expect.poll(async()=>(await state(request)).session.id).not.toBe(before.session.id);
+  await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bull-put');await expect(page.getByLabel('Fixture lots',{exact:true})).toHaveValue('1');await page.reload();await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bull-put');
+  const old=await page.evaluate(id=>JSON.parse(localStorage.getItem('algooptionx.demo.draft.v1:'+id)!),before.session.id);expect(old.draft.strategy).toBe('bear-call');expect(old.draft.lots).toBe(2);
+ });
+ workflowTest('strategy draft tolerates invalid expiry and blocked storage',async({page,request})=>{
+  const before=await state(request),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/demo/strategy');
+  await page.evaluate(id=>localStorage.setItem('algooptionx.demo.draft.v1:'+id,JSON.stringify({version:1,sessionId:id,draft:{strategy:'bear-call',lots:2,expiry:'1900-01-01',strikes:[]},optionsExpiry:'1900-01-01'})),before.session.id);
+  await page.reload();await expect(page.getByLabel('Strategy',{exact:true})).toHaveValue('bull-put');await expect(page.getByLabel('Strategy expiry',{exact:true})).toHaveValue(before.expiries[0]);
+  await page.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage unavailable');}});});await page.reload();await expect(page.getByText('Draft changes are temporary because browser storage is unavailable.',{exact:true})).toBeVisible();
+  await page.getByLabel('Fixture lots',{exact:true}).selectOption('2');await expect(page.getByLabel('Fixture lots',{exact:true})).toHaveValue('2');await page.reload();await expect(page.getByLabel('Fixture lots',{exact:true})).toHaveValue('1');expect(errors).toEqual([]);expect((await state(request)).account).toEqual(before.account);
+ });
  workflowTest('desktop tablet mobile routes and navigation focus',async({page},info)=>{
   for(const width of [1440,1024,390]){await page.setViewportSize({width,height:1000});await page.goto('/demo');for(const [screen,[,name]] of Object.entries(screens)){if(screen!=='COMMAND')await nav(page,name);await expect(page.getByRole('heading',{name,exact:true})).toBeVisible();await expect(page.locator('main')).not.toHaveAttribute('data-state','loading');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();}await nav(page,'Command Center');await expect(page.locator('.demo-stat').first()).toBeVisible();await page.screenshot({path:info.outputPath(`command-${width}.png`),fullPage:true});}
   await page.getByRole('button',{name:'Toggle demo navigation'}).click();await expect(page.getByRole('dialog',{name:'Demo navigation menu'})).toBeVisible();await page.getByRole('button',{name:'Close navigation menu'}).focus();await page.keyboard.press('Shift+Tab');await expect(page.getByRole('link',{name:'Return to original workspace →'})).toBeFocused();await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'Toggle demo navigation'})).toBeFocused();

@@ -14,5 +14,8 @@ def test_demo_has_no_network_research_or_execution_adapter():
 
 def test_demo_frontend_has_only_its_same_origin_api():
     source=(PROJECT_ROOT/'apps/web/src/features/demo/api.ts').read_text()
-    assert 'fetch(`/api/demo/${path}`' in source
+    assert 'apiFetch(`/api/demo/${path}`' in source
+    transport=(PROJECT_ROOT/'apps/web/src/shared/lib/http.ts').read_text()
+    assert 'credentials: "same-origin"' in transport
+    assert 'X-AlgoOptionX-CSRF' in transport
     assert 'https://' not in source and '/api/commands' not in source

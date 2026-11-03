@@ -72,3 +72,64 @@ package in chat. See [scope and acceptance](m1-local-experience.md).
 
 Implementation does not enable authentication, billing, brokers, new fill/risk
 models, deployment or real-money execution. No release approval is recorded.
+
+## Local demo integration — 3 November 2026
+
+User selected connecting the public onboarding flow to the richer `/demo`
+workspace and finishing local integration. This is a bounded follow-up to M1.
+
+- [x] Shared router owns public, demo and original-workspace routes
+- [x] Guided start → Command Center; experienced start → Market Intelligence
+- [x] Demo links back to public home, starting-point choices and original workspace
+- [x] Current synthetic multi-leg capabilities and simulation limitations reconciled
+- [x] Both account histories preserved; onboarding submits no economic commands
+- [x] Focused routing/mobile/storage/deep-link tests: 5 passed
+- [x] Frontend build/lint and distinct read-only source review completed
+
+Validation follows the user's explicit instruction to run tests relevant to the
+changes. No full harness, Python suite or frozen demo matrix was run for this
+presentation/routing follow-up. Financial engines, risk limits and databases were
+not modified. Windows verification and human final acceptance remain separate.
+
+## Next local slice: saved chart settings — 3 November 2026
+
+- [x] Save timeframe, indicator visibility and validated drawings in browser storage
+- [x] Restore across reload and Command Center/Market Intelligence navigation
+- [x] Keep saved state scoped to the demo session; prevent hydration cross-writes
+- [x] Ignore corrupt/unsupported data; keep charts usable when storage is blocked
+- [x] Preserve account economics, positions and events
+- [x] Build/lint; 6 focused browser tests; distinct read-only review
+
+No full harness, Python suite or 216-case screenshot matrix was run. This slice
+does not add server persistence, chart layout editing, viewport persistence,
+financial rules or deployment. Human acceptance remains separate from evidence.
+
+## Local-product completion batch — 3 November 2026
+
+The user requested automatic progression between local tasks and implementation
+before one final harness pass. Scope remains the selected local-product work;
+external SaaS/live-trading milestones are not represented as complete.
+
+- [x] Public/demo/original-workspace integration
+- [x] Session-scoped chart preferences and drawings
+- [x] Session-scoped strategy draft restoration; fresh preview and explicit confirmation
+- [x] Options expiry restoration; invalid/unavailable expiry fallback
+- [x] Safe last-screen resume from onboarding
+- [x] Explicit storage failure notices and local reset controls
+- [x] Focused acceptance cases prepared without removing existing assertions
+- [x] Implementation complete; final scoped harness and independent review prepared
+- [ ] Human final acceptance (validation evidence is recorded separately)
+
+No customer authentication, billing, licensed data, external deployment or live
+execution is activated. Windows verification and human acceptance remain explicit
+external/manual items; they are not inferred from Linux browser evidence.
+
+## Enterprise implementation in progress
+
+The user expanded implementation authorization to the full SaaS roadmap. Current
+source scope, external dependencies and remaining engineering are tracked in
+[enterprise delivery](enterprise-delivery.md). Customer identity/tenancy, sandbox
+ledgers, saved resources, quote-cycle execution, synthetic research jobs, optional
+grounded narratives, encrypted read-only broker connections and workspace
+operations now have source implementations. Validation and production-readiness
+claims remain separate. No deployment, live payment or live order was activated.

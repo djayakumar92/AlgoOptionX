@@ -1,5 +1,6 @@
+import {apiFetch} from "../../../shared/lib/http";
 export async function api<T>(path: string, body?: unknown): Promise<T> {
-  const response = await fetch(
+  const response = await apiFetch(
     `/api/${path}`,
     body === undefined
       ? undefined

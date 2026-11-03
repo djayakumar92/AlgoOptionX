@@ -29,6 +29,7 @@ const test = base.extend<{}, { entryUrl: string }>({
 });
 test("public entry is read-only and guided start preserves the existing account", async ({ page, request }) => {
   const before = await (await request.get('/api/workspace')).json();
+  const demoBefore = await (await request.get('/api/demo/state')).json();
   const calls: string[] = [];
   page.on('request', request => { if (new URL(request.url()).pathname.startsWith('/api/')) calls.push(request.method() + ' ' + new URL(request.url()).pathname); });
   await page.goto('/');
@@ -37,11 +38,15 @@ test("public entry is read-only and guided start preserves the existing account"
   await expect(page.getByRole('heading', { name: 'Know what the demo represents.' })).toBeVisible();
   await page.getByRole('link', { name: 'Explore the demo', exact: true }).last().click();
   await expect(page.getByRole('radio', { name: /Guided overview/ })).toBeChecked();
-  expect(calls).toEqual([]);
+  expect(calls.filter(call => !call.endsWith("/api/identity/me"))).toEqual([]);
   await page.getByRole('button', { name: 'Open demo workspace' }).click();
-  await expect(page).toHaveURL(/\/app\/overview$/);
-  await expect(page).toHaveTitle('Overview | AlgoOptionX');
-  await expect(page.locator('.ax-session-bar')).toBeVisible();
+  await expect(page).toHaveURL(/\/demo$/);
+  await expect(page).toHaveTitle('Command Center | AlgoOptionX');
+  await expect(page.getByRole('heading', { name: 'Command Center', exact: true })).toBeVisible();
+  const demoAfter = await (await request.get('/api/demo/state')).json();
+  expect(demoAfter.session.id).toBe(demoBefore.session.id);
+  expect(demoAfter.account).toEqual(demoBefore.account);
+  expect(demoAfter.positions).toEqual(demoBefore.positions);
   const after = await (await request.get('/api/workspace')).json();
   expect(after.account.id).toBe(before.account.id);
   expect(after.account.cash).toBe(before.account.cash);
@@ -52,7 +57,7 @@ test("experienced start persists and legacy routes resolve without nested prefix
   await page.goto('/app/start');
   await page.getByRole('radio', { name: /Straight to the market/ }).check();
   await page.getByRole('button', { name: 'Open demo workspace' }).click();
-  await expect(page).toHaveURL(/\/app\/market$/);
+  await expect(page).toHaveURL(/\/demo\/market$/);
   await page.goto('/app/start');
   await expect(page.getByRole('radio', { name: /Straight to the market/ })).toBeChecked();
   await page.goto('/market?context=test#chain');
@@ -67,16 +72,16 @@ test("mobile entry and navigation support keyboard and blocked storage", async (
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
   }
   await page.getByRole('button', { name: 'Open demo workspace' }).click();
-  const toggle = page.getByRole('button', { name: 'Toggle navigation' });
+  const toggle = page.getByRole('button', { name: 'Toggle demo navigation' });
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await page.keyboard.press('Escape');
   await expect(toggle).toBeFocused();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
-  await page.getByRole('link', { name: /Trade.*Market terminal/ }).click();
+  await page.getByRole('link', { name: 'Market Intelligence', exact: true }).click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.getByRole('heading', { name: 'The market, in focus.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Market Intelligence', exact: true })).toBeVisible();
 });
 
 test("limitations anchors scroll and malformed hashes do not crash", async ({ page }) => {
@@ -88,4 +93,40 @@ test("limitations anchors scroll and malformed hashes do not crash", async ({ pa
   await page.goto('/walkthrough#%');
   await expect(page.getByRole('heading', { name: 'Know what the demo represents.' })).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("public, demo and original routes switch without reloading or losing deep links", async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/app/start');
+  await page.evaluate(() => { (window as unknown as { integrationMarker: string }).integrationMarker = 'same-document'; });
+  await page.getByRole('button', { name: 'Open demo workspace' }).click();
+  await page.getByRole('link', { name: 'Product home', exact: false }).click();
+  await expect(page.getByRole('heading', { name: /Research clearly/ })).toBeVisible();
+  await page.getByRole('link', { name: 'Build your demo workspace', exact: false }).click();
+  await page.getByRole('link', { name: 'Open original workspace', exact: false }).click();
+  await expect(page.locator('.ax-session-bar')).toBeVisible();
+  expect(await page.evaluate(() => (window as unknown as { integrationMarker: string }).integrationMarker)).toBe('same-document');
+  await page.goto('/demo/strategy?source=bookmark#builder');
+  await expect(page.getByRole('heading', { name: 'Strategy Builder', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page).toHaveURL(/\/demo\/strategy\?source=bookmark#builder$/);
+  await expect(page).toHaveTitle('Strategy Builder | AlgoOptionX');
+  expect(errors).toEqual([]);
+});
+
+test("returning users resume only an allowlisted local demo route", async ({ page }) => {
+  await page.goto('/demo/journal');
+  await page.getByRole('link', { name: 'Change starting point', exact: false }).click();
+  const resume = page.getByRole('link', { name: 'Resume last demo screen', exact: false });
+  await expect(resume).toHaveAttribute('href', '/demo/journal');
+  await resume.click();
+  await expect(page.getByRole('heading', { name: 'Trading Journal', exact: true })).toBeVisible();
+  await page.goto('/demo/unknown-screen');
+  await page.getByRole('link', { name: 'Change starting point', exact: false }).click();
+  await expect(resume).toHaveAttribute('href', '/demo/journal');
+  await page.evaluate(() => localStorage.setItem('algooptionx.demo.last-route.v1', 'https://example.invalid/steal'));
+  await page.reload();
+  await expect(resume).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Open demo workspace' })).toBeEnabled();
 });

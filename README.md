@@ -5,9 +5,12 @@ A local NIFTY options research and paper-trading workspace. The default applicat
 ## Product entry and local startup
 
 The default `/` route is a public product introduction. `/walkthrough` explains
-current simulation behavior and limitations. `/app/start` selects a guided overview
-or the market terminal without creating an account, resetting capital, or changing
-risk. The eight existing pages live under `/app`; legacy paths such as `/market`
+current simulation behavior and limitations. `/app/start` opens the richer synthetic
+demo: guided users reach `/demo` (Command Center), experienced users reach
+`/demo/market` (Market Intelligence). This changes the opening screen without
+resetting capital, positions, risk or history. The demo uses its own account and
+provides links back to the public pages and original workspace. The eight original
+pages remain under `/app`; legacy paths such as `/market`
 and `/paper` redirect to the corresponding workspace page. This remains local-only
 software: customer authentication, billing, licensed live feeds and broker
 connections are planned, not active.
@@ -120,3 +123,20 @@ See the [AlgoOptionX enterprise master plan](docs/product/enterprise-master-plan
 ## Repository layout
 
 Application code is in `src/algooptionx`, development automation in `src/algooptionx_harness`, and the web app in `apps/web`. See [the repository architecture](docs/architecture/repository-layout.md) for module boundaries, renamed paths and the test layout. Windows launchers are under `scripts/windows/`. Existing database files and runtime history are preserved.
+
+### Enterprise workspace implementation in progress
+
+Optional customer accounts add `/account` and `/account/mfa`; tenant-owned product
+routes include `/studio`, `/workspaces`, `/trade`, `/research-jobs`, `/insights`,
+`/brokers`, `/billing` and `/operations`. The original and template demo accounts
+remain separate. Research jobs replay synthetic rule observations and report no
+historical returns. The quote-driven execution book uses declared fixture
+liquidity, charges and conservative reserves, not exchange margin or settlement.
+
+`ALGOOPTIONX_REQUIRE_AUTH=1` requires verified customer sessions for workspaces;
+secure cookies default on in that mode and require HTTPS. Local evaluation keeps
+anonymous synthetic access. SMTP, encryption keys, sandbox payment prices/keys and
+optional AI provider/model/credit cost require explicit server configuration.
+None is activated automatically. Do not expose this single-process SQLite bridge
+as a production SaaS. See `docs/product/enterprise-delivery.md` for the actual
+remaining engineering, external prerequisites and validation status.

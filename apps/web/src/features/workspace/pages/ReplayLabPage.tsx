@@ -1,3 +1,4 @@
+import {useIdentity} from "../../identity/IdentityContext";
 import { useState } from "react";
 import type { ReplayResult } from "../types";
 import { money } from "../lib/format";
@@ -5,6 +6,7 @@ import { api } from "../api/client";
 import { Icon, Badge, Panel, EmptyState, LineChart } from "../../../shared/ui";
 
 export function ReplayLabPage() {
+  const {user} = useIdentity();
   const [bars, setBars] = useState(120),
     [result, setResult] = useState<ReplayResult | null>(null),
     [loading, setLoading] = useState(false),
@@ -13,7 +15,7 @@ export function ReplayLabPage() {
     setLoading(true);
     setError("");
     try {
-      setResult(await api<ReplayResult>("replay", { bars }));
+      setResult(await api<ReplayResult>("replay", { bars, expected_tenant_id: user?.tenant_id }));
     } catch (e) {
       setError((e as Error).message);
     } finally {

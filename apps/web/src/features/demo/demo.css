@@ -95,3 +95,6 @@
 .demo-annotations li {display:flex;gap:10px;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ax-border)}
 .demo-annotations button {font-size:9px;min-height:30px;padding:5px 8px}
 @media(max-width:760px){.demo-chart-host{height:300px}.demo-chart-toolbar button{font-size:9px}.demo-drawing-form{gap:8px}.demo-drawing-form input{width:110px}}
+
+.demo-product-links {display:flex;flex-direction:column;gap:8px}
+.demo-draft-status{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:16px}.demo-draft-status>p{margin:0}@media(max-width:760px){.demo-draft-status{flex-direction:column;align-items:start;gap:10px}}
