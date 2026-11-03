@@ -23,6 +23,10 @@ class PaperError(ValueError):
     pass
 
 
+class AccountChanged(PaperError):
+    """The displayed account is no longer active; no financial/audit mutation."""
+
+
 class Engine:
     def __init__(self, path: str | Path):
         self.path = str(path)
@@ -236,6 +240,8 @@ class Engine:
         try:
             return self._command(key, action, **kwargs)
         except PaperError as exc:
+            if isinstance(exc, AccountChanged):
+                raise
             # The failed financial transaction is rolled back first. Record the
             # refusal separately so manual as well as autonomous denials are visible.
             with self.tx() as c:
@@ -253,6 +259,9 @@ class Engine:
         request = json.dumps({"action": action, **kwargs}, sort_keys=True)
         with self.tx() as c:
             a = self._account(c)
+            expected = kwargs.pop("expected_account_id", None)
+            if expected is not None and expected != a["id"]:
+                raise AccountChanged("The active account changed. Refresh and review this action again.")
             old = c.execute(
                 "SELECT * FROM commands WHERE account_id=? AND key=?", (a["id"], key)
             ).fetchone()
@@ -362,9 +371,11 @@ class Engine:
             if a["running"]:
                 self._advance(c, a)
 
-    def new_session(self):
+    def new_session(self, expected_account_id=None):
         with self.tx() as c:
             a = self._account(c)
+            if expected_account_id is not None and expected_account_id != a["id"]:
+                raise AccountChanged("The active account changed. Refresh before creating a session.")
             if self._positions(c, a):
                 raise PaperError("Close all positions before creating a new session.")
             c.execute(

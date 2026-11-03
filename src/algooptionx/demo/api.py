@@ -48,12 +48,12 @@ def health():return {'mode':'DEMO','source':'SYNTHETIC','broker_routing':False}
 
 
 @router.get('/state')
-def state(request:Request):return request.app.state.demo.state()
+def state(request:Request):return request.state.demo_engine.state()
 
 
 @router.post('/preview')
 def preview(body:Draft,request:Request):
-    try:return request.app.state.demo.preview(body.model_dump())
+    try:return request.state.demo_engine.preview(body.model_dump())
     except ValueError as error:raise HTTPException(422,str(error)) from None
 
 
@@ -66,7 +66,12 @@ def command(body:DemoCommand,request:Request):
     if set(values)-{'key','session_id','action'}-fields[body.action]:raise HTTPException(422,'Fields do not match the demo command.')
     required={'open':{'draft','quote_token'},'close':{'position_id'},'session':{'scenario'},'note':{'position_id','note'}}.get(body.action,set())
     if not required <= set(values):raise HTTPException(422,'Missing required demo command fields.')
-    result=request.app.state.demo.command(values)
+    user=getattr(request.state,'principal',None)
+    if user:
+        with request.app.state.tenants.market_lock(user['tenant_id']):
+            if body.action=='session' and request.app.state.tenants.has_execution_exposure(user['tenant_id']):raise HTTPException(409,'Close execution-account positions and cancel its working orders before changing the synthetic source session.')
+            result=request.state.demo_engine.command(values)
+    else:result=request.state.demo_engine.command(values)
     if not result['ok']:raise HTTPException(409,result['error'])
     return result
 
@@ -76,4 +81,4 @@ def research(body:ResearchRequest):return evaluate(**body.model_dump())
 
 
 @router.get('/audit')
-def audit(request:Request):return request.app.state.demo.audit()
+def audit(request:Request):return request.state.demo_engine.audit()
