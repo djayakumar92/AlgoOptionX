@@ -16,13 +16,42 @@ try {
     if (!(Test-Path $pythonExe)) { throw 'Python environment missing. Install Python 3.12+ and uv, then run: uv sync --frozen --extra dev' }
     & $pythonExe -c "import sys; assert sys.version_info >= (3,12); import uvicorn, algooptionx.api.app"
     if ($LASTEXITCODE -ne 0) { throw 'Python prerequisites are incomplete. Run: uv sync --frozen --extra dev' }
-    $frontend = Join-Path $projectRoot 'apps\web\dist\index.html'
-    if (!(Test-Path $frontend)) { throw 'Frontend missing. Install Node 22.12+ and npm, then run: npm --prefix apps/web ci and npm --prefix apps/web run build' }
-    $inputs = @(Get-ChildItem (Join-Path $projectRoot 'apps\web\src') -File -Recurse)
-    $inputs += Get-Item (Join-Path $projectRoot 'apps\web\package-lock.json'), (Join-Path $projectRoot 'apps\web\index.html')
-    $latest = $inputs | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
-    if ($latest.LastWriteTimeUtc -gt (Get-Item $frontend).LastWriteTimeUtc) { throw 'Frontend build is stale. Run: npm --prefix apps/web run build' }
     if (Test-LocalPort $Port) { throw "Port $Port is already occupied. Close that server or choose a different -Port. No existing process was stopped." }
+    $webDirectory = Join-Path $projectRoot 'apps\web'
+    $frontend = Join-Path $webDirectory 'dist\index.html'
+    $inputs = @(Get-ChildItem (Join-Path $webDirectory 'src') -File -Recurse)
+    foreach ($name in @('package.json', 'package-lock.json', 'index.html', 'vite.config.ts', 'tsconfig.json', 'tsconfig.app.json', 'tsconfig.node.json')) {
+        $inputPath = Join-Path $webDirectory $name
+        if (Test-Path $inputPath) { $inputs += Get-Item $inputPath }
+    }
+    $latest = $inputs | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+    $needsBuild = !(Test-Path $frontend)
+    if (!$needsBuild) { $needsBuild = $latest.LastWriteTimeUtc -gt (Get-Item $frontend).LastWriteTimeUtc }
+    if ($needsBuild) {
+        if ($Diagnose) { throw 'Frontend missing or stale. Normal Start-AlgoOptionX.bat will rebuild it automatically. Manual repair: npm --prefix apps/web ci, then npm --prefix apps/web run build. Diagnostics made no changes.' }
+        # Use the executable shim, not npm.ps1, so Windows execution policy does
+        # not prevent npm from running. Argument paths may contain spaces.
+        $npmCommand = Get-Command npm.cmd -CommandType Application -ErrorAction SilentlyContinue
+        $nodeCommand = Get-Command node.exe -CommandType Application -ErrorAction SilentlyContinue
+        if (!$npmCommand -or !$nodeCommand) { throw 'Frontend rebuild requires Node 22.12+ and npm. Install Node, reopen Start-AlgoOptionX.bat and try again.' }
+        $nodeVersionText = & $nodeCommand.Source --version
+        if ($LASTEXITCODE -ne 0) { throw 'Unable to run Node. Repair the Node installation and try again.' }
+        $nodeVersion = [Version]($nodeVersionText.Trim().TrimStart('v'))
+        if ($nodeVersion -lt [Version]'22.12.0') { throw 'Frontend rebuild requires Node 22.12+ (Node 24 recommended). Update Node and try again.' }
+        $installedLock = Join-Path $webDirectory 'node_modules\.package-lock.json'
+        $packageLock = Join-Path $webDirectory 'package-lock.json'
+        $needsInstall = !(Test-Path $installedLock)
+        if (!$needsInstall) { $needsInstall = (Get-Item $packageLock).LastWriteTimeUtc -gt (Get-Item $installedLock).LastWriteTimeUtc }
+        if ($needsInstall) {
+            Write-Host 'Preparing frontend dependencies from package-lock.json...'
+            & $npmCommand.Source --prefix $webDirectory ci
+            if ($LASTEXITCODE -ne 0) { throw 'Frontend dependency installation failed. Check the npm output above and retry. No server was started.' }
+        }
+        Write-Host 'Building the updated frontend. This may take a moment...' -ForegroundColor Cyan
+        & $npmCommand.Source --prefix $webDirectory run build
+        if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed. Check the build output above. No server was started.' }
+        if (!(Test-Path $frontend)) { throw 'Frontend build returned success but dist/index.html is missing. No server was started.' }
+    }
     Write-Host "Python environment and frontend ready. Port $Port is available."
     if ($Diagnose) {
         foreach ($tool in @('node', 'npm', 'uv')) { if (Get-Command $tool -ErrorAction SilentlyContinue) { Write-Host "$tool is available" } else { Write-Warning "$tool is unavailable (needed for setup/development, not the built application)." } }

@@ -18,12 +18,16 @@ connections are planned, not active.
 On Windows, after the one-time setup below, double-click `Start-AlgoOptionX.bat`.
 The launcher checks the existing Python environment, frontend build freshness and
 port 8000, starts the built single-process app, verifies PAPER/SYNTHETIC health and
-opens the public entry. It does not reinstall dependencies, rebuild or run tests.
+opens the public entry. If the frontend is missing or stale after an update, it
+rebuilds automatically using Node 22.12+ and npm. Missing or older frontend
+dependencies are installed from the lockfile with `npm ci` when needed. A fresh
+build starts directly; startup never runs tests.
 Press Enter in its window to stop its owned process. Process termination is not a
 guarantee of graceful shutdown; SQLite transaction recovery preserves committed
 history. Do not terminate during backups or copy a running database.
 
-`Diagnose-AlgoOptionX.bat` checks prerequisites without starting a server. For a
+`Diagnose-AlgoOptionX.bat` checks prerequisites without starting a server,
+installing dependencies or rebuilding. For a
 custom port run `powershell -File scripts/windows/launch-algooptionx.ps1 -Port 8001`.
 Port conflicts never cause an existing process to be killed. Startup logs are
 stored under ignored `logs/`. Windows execution still requires verification on an
