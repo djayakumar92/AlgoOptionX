@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import os from "node:os";
 
 const routes = [
-  ["overview", "/"],
+  ["overview", "/app/overview"],
   ["market", "/market"],
   ["portfolio", "/paper"],
   ["decisions", "/strategy"],

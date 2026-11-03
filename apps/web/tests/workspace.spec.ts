@@ -25,10 +25,10 @@ test("buy, mark, close and export a virtual trade", async ({
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
+  await page.goto("/app/overview");
   await expect(page).toHaveTitle(/AlgoOptionX/);
-  await expect(page.getByText("Your market. Your edge.")).toBeVisible();
-  await page.getByRole("link", { name: "Market terminal" }).click();
+  await expect(page.getByText("Your research, in perspective.")).toBeVisible();
+  await page.getByRole("link", { name: /Trade.*Market terminal/ }).click();
   await page.getByRole("button", { name: "Buy paper" }).first().click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await expect(page.getByRole("button", { name: "Close order ticket" })).toBeFocused();
@@ -124,7 +124,7 @@ test("responsive routes and candidate screenshots", async ({
   for (const width of [1440, 1024, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const route of [
-      "/",
+      "/app/overview",
       "/market",
       "/paper",
       "/strategy",
@@ -141,7 +141,7 @@ test("responsive routes and candidate screenshots", async ({
         ),
       ).toBeTruthy();
     }
-    await page.goto("/");
+    await page.goto("/app/overview");
     await expect(page.getByRole("img", { name: /NIFTY price/ })).toBeVisible();
     await page.screenshot({
       path: testInfo.outputPath(`overview-${width}-candidate.png`),
@@ -149,7 +149,7 @@ test("responsive routes and candidate screenshots", async ({
     });
     if (width === 390) {
       await page.getByRole("button", { name: "Toggle navigation" }).click();
-      await page.getByRole("link", { name: "Market terminal" }).click();
+      await page.getByRole("link", { name: /Trade.*Market terminal/ }).click();
       await expect(
         page.getByRole("heading", { name: "The market, in focus." }),
       ).toBeVisible();
@@ -321,7 +321,7 @@ test.describe("journal filter accessibility", () => {
     await expect(journal.group).toBeVisible();
     await expect(journal.group.getByRole("button")).toHaveCount(6);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
-    await page.goto("/");
+    await page.goto("/app/overview");
     await expect(page.getByRole("group", { name: "Activity filters" })).toHaveCount(0);
     const recent = page.locator(".ax-activity .ax-event");
     await expect(recent).toHaveCount(5);

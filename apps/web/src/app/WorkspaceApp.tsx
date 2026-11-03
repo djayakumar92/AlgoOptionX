@@ -1,6 +1,7 @@
 import { useWorkspaceTheme } from "../shared/theme/useWorkspaceTheme";
 import type { ThemePreference } from "../shared/theme/useWorkspaceTheme";
 import { useCallback, useEffect, useState } from "react";
+import PrimaryNavigation from "../shared/ui/PrimaryNavigation";
 import { NavLink, useLocation } from "react-router-dom";
 import { api, command } from "../features/workspace/api/client";
 import { number } from "../features/workspace/lib/format";
@@ -57,12 +58,12 @@ const aliases: Record<string, string> = {
 export default function WorkspaceApp() {
   const location = useLocation();
   const { theme, changeTheme } = useWorkspaceTheme();
-  const path = aliases[location.pathname] || location.pathname;
+  const localPath = location.pathname.replace(/^\/app/, "") || "/overview";
+  const path = localPath === "/overview" ? "/" : aliases[localPath] || localPath;
   const [state, setState] = useState<Workspace | null>(null),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(false),
-    [menu, setMenu] = useState(false),
     [connection, setConnection] = useState(true);
   const refresh = useCallback(async () => {
     const data = await api<Workspace>("workspace");
@@ -133,7 +134,7 @@ export default function WorkspaceApp() {
   const current = links.find((l) => l.to === path);
   const titles: Record<string, [string, string]> = {
     "/": [
-      "Your market. Your edge.",
+      "Your research, in perspective.",
       "A focused workspace for research, disciplined decisions and paper execution.",
     ],
     "/market": [
@@ -166,89 +167,16 @@ export default function WorkspaceApp() {
     ],
   };
   const title = titles[path];
+  useEffect(() => { document.title = `${current?.label || "Workspace"} | AlgoOptionX`; }, [current?.label]);
   return (
-    <div className="ax-app">
+    <div className="ax-app product-workspace">
       <a className="ax-skip" href="#workspace">
         Skip to workspace
       </a>
-      <aside className={`ax-sidebar ${menu ? "is-open" : ""}`}>
-        <NavLink to="/" className="ax-brand" onClick={() => setMenu(false)}>
-          <span className="ax-brand-symbol">
-            A<span>×</span>
-          </span>
-          <span>
-            AlgoOption<span className="ax-brand-x">X</span>
-            <small>THE RESEARCH WORKSPACE</small>
-          </span>
-        </NavLink>
-        <div className="ax-workspace-chip">
-          <span className="ax-workspace-avatar">P</span>
-          <div>
-            Personal workspace<small>Local environment</small>
-          </div>
-          <Badge>PAPER</Badge>
-        </div>
-        <nav aria-label="Main navigation">
-          {links.map((l, i) => (
-            <div key={l.to}>
-              {l.group && <span className="ax-nav-group">{l.group}</span>}
-              {i === 0 && <span className="ax-nav-group">TERMINAL</span>}
-              <NavLink
-                to={l.to}
-                end={l.to === "/"}
-                className={`ax-nav-link ${path === l.to ? "selected" : ""}`}
-                onClick={() => setMenu(false)}
-              >
-                <Icon name={l.icon} />
-                {l.label}
-                {l.to === "/paper" && (
-                  <span className="ax-nav-count">
-                    {state?.positions.length || 0}
-                  </span>
-                )}
-              </NavLink>
-            </div>
-          ))}
-        </nav>
-        <div className="ax-sidebar-bottom">
-          <div className="ax-sandbox-card">
-            <Icon name="shield" />
-            <strong>Room to experiment.</strong>
-            <p>
-              Virtual capital. Real discipline.
-              <br />
-              No live orders. Ever.
-            </p>
-            <NavLink to="/settings" onClick={() => setMenu(false)}>
-              About this workspace <Icon name="arrow" size={14} />
-            </NavLink>
-          </div>
-          <div className="ax-profile">
-            <span>AX</span>
-            <div>
-              Research workspace<small>AlgoOptionX · v0.2</small>
-            </div>
-            <span className="ax-dot" />
-          </div>
-        </div>
-      </aside>
-      {menu && (
-        <button
-          className="ax-menu-overlay"
-          aria-label="Close navigation"
-          onClick={() => setMenu(false)}
-        />
-      )}
+      <PrimaryNavigation />
       <div className="ax-main">
         <header className="ax-topbar">
           <div className="ax-breadcrumb">
-            <button
-              className="ax-icon-button ax-menu-toggle"
-              aria-label="Toggle navigation"
-              onClick={() => setMenu(!menu)}
-            >
-              <Icon name="menu" />
-            </button>
             <span>Workspace</span>
             <span>/</span>
             <strong>{current?.label || "Page"}</strong>
@@ -294,7 +222,7 @@ export default function WorkspaceApp() {
                       hour12: false,
                     })
                   : "09:15"}{" "}
-                IST <span className="ax-muted">· 02 NOV 2026</span>
+                IST <span className="ax-muted">· {state ? new Date(state.market.time).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric" }) : "Synthetic session"}</span>
               </span>
             </div>
           </div>
@@ -404,7 +332,7 @@ export default function WorkspaceApp() {
                   />
                 )}
                 {!title && (
-                  <NavLink to="/" className="ax-button primary">
+                  <NavLink to="/app/overview" className="ax-button primary">
                     Return to overview
                   </NavLink>
                 )}

@@ -1,0 +1,2 @@
+:root { --product-canvas: #f6f8fc; --product-surface: #fff; --product-text: #172033; --product-muted: #475569; --product-border: #d9e0ec; --product-accent: #4338ca; --product-gain: #067647; --product-loss: #b42318; --product-space: 8px; --product-radius: 10px; }
+:root[data-workspace-theme="dark"] { --product-canvas: #0b1220; --product-surface: #121d2e; --product-text: #e7eef9; --product-muted: #b3c0d4; --product-border: #334155; --product-accent: #818cf8; --product-gain: #34d399; --product-loss: #fb7185; }
