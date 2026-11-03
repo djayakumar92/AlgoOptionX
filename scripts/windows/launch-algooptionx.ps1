@@ -30,11 +30,13 @@ try {
     if ($needsBuild) {
         if ($Diagnose) { throw 'Frontend missing or stale. Normal Start-AlgoOptionX.bat will rebuild it automatically. Manual repair: npm --prefix apps/web ci, then npm --prefix apps/web run build. Diagnostics made no changes.' }
         # Use the executable shim, not npm.ps1, so Windows execution policy does
-        # not prevent npm from running. Argument paths may contain spaces.
-        $npmCommand = Get-Command npm.cmd -CommandType Application -ErrorAction SilentlyContinue
-        $nodeCommand = Get-Command node.exe -CommandType Application -ErrorAction SilentlyContinue
-        if (!$npmCommand -or !$nodeCommand) { throw 'Frontend rebuild requires Node 22.12+ and npm. Install Node, reopen Start-AlgoOptionX.bat and try again.' }
-        $nodeVersionText = & $nodeCommand.Source --version
+        # not prevent npm from running. Select one PATH match: nvm and user-level
+        # npm installs can both resolve, and invoking an array joins their paths.
+        # Argument paths may contain spaces.
+        $npmExecutable = Get-Command npm.cmd -All -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Source
+        $nodeExecutable = Get-Command node.exe -All -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Source
+        if (!$npmExecutable -or !$nodeExecutable) { throw 'Frontend rebuild requires Node 22.12+ and npm. Install Node, reopen Start-AlgoOptionX.bat and try again.' }
+        $nodeVersionText = & $nodeExecutable --version
         if ($LASTEXITCODE -ne 0) { throw 'Unable to run Node. Repair the Node installation and try again.' }
         $nodeVersion = [Version]($nodeVersionText.Trim().TrimStart('v'))
         if ($nodeVersion -lt [Version]'22.12.0') { throw 'Frontend rebuild requires Node 22.12+ (Node 24 recommended). Update Node and try again.' }
@@ -44,11 +46,11 @@ try {
         if (!$needsInstall) { $needsInstall = (Get-Item $packageLock).LastWriteTimeUtc -gt (Get-Item $installedLock).LastWriteTimeUtc }
         if ($needsInstall) {
             Write-Host 'Preparing frontend dependencies from package-lock.json...'
-            & $npmCommand.Source --prefix $webDirectory ci
+            & $npmExecutable --prefix $webDirectory ci
             if ($LASTEXITCODE -ne 0) { throw 'Frontend dependency installation failed. Check the npm output above and retry. No server was started.' }
         }
         Write-Host 'Building the updated frontend. This may take a moment...' -ForegroundColor Cyan
-        & $npmCommand.Source --prefix $webDirectory run build
+        & $npmExecutable --prefix $webDirectory run build
         if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed. Check the build output above. No server was started.' }
         if (!(Test-Path $frontend)) { throw 'Frontend build returned success but dist/index.html is missing. No server was started.' }
     }
