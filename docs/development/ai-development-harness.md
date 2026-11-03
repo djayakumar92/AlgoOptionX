@@ -444,3 +444,28 @@ source digest: compare the exact candidate file inventory for source equivalence
 while preserving original execution provenance. Roll back only the owned commit
 with a reviewed revert; never reset/clean or erase evidence. Validate a reverse
 patch read-only before applying any separately authorized rollback.
+
+## V1 UI/UX native integration candidate
+
+This section covers v1 changes; the v2 execution path above retains its frozen execution-request gates. The Phase 1A section describes its original boundary. The additive
+[UI/UX enforcement candidate](../requirements/ui-ux-enforcement.md) now connects
+those records to native change dispatch and closure. Human acceptance is pending;
+this is not evidence that all future UI governance capabilities are implemented.
+
+For a UI child, create/freeze the design, capture the native task, obtain actual
+native UI approval and prepare the DesignBinding before calling:
+
+```bash
+algooptionx-harness change-dispatch CHANGE.json --policy-sha256 REVIEWED_SHA256 \
+  --child CHILD-ID --role frontend-engineer \
+  --design-binding .harness/design/binding.json
+```
+
+UI child and aggregate NativeRun records require `design_binding` and
+`ui_evidence` pinned references. Both use the existing design record schemas.
+Aggregate bindings target CHANGE-ID-AGGREGATE with exact parent scope and
+requirements; every UI run binds the same parent design revision. A rejected
+approval or incomplete/nonpassing case matrix blocks closure. The normal native
+implementation, final QA and separate release boundaries remain authoritative.
+The structural lifecycle commands remain inert; dispatch prepares a bundle only.
+No existing decision is migrated into approval of a newly created task.

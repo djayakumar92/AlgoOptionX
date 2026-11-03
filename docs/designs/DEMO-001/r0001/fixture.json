@@ -1,0 +1,1 @@
+{"capital_paise":50000000,"clock":"2026-11-02T09:15:00+05:30","default_scenario":"bullish","expiry":["2026-11-03T15:30:00+05:30","2026-11-10T15:30:00+05:30"],"initial_tick":60,"lot_size":65,"rate":0.06,"revision":1,"scenarios":["bullish","bearish","sideways","gap-up","gap-down","risk-rejection","disconnection","lifecycle"],"seed":17,"source":"SYNTHETIC","volatility":0.18}

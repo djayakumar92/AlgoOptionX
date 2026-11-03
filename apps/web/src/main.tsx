@@ -6,7 +6,9 @@ import ProductRouter from "./app/ProductRouter.tsx";
 const App =
   import.meta.env.VITE_WORKSPACE === "research"
     ? lazy(() => import("./features/research/ResearchApp.tsx"))
-    : ProductRouter;
+    : window.location.pathname === '/demo' || window.location.pathname.startsWith('/demo/')
+      ? lazy(() => import('./features/demo/DemoWorkspace.tsx'))
+      : ProductRouter;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

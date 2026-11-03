@@ -1,4 +1,32 @@
-import { test, expect } from "@playwright/test";
+import { test as base, expect } from "@playwright/test";
+import { spawn } from "node:child_process";
+import { mkdtempSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+// Account-preservation assertions must not share the legacy trading suite's
+// mutable account when the upstream demo matrix runs across four workers.
+const test = base.extend<{}, { entryUrl: string }>({
+  entryUrl: [async ({ playwright }, use, worker) => {
+    void playwright;
+    const directory = mkdtempSync(path.join(os.tmpdir(), "algooptionx-entry-"));
+    const root = path.resolve("../..");
+    const url = `http://127.0.0.1:${8120 + worker.parallelIndex}`;
+    const server = spawn(path.join(root, ".venv/bin/python"), ["-m", "uvicorn", "algooptionx.api.app:app", "--host", "127.0.0.1", "--port", String(8120 + worker.parallelIndex)], {
+      cwd: root,
+      env: { ...process.env, ALGOOPTIONX_DB: path.join(directory, "paper.db"), ALGOOPTIONX_DEMO_DB: path.join(directory, "demo.db") },
+      stdio: "ignore",
+    });
+    try {
+      await expect.poll(async () => { try { return (await fetch(`${url}/api/health`)).ok; } catch { return false; } }, { timeout: 15000 }).toBeTruthy();
+      await use(url);
+    } finally {
+      server.kill("SIGTERM");
+      await new Promise<void>(resolve => { if (server.exitCode !== null) resolve(); else server.once("exit", () => resolve()); });
+    }
+  }, { scope: "worker" }],
+  baseURL: async ({ entryUrl }, use) => { await use(entryUrl); },
+});
 test("public entry is read-only and guided start preserves the existing account", async ({ page, request }) => {
   const before = await (await request.get('/api/workspace')).json();
   const calls: string[] = [];
